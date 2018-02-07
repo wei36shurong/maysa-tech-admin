@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>
+        Vcommerce
+    </title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no,email=no" name="format-detection">
+
+    <!--<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">-->
+    <!-- <meta content="modeName=750-12" name="grid"/> -->
+
+    <!--<script src="https://hm.baidu.com/hm.js?a98734e6f3f3b87eab484a8f79f7ebb2"></script>-->
+    <script src="http://gosspublic.alicdn.com/aliyun-oss-sdk-4.4.4.min.js"></script>
+    <script src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
+
+    <%if (htmlWebpackPlugin.files.favicon) { %>
+        <link rel="shortcut icon" href="<%= htmlWebpackPlugin.files.favicon %>" type="image/x-icon">
+    <% } %>
+    <%for (var css in htmlWebpackPlugin.files.css) { %>
+        <link href="<%= htmlWebpackPlugin.files.css[css] %>" rel="stylesheet">
+    <%} %>
+</head>
+
+<body>
+
+    <div id="app"></div>
+
+    <%for (var chunk in htmlWebpackPlugin.files.chunks) { %>
+        <script src='<%= htmlWebpackPlugin.files.chunks[chunk].entry %>'></script>
+    <%} %>
+
+</body>
+
+</html>
