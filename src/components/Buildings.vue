@@ -34,6 +34,12 @@ export default {
             default: "-1"
         }
     },
+    computed: {
+        ...mapState([
+            "currentCommunityId",
+            "currentBuildingId"
+        ])
+    },
     data() {
         return {
             fields: [
@@ -52,7 +58,7 @@ export default {
             "changeBuilding"
         ]),
         onRowClicked ({id}) {
-            this.$router.push(`/admin/community-layout/buildings/${id}/rooms`);
+            this.$router.push(`/admin/community-layout/communities/${this.currentCommunityId}/buildings/${id}/rooms`);
             this.changeBuilding(id);
         }
     }

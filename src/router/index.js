@@ -58,18 +58,25 @@ const router = new Router({
                     component: (resolve) => require(["@/components/CommunityLayout"], resolve),
                     children: [{
                         path: "communities",
-                        component: (resolve) => require(["@/components/Communities"], resolve),
-                        breadcrumb: "小区列表",
+                        component: (resolve) => require(["@/components/Communities"], resolve)
+                    }, {
+                        redirect: "communities",
+                        path: "communities/:communityId",
+                        meta: { breadcrumb: "小区列表" },
+                        component: { template: "<router-view />" },
                         children: [{
-                            path: "/:communityId/buildings",
+                            path: "buildings",
+                            component: (resolve) => require(["@/components/Buildings"], resolve)
+                        }, {
+                            path: "buildings/:buildingId",
                             props: true,
-                            component: (resolve) => require(["@/components/Buildings"], resolve),
-                            breadcrumb: "楼栋列表",
+                            component: { template: "<router-view />" },
+                            meta: { breadcrumb: "楼栋列表" },
                             children: [{
-                                path: "buildings/:buildingId/rooms",
+                                path: "rooms",
                                 props: true,
                                 component: (resolve) => require(["@/components/Rooms"], resolve),
-                                breadcrumb: "房间列表"
+                                meta: { breadcrumb: "房间列表" }
                             }]
                         }]
                     }]

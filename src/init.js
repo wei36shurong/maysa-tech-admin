@@ -16,6 +16,9 @@ Vue.use(AsyncComputed);
 import NetPlugin from "@/plugin/net";
 Vue.use(NetPlugin);
 
+import VueBreadcrumbs from "vue-breadcrumbs";
+Vue.use(VueBreadcrumbs);
+
 import logger from "@/util/logger";
 import api from "@/conf/api";
 import * as constants from "@/conf/constants";
