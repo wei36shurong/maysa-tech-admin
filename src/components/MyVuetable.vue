@@ -61,27 +61,24 @@ export default {
         };
     },
     render(h) {
-        return h(
-            "div",
-            {
-                class: ["ui", "container"]
-            },
-            [
-                // h('filter-bar'),
-                h("div", {
-                    class: [
-                        "ui",
-                        "large",
-                        "text",
-                        "loader",
-                        { active: this.isLoading }
-                    ]
-                }),
-                this.renderVuetable(h),
-                this.renderPagination(h),
-                this.renderDetailModal(h)
-            ]
-        );
+        const elems = [
+            // h('filter-bar'),
+            h("div", {
+                class: [
+                    "ui",
+                    "large",
+                    "text",
+                    "loader",
+                    { active: this.isLoading }
+                ]
+            }),
+            this.renderVuetable(h),
+            this.renderPagination(h)
+        ];
+        if (this.detailModalComponent) {
+            elems.push(this.renderDetailModal(h));
+        }
+        return h("div", { class: ["ui", "container"] }, elems);
     },
     methods: {
         // render related functions
@@ -129,7 +126,7 @@ export default {
                         this.orderBy = orderBy;
                         this.asc = asc;
                     },
-                    // 将所有的事件port给Vuetable
+                    // 将所有的监听器port给Vuetable
                     ...this.$listeners
                 },
                 // thats why use render function instead of template
@@ -188,6 +185,13 @@ export default {
                 h(this.detailModalComponent, { props: { id: this.id } })
             ]);
         },
+        onRowClicked(data, event) {
+            this.id = data.id;
+            // 显示详情
+            const modal = $(`.detail-modal-${this.api}`).modal();
+            // 有时候弹窗位置不对的quick fix
+            setTimeout(() => { modal.modal("show"); }, 100);
+        },
         onPaginationData(paginationData) {
             this.$refs.pagination.setPaginationData(paginationData);
             this.$refs.paginationInfo.setPaginationData(paginationData);
@@ -204,12 +208,6 @@ export default {
                     this.page = page;
             }
             this.$refs.vuetable.changePage(page);
-        },
-        onRowClicked(data, event) {
-            this.id = data.id;
-            // 显示详情
-            const modal = $(`.detail-modal-${this.api}`).modal();
-            modal.modal("show");
         },
         reload() {
             this.$refs.vuetable.reload();

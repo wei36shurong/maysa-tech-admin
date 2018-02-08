@@ -57,7 +57,20 @@
 					<tr> <td>预约时间</td> <td>{{order.appointmentTime}}</td> </tr>
 					<tr> <td>故障位置</td> <td>{{order.locationName}}</td> </tr>
 					<tr> <td>故障产品</td> <td>{{order.productName}}</td> </tr>
-					<tr> <td>故障描述</td> <td>{{order.detail}}</td> </tr>
+					<tr> 
+                        <td>故障描述</td> 
+                        <w-input
+                        type="textarea"
+                        :rows="2"
+                        name="detail"
+                        :api="`orders/${this.id}`"
+                        placeholder="请输入故障描述"
+                        v-model="order.detail" />
+                    </tr>
+					<tr> 
+                        <td>工时</td> 
+                        <w-input v-model="order.workHours" />
+                    </tr>
 					<tr>
 						<td></td>
 						<td>

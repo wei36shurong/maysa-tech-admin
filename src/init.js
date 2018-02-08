@@ -28,8 +28,9 @@ import debounce from "throttle-debounce/debounce";
 import moment from "moment";
 
 import MyVuetable from "@/components/MyVuetable";
+import WInput from "@/components/WInput";
 
-const components = [MyVuetable];
+const components = [MyVuetable, WInput];
 
 components.forEach(component => {
     console.log("component.name", component.name);
