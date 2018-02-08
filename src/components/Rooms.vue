@@ -6,7 +6,7 @@
 	<div class="rooms">
 		<my-vuetable
 			ref="vuetable"
-			:api="`buildings/${buildingId}/rooms`"
+			:api="`buildings/${currentBuildingId}/rooms`"
 			:fields="fields"
             @vuetable:row-clicked="onRowClicked"
 			detail-modal-component="community-detail">
@@ -25,6 +25,7 @@
 import Vue from "vue";
 // import FileUpload from "vue-upload-component";
 import detail from "@/components/CommunityDetail";
+import { mapState, mapMutations } from "vuex";
 
 Vue.component("room-detail", detail);
 
@@ -35,6 +36,12 @@ export default {
             type: String,
             default: "-1"
         }
+    },
+    computed: {
+        ...mapState([
+            "currentCommunityId",
+            "currentBuildingId"
+        ])
     },
     data() {
         return {

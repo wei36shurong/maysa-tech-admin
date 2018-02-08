@@ -6,7 +6,7 @@
 	<div class="buildings">
 		<my-vuetable
 			ref="vuetable"
-			:api="`communities/${communityId}/buildings`"
+			:api="`communities/${currentCommunityId}/buildings`"
 			:fields="fields"
             @vuetable:row-clicked="onRowClicked"
 			detail-modal-component="community-detail">
@@ -28,12 +28,12 @@ import { mapState, mapMutations } from "vuex";
 
 export default {
     name: "Buildings",
-    props: {
-        communityId: {
-            type: String,
-            default: "-1"
-        }
-    },
+    // props: {
+    //     communityId: {
+    //         type: String,
+    //         default: "-1"
+    //     }
+    // },
     computed: {
         ...mapState([
             "currentCommunityId",

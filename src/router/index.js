@@ -11,13 +11,41 @@ Vue.use(Router);
 
 import { CacheKeys } from "@/conf/constants";
 
-const demoRoute = {
-    path: "demo",
-    component: (resolve) => require(["@/vankely/sub-layout.vue"], resolve),
+// 这里breadbrumb的链接不支持动态值的传（eg. :communityId)，
+// 需要依赖store里的currentCommunityId, 后期看有没有更好的方法
+
+const communitiesRoot = "/admin/community-layout/communities";
+const buildingsPath = `${communitiesRoot}/:communityId/buildings`;
+const roomsPath = `${buildingsPath}/:buildingId/rooms`;
+const communitiesRoute = {
+    path: "community-layout",
+    alias: "communities",
+    redirect: "community-layout/communities",
+    meta: { breadcrumb: "小区列表" },
+    component: (resolve) => require(["@/components/CommunityLayout"], resolve),
     children: [{
-        path: "index",
-        meta: "/admin/demo/index",
-        component: (resolve) => require(["@/vankely/demo/index.vue"], resolve)
+        path: "",
+        component: (resolve) => require(["@/components/Communities"], resolve)
+    }, {
+        path: "communities/:communityId",
+        redirect: buildingsPath,
+        meta: { breadcrumb: "楼栋列表" },
+        component: { template: "<router-view />" },
+        children: [{
+            path: buildingsPath,
+            props: true,
+            component: (resolve) => require(["@/components/Buildings"], resolve)
+        }, {
+            path: ":buildingId",
+            redirect: roomsPath,
+            meta: { breadcrumb: "房间列表" },
+            component: { template: "<router-view />" },
+            children: [{
+                path: roomsPath,
+                props: true,
+                component: (resolve) => require(["@/components/Rooms"], resolve)
+            }]
+        }]
     }]
 };
 
@@ -51,37 +79,8 @@ const router = new Router({
                 }, {
                     path: "solutions",
                     component: (resolve) => require(["@/components/Solutions"], resolve)
-                }, {
-                    path: "community-layout",
-                    alias: "communities",
-                    redirect: "community-layout/communities",
-                    component: (resolve) => require(["@/components/CommunityLayout"], resolve),
-                    children: [{
-                        path: "communities",
-                        component: (resolve) => require(["@/components/Communities"], resolve)
-                    }, {
-                        redirect: "communities",
-                        path: "communities/:communityId",
-                        meta: { breadcrumb: "小区列表" },
-                        component: { template: "<router-view />" },
-                        children: [{
-                            path: "buildings",
-                            component: (resolve) => require(["@/components/Buildings"], resolve)
-                        }, {
-                            path: "buildings/:buildingId",
-                            props: true,
-                            component: { template: "<router-view />" },
-                            meta: { breadcrumb: "楼栋列表" },
-                            children: [{
-                                path: "rooms",
-                                props: true,
-                                component: (resolve) => require(["@/components/Rooms"], resolve),
-                                meta: { breadcrumb: "房间列表" }
-                            }]
-                        }]
-                    }]
                 },
-                demoRoute
+                communitiesRoute
             ]
         },
         {
