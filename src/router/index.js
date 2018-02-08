@@ -1,6 +1,11 @@
 import Vue from "vue";
 import store from "@/store";
 import Router from "vue-router";
+import Orders from "@/components/Orders";
+import Products from "@/components/Products";
+import Engineers from "@/components/Engineers";
+import Solutions from "@/components/Solutions";
+import Communities from "@/components/Communities";
 
 Vue.use(Router);
 
@@ -33,8 +38,41 @@ const router = new Router({
             children: [
                 {
                     path: "home",
-                    // component: (resolve) => require(['@/components/Hello.vue'], resolve)
                     component: (resolve) => require(["@/vankely/demo/index.vue"], resolve)
+                }, {
+                    path: "orders",
+                    component: (resolve) => require(["@/components/Orders"], resolve)
+                }, {
+                    path: "products",
+                    component: (resolve) => require(["@/components/Products"], resolve)
+                }, {
+                    path: "engineers",
+                    component: (resolve) => require(["@/components/Engineers"], resolve)
+                }, {
+                    path: "solutions",
+                    component: (resolve) => require(["@/components/Solutions"], resolve)
+                }, {
+                    path: "community-layout",
+                    alias: "communities",
+                    redirect: "community-layout/communities",
+                    component: (resolve) => require(["@/components/CommunityLayout"], resolve),
+                    children: [{
+                        path: "communities",
+                        component: (resolve) => require(["@/components/Communities"], resolve),
+                        breadcrumb: "小区列表",
+                        children: [{
+                            path: "/:communityId/buildings",
+                            props: true,
+                            component: (resolve) => require(["@/components/Buildings"], resolve),
+                            breadcrumb: "楼栋列表",
+                            children: [{
+                                path: "buildings/:buildingId/rooms",
+                                props: true,
+                                component: (resolve) => require(["@/components/Rooms"], resolve),
+                                breadcrumb: "房间列表"
+                            }]
+                        }]
+                    }]
                 },
                 demoRoute
             ]

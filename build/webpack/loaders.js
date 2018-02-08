@@ -38,7 +38,8 @@ exports.vue = {
         resolve("src"),
         resolve("test"),
         resolve("node_modules/element-ui/src"),
-        resolve("node_modules/element-ui/packages")
+        resolve("node_modules/element-ui/packages"),
+        resolve("node_modules/vuetable-2/src/components")
     ],
     options: {
         loaders: {

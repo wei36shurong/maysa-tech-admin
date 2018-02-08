@@ -103,7 +103,8 @@ module.exports = {
         // "no-empty-function": 0,
         // "no-use-before-define": 0,
         // "default-case": 0,
-        // "object-curly-spacing": 0,
+        "object-curly-spacing": 0,
+        "no-console": 0,
 
         // 未来会陆续打开
         "space-before-function-paren": 0, // 函数后要有空格
@@ -121,14 +122,15 @@ module.exports = {
         "no-return-await": 0, // 暂时允许在async中返回await
         "prefer-template": 0, // 字符串用模版，不要用相加
         "no-param-reassign": 0, // 参数重新赋值
-        "prefer-destructuring": 0, // 建议使用结构赋值
+        "prefer-destructuring": 0, // 建议使用结构赋值,
+        "function-paren-newline": 0
     },
 
     // 这里设置可能用到的全局变量
     "globals": {
         // "wx": false,
 
-        // "$": true,
+        "$": true,
         "window": true,
         "fetch": true,
         "__DEV__": true,

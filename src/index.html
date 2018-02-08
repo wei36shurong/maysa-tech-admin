@@ -2,9 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>
-        Vcommerce
-    </title>
+    <title> 梅沙物业保修系统 </title>
 
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="IE=edge"/>
@@ -14,10 +12,14 @@
 
     <!--<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">-->
     <!-- <meta content="modeName=750-12" name="grid"/> -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.7/semantic.min.css" media="screen" title="no title" charset="utf-8">
 
     <!--<script src="https://hm.baidu.com/hm.js?a98734e6f3f3b87eab484a8f79f7ebb2"></script>-->
     <script src="http://gosspublic.alicdn.com/aliyun-oss-sdk-4.4.4.min.js"></script>
-    <script src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
+    <!-- <script src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script> -->
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.7/semantic.min.js" charset="utf-8"></script>
 
     <%if (htmlWebpackPlugin.files.favicon) { %>
         <link rel="shortcut icon" href="<%= htmlWebpackPlugin.files.favicon %>" type="image/x-icon">
@@ -30,7 +32,6 @@
 <body>
 
     <div id="app"></div>
-
     <%for (var chunk in htmlWebpackPlugin.files.chunks) { %>
         <script src='<%= htmlWebpackPlugin.files.chunks[chunk].entry %>'></script>
     <%} %>

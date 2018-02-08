@@ -48,13 +48,16 @@ const isPermitted = (permissions, menuCode, action) => {
 
 export default new Vuex.Store({
     state: {
-        inited: false,
-
         isLogin: false,
         loginUser: {},
 
         fullscreenLoading: false,
-        fullscreenLoadingContent: ""
+        fullscreenLoadingContent: "",
+
+        currentCommunityId: -1,
+        currentBuildingId: -1,
+
+        inited: false
     },
     getters: {
         isPermitted: state => {
@@ -103,6 +106,12 @@ export default new Vuex.Store({
             } else {
                 state.fullscreenLoading = false;
             }
+        },
+        [types.changeCommunity] (state, id) {
+            state.currentCommunityId = id;
+        },
+        [types.changeBuilding] (state, id) {
+            state.currentBuildingId = id;
         }
     },
     actions: {

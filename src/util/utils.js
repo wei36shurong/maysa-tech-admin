@@ -352,6 +352,9 @@ const funcs = {
                 resolve();
             }, mils);
         });
+    },
+    toSnakeCase (str) {
+        return str.replace(/([A-Z])/g, (upper) => "_" + upper.toLowerCase());
     }
 };
 export default funcs;
