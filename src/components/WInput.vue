@@ -84,7 +84,7 @@ export default {
             const data = {
                 [this.name]: this.currentValue
             };
-            this.$request({ url: this.api, data, method: "put"});
+            await this.$request({ url: this.api, data, method: "put"});
             this.$emit("save");
             this.$emit("finish");
         }

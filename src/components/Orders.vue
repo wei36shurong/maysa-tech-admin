@@ -19,6 +19,7 @@
                     :api="`orders/${rowData.id}`"
                     :ref="`input-${rowData.id}`"
                     :clickable="false"
+                    @save="$refs.vuetable.reload"
                     @finish="editing = false"
                     name="detail" />
 			</div>

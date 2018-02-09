@@ -54,11 +54,13 @@ export default {
         return {
             isLoading: false,
             id: null,
-            asc: true,
             perPage: 3,
             page: 1,
             apiRoot: "http://172.17.21.221:8088/admin/"
         };
+    },
+    computed: {
+        asc () { return this.sortOrder[0].direction === "asc"; }
     },
     render(h) {
         const elems = [
@@ -107,7 +109,7 @@ export default {
                     paginationPath: "data",
                     multiSort: true,
                     sortOrder: this.sortOrder,
-                    appendParams: { asc: this.sortOrder[0].direction === "asc", ...this.appendParams },
+                    appendParams: { asc: this.asc, ...this.appendParams },
                     detailRowComponent: this.detailRowComponent
                 },
                 on: {
@@ -124,7 +126,6 @@ export default {
                     "vuetable:load-success": payload => {
                         const { orderBy, asc } = payload.config.params;
                         this.orderBy = orderBy;
-                        this.asc = asc;
                     },
                     // 将所有的监听器port给Vuetable
                     ...this.$listeners
@@ -222,7 +223,6 @@ export default {
         },
         getSortParam: function(sortOrder) {
             const sort = sortOrder[0]; // 只有第一个过滤支持
-            this.asc = sort.direction !== "desc";
             console.log("this.asc", this.asc);
             // 服务器需要用下划线的形式
             return Vue.utils.toSnakeCase(sort.field);
