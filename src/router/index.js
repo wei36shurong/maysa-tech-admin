@@ -21,7 +21,6 @@ const communitiesRoute = {
     path: "community-layout",
     alias: "communities",
     redirect: "community-layout/communities",
-    meta: { breadcrumb: "小区列表" },
     component: (resolve) => require(["@/components/CommunityLayout"], resolve),
     children: [{
         path: "",
@@ -29,7 +28,6 @@ const communitiesRoute = {
     }, {
         path: "communities/:communityId",
         redirect: buildingsPath,
-        meta: { breadcrumb: "楼栋列表" },
         component: { template: "<router-view />" },
         children: [{
             path: buildingsPath,
@@ -38,7 +36,6 @@ const communitiesRoute = {
         }, {
             path: ":buildingId",
             redirect: roomsPath,
-            meta: { breadcrumb: "房间列表" },
             component: { template: "<router-view />" },
             children: [{
                 path: roomsPath,

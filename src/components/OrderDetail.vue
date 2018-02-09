@@ -63,7 +63,7 @@
                         type="textarea"
                         :rows="2"
                         name="detail"
-                        :api="`orders/${this.id}`"
+                        :api="`orders/${id}`"
                         placeholder="请输入故障描述"
                         v-model="order.detail" />
                     </tr>

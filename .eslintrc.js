@@ -106,6 +106,7 @@ module.exports = {
         "object-curly-spacing": 0,
         "no-console": 0,
         "no-unreachable": 0,
+        "jsx-quotes": ["error", "prefer-double"],
 
         // 未来会陆续打开
         "space-before-function-paren": 0, // 函数后要有空格

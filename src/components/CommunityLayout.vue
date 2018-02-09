@@ -1,11 +1,9 @@
 <style lang="less" scoped>
 @import "~@/assets/less/fn";
-
 </style>
 
 <template>
 	<div class="communityLayout">
-        <breadcrumbs />
         <router-view />
 	</div>
 </template>

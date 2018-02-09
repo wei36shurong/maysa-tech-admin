@@ -133,32 +133,18 @@ export default {
                 scopedSlots: {
                     ...this.$vnode.data.scopedSlots,
                     actions: ({ rowData, rowIndex }) => {
-                        return h(
-                            "div",
-                            {
-                                class: "ui dropdown item"
-                            },
-                            [
-                                h("i", {
-                                    class: "options icon",
-                                    style: "cursor:pointer"
-                                }),
-                                h("div", { class: "menu" }, [
-                                    h(
-                                        "a",
-                                        {
-                                            class: "item",
-                                            on: {
-                                                click: event => {
-                                                    event.stopPropagation();
-                                                    this.remove(rowData);
-                                                }
-                                            }
-                                        },
-                                        ["删除"]
-                                    )
-                                ])
-                            ]
+                        return (
+                            <div class="ui dropdown item">
+                                <i class="options icon" />
+                                <div class="menu">
+                                    <a class="item" onClick={
+                                        event => { this.remove(rowData, event); }
+                                    }> 删除 </a>
+                                    <a class="item" onClick={
+                                        event => { this.edit(rowData, event); }
+                                    }> 编辑 </a>
+                                </div>
+                            </div>
                         );
                     }
                 }
@@ -212,7 +198,13 @@ export default {
         reload() {
             this.$refs.vuetable.reload();
         },
-        async remove(data) {
+        async edit(data, event) {
+            console.log("编辑", data.id);
+            event.stopPropagation();
+            this.$emit("edit", data.id);
+        },
+        async remove(data, event) {
+            event.stopPropagation();
             console.log("删除", data.id);
             await this.$request({url: `${this.api}/${data.id}`, method: "delete"});
             this.$refs.vuetable.reload();

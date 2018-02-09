@@ -10,7 +10,18 @@
 			:fields="fields"
 			:formatter="formatter"
             @vuetable:row-clicked="onRowClicked"
+            @edit="onEdit"
         >
+			<div
+				slot="detail"
+				slot-scope="{rowData}">
+                <w-input :value="rowData.detail"
+                    :api="`orders/${rowData.id}`"
+                    :ref="`input-${rowData.id}`"
+                    :clickable="false"
+                    @finish="editing = false"
+                    name="detail" />
+			</div>
 			<div
 				slot="status"
 				slot-scope="{rowData}">
@@ -27,19 +38,35 @@
 
 <script>
 import Vue from "vue";
-import FieldDefs from "@/components/FieldDefsOrder.js";
+// import FieldDefs from "@/components/FieldDefsOrder.js";
 import detail from "@/components/OrderDetail";
 import { statusMap, statusColorMap } from "@/conf/constants";
+
+const fields = [
+    { name: "code", title: "订单编号" },
+    { name: "__slot:detail", title: "故障描述" },
+    { name: "communityName", title: "小区" },
+    { name: "buildingName", title: "楼栋" },
+    { name: "roomName", title: "单元号" },
+    { name: "createTime", title: "创建时间" },
+    { name: "updateTime", title: "更新时间" }
+];
+
+fields.map(field => {
+    field.sortField = field.name;
+    return field;
+});
 
 export default {
     name: "Orders",
     components: {detail},
     data() {
         return {
+            editing: false,
             id: null,
             api: "orders",
             fields: [
-                ...FieldDefs,
+                ...fields,
                 {
                     title: "状态",
                     name: "__slot:status",
@@ -59,10 +86,13 @@ export default {
             }
         };
     },
-    mounted () {
-    },
     methods: {
+        onEdit (id) {
+            this.editing = true;
+            this.$refs[`input-${id}`].edit();
+        },
         onRowClicked ({id}) {
+            if (this.editing) return;
             this.id = id;
             // 显示详情
             const modal = $(".detail-modal").modal({
