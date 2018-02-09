@@ -46,6 +46,10 @@ const isPermitted = (permissions, menuCode, action) => {
     return filterPermissions.length > 0;
 };
 
+const communitiesRoot = "/admin/community-layout/communities";
+const buildingsPath = `${communitiesRoot}/:communityId/buildings`;
+const roomsPath = `${buildingsPath}/:buildingId/rooms`;
+
 export default new Vuex.Store({
     state: {
         isLogin: false,
@@ -56,7 +60,11 @@ export default new Vuex.Store({
 
         currentCommunityId: -1,
         currentBuildingId: -1,
-
+        communityBreadcrumb: [
+            {listTitle: "小区列表", title: "某小区", path: communitiesRoot},
+            {listTitle: "楼栋列表", title: "某楼栋", path: buildingsPath},
+            {listTitle: "房间列表", title: "", path: roomsPath}
+        ],
         inited: false
     },
     getters: {
