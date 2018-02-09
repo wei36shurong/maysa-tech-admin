@@ -61,9 +61,9 @@ export default new Vuex.Store({
         currentCommunityId: -1,
         currentBuildingId: -1,
         communityBreadcrumb: [
-            {listTitle: "小区列表", title: "某小区", path: communitiesRoot},
-            {listTitle: "楼栋列表", title: "某楼栋", path: buildingsPath},
-            {listTitle: "房间列表", title: "", path: roomsPath}
+            {listTitle: "", title: "小区列表", path: communitiesRoot}
+            // {listTitle: "楼栋列表", title: "某小区", path: buildingsPath},
+            // {listTitle: "房间列表", title: "某楼栋", path: roomsPath}
         ],
         inited: false
     },
@@ -115,11 +115,26 @@ export default new Vuex.Store({
                 state.fullscreenLoading = false;
             }
         },
-        [types.changeCommunity] (state, id) {
+        [types.changeCommunity] (state, {id, communityName}) {
+            const newItem = {
+                title: communityName,
+                listTitle: "楼栋列表",
+                path: `${communitiesRoot}/${id}/buildings`
+            };
             state.currentCommunityId = id;
+            state.communityBreadcrumb.splice(1);
+            state.communityBreadcrumb.push(newItem);
+            // Vue.set(state.communityBreadcrumb, 0, newItem)
         },
-        [types.changeBuilding] (state, id) {
+        [types.changeBuilding] (state, {id, buildingName}) {
+            const newItem = {
+                title: buildingName,
+                listTitle: "房间列表",
+                path: `${communitiesRoot}/${state.currentCommunityId}/buildings/${id}/rooms`
+            };
             state.currentBuildingId = id;
+            state.communityBreadcrumb.splice(2);
+            state.communityBreadcrumb.push(newItem);
         }
     },
     actions: {

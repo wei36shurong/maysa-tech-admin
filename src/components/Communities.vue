@@ -49,9 +49,9 @@ export default {
         ...mapMutations([
             "changeCommunity"
         ]),
-        onRowClicked ({id}) {
-            this.$router.push(`/admin/community-layout/communities/${id}/buildings`);
-            this.changeCommunity(id);
+        onRowClicked (data) {
+            this.$router.push(`/admin/community-layout/communities/${data.id}/buildings`);
+            this.changeCommunity(data);
         }
     }
 };

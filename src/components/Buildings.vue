@@ -57,9 +57,9 @@ export default {
         ...mapMutations([
             "changeBuilding"
         ]),
-        onRowClicked ({id}) {
-            this.$router.push(`/admin/community-layout/communities/${this.currentCommunityId}/buildings/${id}/rooms`);
-            this.changeBuilding(id);
+        onRowClicked (data) {
+            this.$router.push(`/admin/community-layout/communities/${this.currentCommunityId}/buildings/${data.id}/rooms`);
+            this.changeBuilding(data);
         }
     }
 };

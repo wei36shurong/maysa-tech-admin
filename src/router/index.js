@@ -20,10 +20,10 @@ const roomsPath = `${buildingsPath}/:buildingId/rooms`;
 const communitiesRoute = {
     path: "community-layout",
     alias: "communities",
-    redirect: "community-layout/communities",
     component: (resolve) => require(["@/components/CommunityLayout"], resolve),
     children: [{
         path: "",
+        alias: "communities",
         component: (resolve) => require(["@/components/Communities"], resolve)
     }, {
         path: "communities/:communityId",
