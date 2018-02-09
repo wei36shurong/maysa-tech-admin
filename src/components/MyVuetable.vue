@@ -54,7 +54,7 @@ export default {
         return {
             isLoading: false,
             id: null,
-            perPage: 3,
+            perPage: 5,
             page: 1,
             apiRoot: "http://172.17.21.221:8088/admin/"
         };
@@ -99,17 +99,18 @@ export default {
                             dataClass: "center aligned"
                         }
                     ],
-                    queryParams: {
-                        sort: "orderBy",
-                        page: "page",
-                        perPage: "rows"
-                    },
+                    queryParams: (sortOrder, currentPage, perPage) => ({
+                        asc: sortOrder[0].direction === "asc",
+                        orderBy: Vue.utils.toSnakeCase(sortOrder[0].field),
+                        page: this.page,
+                        rows: perPage
+                    }),
                     perPage: this.perPage,
                     dataPath: "data.rows",
                     paginationPath: "data",
                     multiSort: true,
                     sortOrder: this.sortOrder,
-                    appendParams: { asc: this.asc, ...this.appendParams },
+                    appendParams: { ...this.appendParams },
                     detailRowComponent: this.detailRowComponent
                 },
                 on: {
@@ -220,13 +221,6 @@ export default {
         onFilterReset() {
             delete this.appendParams.filter;
             Vue.nextTick(() => this.$refs.vuetable.refresh());
-        },
-        getSortParam: function(sortOrder) {
-            const sort = sortOrder[0]; // 只有第一个过滤支持
-            console.log("this.asc", this.asc);
-            // 服务器需要用下划线的形式
-            return Vue.utils.toSnakeCase(sort.field);
-            // return (sort.direction === 'desc' ? '+' : '') + sort.field
         },
         transform(data) {
             if (this.formatter) data = this.formatter(data);

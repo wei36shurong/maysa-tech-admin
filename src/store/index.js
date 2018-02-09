@@ -62,8 +62,6 @@ export default new Vuex.Store({
         currentBuildingId: -1,
         communityBreadcrumb: [
             {listTitle: "", title: "小区列表", path: communitiesRoot}
-            // {listTitle: "楼栋列表", title: "某小区", path: buildingsPath},
-            // {listTitle: "房间列表", title: "某楼栋", path: roomsPath}
         ],
         inited: false
     },
@@ -118,7 +116,6 @@ export default new Vuex.Store({
         [types.changeCommunity] (state, {id, communityName}) {
             const newItem = {
                 title: communityName,
-                listTitle: "楼栋列表",
                 path: `${communitiesRoot}/${id}/buildings`
             };
             state.currentCommunityId = id;
@@ -129,7 +126,6 @@ export default new Vuex.Store({
         [types.changeBuilding] (state, {id, buildingName}) {
             const newItem = {
                 title: buildingName,
-                listTitle: "房间列表",
                 path: `${communitiesRoot}/${state.currentCommunityId}/buildings/${id}/rooms`
             };
             state.currentBuildingId = id;

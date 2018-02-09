@@ -13,9 +13,6 @@
             >
                 {{item.title}}
             </el-breadcrumb-item>
-            <el-breadcrumb-item>
-                {{lastBreadcrumItem.listTitle}}
-            </el-breadcrumb-item>
         </el-breadcrumb>
         <router-view />
 	</div>
