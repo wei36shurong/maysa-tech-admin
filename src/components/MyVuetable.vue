@@ -107,7 +107,7 @@ export default {
                     paginationPath: "data",
                     multiSort: true,
                     sortOrder: this.sortOrder,
-                    appendParams: { asc: this.asc, ...this.appendParams },
+                    appendParams: { asc: this.sortOrder[0].direction === "asc", ...this.appendParams },
                     detailRowComponent: this.detailRowComponent
                 },
                 on: {
@@ -223,6 +223,7 @@ export default {
         getSortParam: function(sortOrder) {
             const sort = sortOrder[0]; // 只有第一个过滤支持
             this.asc = sort.direction !== "desc";
+            console.log("this.asc", this.asc);
             // 服务器需要用下划线的形式
             return Vue.utils.toSnakeCase(sort.field);
             // return (sort.direction === 'desc' ? '+' : '') + sort.field
