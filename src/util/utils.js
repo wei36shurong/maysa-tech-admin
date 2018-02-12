@@ -201,6 +201,11 @@ const funcs = {
         if (!date) {
             return "";
         }
+        if (typeof date === "number") {
+            // 获取13位的timestamp
+            const timestamp = date * 10 ** (13 - String(date).length);
+            date = new Date(timestamp);
+        }
         if (!format) {
             format = "YYYY-MM-DD";
         }

@@ -37,7 +37,9 @@ console.log("appsConfig.config.assetsPublicPath", appsConfig.config.assetsPublic
 const config = {
     cache: true,
     entry,
-    devtool: devTool,
+    // TEST
+    // devtool: devTool,
+    devtool: "source-map",
     // 所有的出口文件，注意，所有的包括图片等本机被放置到了dist目录下，其他文件放置到static目录下
     output: {
         path: resolve("dist"), // 生成目录

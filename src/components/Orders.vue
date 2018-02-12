@@ -6,7 +6,7 @@
 	<div class="orders">
 		<my-vuetable
 			ref="vuetable"
-			:api="api"
+			api="orders"
 			:fields="fields"
 			:formatter="formatter"
             @vuetable:row-clicked="onRowClicked"
@@ -16,6 +16,7 @@
 				slot="detail"
 				slot-scope="{rowData}">
                 <w-input :value="rowData.detail"
+                    type="textarea"
                     :api="`orders/${rowData.id}`"
                     :ref="`input-${rowData.id}`"
                     :clickable="false"
@@ -65,7 +66,6 @@ export default {
         return {
             editing: false,
             id: null,
-            api: "orders",
             fields: [
                 ...fields,
                 {

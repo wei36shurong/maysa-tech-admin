@@ -176,7 +176,7 @@ export default {
         onRowClicked(data, event) {
             this.id = data.id;
             // 显示详情
-            const modal = $(`.detail-modal-${this.api}`).modal();
+            const modal = $(`.detail-modal-${this.api}-${data.id}`).modal();
             // 有时候弹窗位置不对的quick fix
             setTimeout(() => { modal.modal("show"); }, 100);
         },

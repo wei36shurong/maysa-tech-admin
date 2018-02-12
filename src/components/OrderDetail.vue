@@ -55,6 +55,10 @@
 					<tr> <td>创建者</td> <td>{{order.residentName}}</td> </tr>
 					<tr> <td>创建时间</td> <td>{{order.createTime}}</td> </tr>
 					<tr> <td>预约时间</td> <td>{{order.appointmentTime}}</td> </tr>
+					<tr> 
+                        <td>可预约时间段</td>
+                        <td> {{order.timeRange}} </td>
+                    </tr>
 					<tr> <td>故障位置</td> <td>{{order.locationName}}</td> </tr>
 					<tr> <td>故障产品</td> <td>{{order.productName}}</td> </tr>
 					<tr> 
@@ -65,6 +69,8 @@
                         name="detail"
                         :api="`orders/${id}`"
                         placeholder="请输入故障描述"
+                        clickable
+                        autofocus
                         v-model="order.detail" />
                     </tr>
 					<tr> 
@@ -116,16 +122,12 @@
 						<td>{{engineer.level}}</td>
 						<td>{{engineer.phoneNum}}</td>
 						<td class="right aligned ">
-							<button
-								class="ui primary button"
-								:class="{
-									disabled: engineer.isLoading,
-									loading: engineer.isLoading,
-									basic: !engineer.occupied
-								}"
-								@click="choose(engineer.id, index)">
+							<w-button
+                                @success="engineer.occupied = !engineer.occupied"
+                                :selected="engineer.occupied"
+								:handler="() => choose(engineer.id, index)">
 								{{ engineer.occupied ? '取消派单' : '派单' }}
-							</button>
+							</w-button>
 						</td>
 					</tr>
 				</tbody>
@@ -156,8 +158,18 @@ export default {
                 url: `orders/${id}`
             });
             console.log(order);
+            const startDate = this.$utils.formatDate(order.startTime);
+            const endDate = this.$utils.formatDate(order.endTime);
+            const startTime = this.$utils.formatDate(order.startTime, "LT");
+            const endTime = this.$utils.formatDate(order.endTime, "LT");
+            let timeRange = `${startTime} - ${endTime}`;
+            timeRange = startDate === endDate
+                ? `${startDate} ${timeRange}`
+                : `${startDate} ${startTime} - ${endDate} ${endTime}`;
             this.order = {
                 ...order,
+                timeRange,
+                workHours: order.workHours || 1,
                 statusName: statusMap[order.status],
                 statusClass: statusColorMap[order.status]
             };
@@ -168,12 +180,20 @@ export default {
                 url: `communities/${communityId}/engineers?orderId=${id}`
             });
 
-            // 处理数据
-            this.engineers = engineers.map(engineer => ({
-                ...engineer,
-                level: levelMap[engineer.level],
-                isLoading: false
-            }));
+            const engineerPromises = engineers.map(engineer => {
+                return new Promise(async (resolve, reject) => {
+                    // 获取工程师的工作安排
+                    const {data: {rows: orders}} = await this.$request(`engineers/${engineer.id}/orders`);
+                    // 处理数据
+                    resolve({
+                        ...engineer,
+                        appointmentTimes: orders.map(_order => _order.appointmentTime),
+                        level: levelMap[engineer.level],
+                        isLoading: false
+                    });
+                });
+            });
+            this.engineers = await Promise.all(engineerPromises);
         }
     },
     methods: {
@@ -185,28 +205,20 @@ export default {
             console.log(modal);
             modal.modal("show");
         },
-        async choose(engineerId, index) {
-            console.log("派单", engineerId);
+        choose(engineerId, index) {
+            return new Promise(async(resolve, reject) => {
+                console.log("派单", engineerId);
+                const engineer = this.engineers[index];
+                const data = { id: engineerId };
+                const url = `orders/${this.order.id}/engineers`;
+                const request = engineer.occupied
+                    ? this.$request({url: `${url}/${engineerId}`, data, method: "delete"})
+                    : this.$request({url, data, method: "post"});
 
-            const engineer = this.engineers[index];
-            const data = { id: engineerId };
-            const url = `orders/${this.order.id}/engineers`;
-            const request = engineer.occupied
-                ? this.$request({url: `${url}/${engineerId}`, data, method: "delete"})
-                : this.$request({url, data, method: "post"});
-
-            // 开始请求，少于1秒等1秒后再返回。
-            engineer.isLoading = true;
-            await Promise.all([
-                request,
-                new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                        resolve();
-                    }, 1000);
-                })
-            ]);
-            engineer.isLoading = false;
-            engineer.occupied = !engineer.occupied;
+                engineer.isLoading = false;
+                engineer.occupied = !engineer.occupied;
+                resolve();
+            });
         }
     }
 };

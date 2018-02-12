@@ -81,6 +81,7 @@ module.exports = {
 
         // "vue/require-v-for-key": 0,
         // "no-shadow": 0,
+        "no-shadow": ["error", { "allow": ["resolve", "reject"] }],
         // "prefer-arrow-callback": 0,
         // "promise/catch-or-return": 0,
         // "promise/no-nesting": 0,

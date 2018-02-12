@@ -1,5 +1,5 @@
 const defaultConfig = {
-    tableClass: "ui blue Selectable celled stackable attached table",
+    tableClass: "ui blue selectable celled stackable attached table",
     loadingClass: "loading",
     ascendingIcon: "blue chevron up icon",
     descendingIcon: "blue chevron down icon",

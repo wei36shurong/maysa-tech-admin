@@ -1,7 +1,10 @@
 <style lang="less" scoped>
+.w-input {
+    cursor: pointer;
+}
 </style>
 <template>
-<div class="w-input">
+<div class="w-input" :class="">
     <el-input v-if="isEditable"
         v-bind="$props"
         v-model="currentValue"
@@ -9,13 +12,12 @@
         @keyup.native.esc="cancel"
         @blur="cancel"
     />
-    <el-button v-else
-        v-on="$listeners"
+    <p v-else
         @click.stop="onClick"
         :style="clickable ? {} : unclickableStyle"
         type="text">
-        {{currentValue}}
-    </el-button>
+        {{currentValue || placeholder}}
+    </p>
 </div>
 </template>
 
@@ -41,7 +43,7 @@ export default {
         return {
             unclickableStyle: {
                 color: "black",
-                cursor: "initial"
+                cursor: "inherit"
             },
             isEditable: false,
             currentValue: "",

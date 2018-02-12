@@ -29,8 +29,9 @@ import moment from "moment";
 
 import MyVuetable from "@/components/MyVuetable";
 import WInput from "@/components/WInput";
+import WButton from "@/components/WButton";
 
-const components = [MyVuetable, WInput];
+const components = [MyVuetable, WInput, WButton];
 
 components.forEach(component => {
     console.log("component.name", component.name);
