@@ -47,4 +47,4 @@ exports.readFilesSync = function (entry, exclude = []) {
     })(entry);
 
     return fileList;
-}
+};

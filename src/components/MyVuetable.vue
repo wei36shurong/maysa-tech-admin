@@ -54,9 +54,9 @@ export default {
         return {
             isLoading: false,
             id: null,
-            perPage: 5,
+            perPage: 20,
             page: 1,
-            apiRoot: "http://172.17.21.221:8088/admin/"
+            apiRoot: "http://111.231.142.117:8088/admin/"
         };
     },
     computed: {
@@ -176,8 +176,9 @@ export default {
         onRowClicked(data, event) {
             this.id = data.id;
             // 显示详情
-            const modal = $(`.detail-modal-${this.api}-${data.id}`).modal();
-            // 有时候弹窗位置不对的quick fix
+            const modal = $(`.detail-modal-${this.api}`).modal({
+                detachable: false // 防止切换时，重复detach到外部dimmer里
+            });
             setTimeout(() => { modal.modal("show"); }, 100);
         },
         onPaginationData(paginationData) {

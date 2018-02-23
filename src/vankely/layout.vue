@@ -111,44 +111,4 @@ export default {
 </script>
 
 <style lang='less'>
-// alias 需要加波浪号才可以运行
-@import "~@/assets/less/fn.less";
-
-body {
-    background-color: #f5f5f5;
-    margin: 0;
-}
-#app {
-    font-family: "Avenir", Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    color: #2c3e50;
-}
-
-// table
-table.table.plain {
-    &,
-    & td,
-    & th {
-        border: none;
-    }
-    & tr {
-        cursor: pointer;
-    }
-}
-table.table.gapped {
-    border-spacing: 0 20px;
-    border-collapse: separate;
-    background-color: transparent;
-    td,
-    th {
-        background-color: white;
-        border-bottom: 1px solid rgba(34, 36, 38, 0.1);
-    }
-}
-table.table.no-header {
-    th {
-        display: none;
-    }
-}
 </style>

@@ -2,8 +2,9 @@ import Axios from "axios";
 import VueLib from "vue";
 import config from "@/conf/config";
 
-const root = "http://172.17.21.221:8088/admin";
-// const root = "http://localhost:3000/"
+// const root = "http://172.17.21.221:8088/admin";
+const root = "http://111.231.142.117:8088/admin";
+// const root = "http://localhost:3000/";
 const axios = Axios.create({
     baseURL: root
 });

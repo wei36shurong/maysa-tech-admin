@@ -19,6 +19,10 @@ Vue.use(NetPlugin);
 import VueBreadcrumbs from "vue-breadcrumbs";
 Vue.use(VueBreadcrumbs);
 
+import Vuedals, {Component as Vuedal, Bus as VuedalsBus} from "vuedals";
+Vue.use(Vuedals);
+Vue.component("vuedals", Vuedal);
+
 import logger from "@/util/logger";
 import api from "@/conf/api";
 import * as constants from "@/conf/constants";

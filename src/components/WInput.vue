@@ -13,7 +13,7 @@
         @blur="cancel"
     />
     <p v-else
-        @click.stop="onClick"
+        @click="onClick"
         :style="clickable ? {} : unclickableStyle"
         type="text">
         {{currentValue || placeholder}}
@@ -29,13 +29,11 @@ export default {
     name: "WInput",
     watch: {
         value(val) {
-            console.log("val", val);
             this.currentValue = val;
         }
     },
     mounted () {
-        this.$nextTick(function () {
-            console.log("nextTick", this.value);
+        this.$nextTick(() => {
             this.currentValue = this.value;
         });
     },
@@ -65,8 +63,9 @@ export default {
         api: String
     },
     methods: {
-        onClick () {
+        onClick (event) {
             if (!this.clickable) return;
+            event.stopPropagation();
             this.isEditable = true;
         },
         cancel () {

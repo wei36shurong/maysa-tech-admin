@@ -1,23 +1,10 @@
 <style lang="less" scoped>
 @import "~@/assets/less/fn";
 
-.order-detail {
-    padding: 0 25px;
-}
 .avatar {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-}
-.mheader {
-    display: flex;
-    align-items: center;
-    // padding-top: 17px;
-    // padding-bottom: 20px;
-    h3 {
-        flex: 1;
-        margin: 0;
-    }
 }
 .ui.fullscreen.modal {
     width: auto !important;
@@ -34,14 +21,6 @@
 
 <template>
 	<div class="order-detail">
-		<div class="mheader ui vertical segment">
-			<h3> 订单详情 </h3>
-			<div>
-				<i :class="[order.statusClass]"
-					class="circle icon"/>
-				<span> {{order.statusName}} </span>
-			</div>
-		</div>
 		<div class="ui vertical segment">
 			<table class="ui very basic plain table detail">
 				<tbody>
@@ -87,12 +66,6 @@
 									@click="showImageModal(img)"
 									:key="img" :src="img">
 								<!-- 图片modal -->
-								<div class="ui fullscreen modal" v-bind:data-url="img" :key="img + '-modal'">
-									<i class="close icon" />
-									<div class="image content">
-										<img class="image" :src="img">
-									</div>
-								</div>
 							</template>
 						</td>
 					</tr>
@@ -121,6 +94,7 @@
 						<td>{{engineer.type}}</td>
 						<td>{{engineer.level}}</td>
 						<td>{{engineer.phoneNum}}</td>
+						<td>{{engineer.appointmentTimes}}</td>
 						<td class="right aligned ">
 							<w-button
                                 @success="engineer.occupied = !engineer.occupied"
@@ -151,7 +125,16 @@ export default {
         id: Number
     },
     watch: {
-        async id(id) {
+        id(id) {
+            this.load();
+        }
+    },
+    created() {
+        this.load();
+    },
+    methods: {
+        async load() {
+            const id = this.id;
             // 获取小区详情
             if (!id) return;
             const {data: order} = await this.$request({
@@ -166,9 +149,15 @@ export default {
             timeRange = startDate === endDate
                 ? `${startDate} ${timeRange}`
                 : `${startDate} ${startTime} - ${endDate} ${endTime}`;
+            // TEST 图片mock
+            const imgs = [];
+            for (let index = 0; index < 3; index++) {
+                imgs[index] = `https://api.adorable.io/avatars/1280/${id + index}`;
+            }
             this.order = {
                 ...order,
                 timeRange,
+                imgs,
                 workHours: order.workHours || 1,
                 statusName: statusMap[order.status],
                 statusClass: statusColorMap[order.status]
@@ -187,23 +176,30 @@ export default {
                     // 处理数据
                     resolve({
                         ...engineer,
-                        appointmentTimes: orders.map(_order => _order.appointmentTime),
+                        appointmentTimes: orders.map(_order => {
+                            // TODO 早于今天的不显示
+                            const date = this.$utils.formatDate(_order.appointmentTime);
+                            const time = this.$utils.formatDate(_order.appointmentTime, "LT");
+                            const today = this.$utils.formatDate(new Date());
+                            return today === date ? null : time;
+                        }).filter(item => item).join(","),
                         level: levelMap[engineer.level],
                         isLoading: false
                     });
                 });
             });
             this.engineers = await Promise.all(engineerPromises);
-        }
-    },
-    methods: {
+        },
         showImageModal(img) {
-            console.log("showImageModal");
-            const modal = $(`.ui.modal[data-url='${img}']`).modal({
-                allowMultiple: true
+            // console.log("showImageModal");
+            // const modal = $(`.ui.modal[data-url='${img}']`).modal();
+            // modal.modal("show");
+            this.$vuedals.open({
+                component: {
+                    name: "ImageModal",
+                    template: `<img src="${img}">`
+                }
             });
-            console.log(modal);
-            modal.modal("show");
         },
         choose(engineerId, index) {
             return new Promise(async(resolve, reject) => {

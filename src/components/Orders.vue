@@ -32,15 +32,15 @@
 				<span> {{rowData.statusName}} </span>
 			</div>
 		</my-vuetable>
-        <div class="ui modal detail-modal">
+        <vuedals></vuedals>
+        <!-- <div class="ui modal detail-modal-orders">
             <detail ref="detail" :id="id"/>
-        </div>
+        </div> -->
 	</div>
 </template>
 
 <script>
 import Vue from "vue";
-// import FieldDefs from "@/components/FieldDefsOrder.js";
 import detail from "@/components/OrderDetail";
 import { statusMap, statusColorMap } from "@/conf/constants";
 
@@ -95,14 +95,22 @@ export default {
         onRowClicked ({id}) {
             if (this.editing) return;
             this.id = id;
-            // 显示详情
-            const modal = $(".detail-modal").modal({
-                onHidden: () => {
-                    this.$refs.vuetable.reload();
+            this.$vuedals.open({
+                title: "订单详情",
+                component: detail,
+                props: {
+                    id: this.id
                 }
             });
+            // // 显示详情
+            // const modal = $(".detail-modal-orders").modal({
+            //     detachable: false,
+            //     onHidden: () => {
+            //         this.$refs.vuetable.reload();
+            //     }
+            // });
             // 有时候弹窗位置不对的quick fix
-            setTimeout(() => { modal.modal("show"); }, 100);
+            // setTimeout(() => { modal.modal("show"); }, 100);
         }
     }
 };

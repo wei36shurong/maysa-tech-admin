@@ -51,7 +51,7 @@ const router = new Router({
     routes: [
         {
             path: "/",
-            redirect: "/admin/home"
+            redirect: "/admin"
         },
         {
             path: "/login",
@@ -59,12 +59,10 @@ const router = new Router({
         },
         {
             path: "/admin",
+            redirect: "/admin/orders",
             component: (resolve) => require(["@/vankely/layout.vue"], resolve),
             children: [
                 {
-                    path: "home",
-                    component: (resolve) => require(["@/vankely/demo/index.vue"], resolve)
-                }, {
                     path: "orders",
                     component: (resolve) => require(["@/components/Orders"], resolve)
                 }, {
@@ -96,7 +94,7 @@ router.beforeEach(async (to, from, next) => {
     Vue.logger.log("from to =>", from.path, to.path, isLogin);
     if (isLogin) {
         if (to.path === "/login") {
-            next("/admin/home");
+            next("/admin");
         } else {
             Vue.logger.log("route from => to", from, to);
             next();

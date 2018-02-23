@@ -25,18 +25,69 @@
     };
 </script>
 
-<style lang="less" scoped type="text/less">
-    .global-loading {
-        background-color: white;
-        position: fixed;
-        top: 0px;
-        bottom: -10px;
-        left: 0px;
-        right: 0px;
-        z-index: 10000000;
-        text-align: center;
-        padding-top: 300px;
+<style lang="less" type="text/less">
+// alias 需要加波浪号才可以运行
+@import "~@/assets/less/fn.less";
+
+body {
+    background-color: #f5f5f5;
+    margin: 0;
+}
+#app {
+    font-family: "Avenir", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #2c3e50;
+}
+
+// table
+table.table.plain {
+    &,
+    & td,
+    & th {
+        border: none;
     }
+    & tr {
+        cursor: pointer;
+    }
+}
+table.table.gapped {
+    border-spacing: 0 20px;
+    border-collapse: separate;
+    background-color: transparent;
+    td,
+    th {
+        background-color: white;
+        border-bottom: 1px solid rgba(34, 36, 38, 0.1);
+    }
+}
+table.table.no-header {
+    th {
+        display: none;
+    }
+}
+
+// vuedal
+.vuedal {
+    // 垂直居中
+    // top: 50%;
+    // transform: translateX(-50%) translateY(-50%);
+}
+.vuedal header {
+    margin-bottom: 0;
+}
+
+.global-loading {
+    background-color: white;
+    position: fixed;
+    top: 0px;
+    bottom: -10px;
+    left: 0px;
+    right: 0px;
+    z-index: 10000000;
+    text-align: center;
+    padding-top: 300px;
+}
 
 </style>
 <!-- <script src="http://gosspublic.alicdn.com/aliyun-oss-sdk-4.4.4.min.js"></script> -->

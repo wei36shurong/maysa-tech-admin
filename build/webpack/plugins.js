@@ -3,16 +3,18 @@
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
+    .BundleAnalyzerPlugin;
 const OptimizeCSSPlugin = require("optimize-css-assets-webpack-plugin");
 const FriendlyErrorsPlugin = require("friendly-errors-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const path = require("path");
+const SshWebpackPlugin = require("ssh-webpack-plugin");
 
 //判断当前是否处于开发状态下
 const __DEV__ = (process.env.NODE_ENV || "development") === "development";
 
-function resolve (dir) {
+function resolve(dir) {
     return path.join(__dirname, "../..", dir);
 }
 
@@ -42,7 +44,6 @@ const commonPlugins = [
 
 //开发时使用插件
 const devPlugins = [
-
     // 启用 HMR
     new webpack.HotModuleReplacementPlugin(),
 
@@ -63,7 +64,17 @@ const devPlugins = [
 
 //生产环境下使用插件
 const prodPlugins = [
-
+    // new SshWebpackPlugin({
+    //     host: "118.25.21.169",
+    //     port: "22",
+    //     username: "root",
+    //     password: "VdqKynDqyBq9k",
+    //     // privateKey: require("fs").readFileSync("/Users/Shu/.ssh/id_rsa_team"),
+    //     from: "/Users/Shu/Workspace/initialV/activity-vue/dist",
+    //     // important: If the 'cover' of value is false,All files in this folder will be cleared before starting deployment.
+    //     // cover: false,
+    //     to: "/usr/node/activity-server/dist"
+    // }),
     // 使用 Scope Hositing 特性
     // new webpack.optimize.ModuleConcatenationPlugin(),
 
@@ -115,7 +126,7 @@ const prodPlugins = [
 const htmlPages = [];
 const apps = require("../app.config").apps;
 //遍历定义好的app进行构造
-apps.forEach((app) => {
+apps.forEach(app => {
     //判断是否加入编译
     if (app.compiled === false) {
         //如果还未开发好,就设置为false
@@ -150,7 +161,7 @@ apps.forEach((app) => {
 });
 
 //自动创建HTML代码
-htmlPages.forEach((p) => {
+htmlPages.forEach(p => {
     commonPlugins.push(new HtmlWebpackPlugin(p));
 });
 
