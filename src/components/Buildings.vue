@@ -23,21 +23,13 @@
 
 <script>
 import Vue from "vue";
-// import FileUpload from "vue-upload-component";
 import { mapState, mapMutations } from "vuex";
 
 export default {
     name: "Buildings",
-    // props: {
-    //     communityId: {
-    //         type: String,
-    //         default: "-1"
-    //     }
-    // },
     computed: {
         ...mapState([
-            "currentCommunityId",
-            "currentBuildingId"
+            "currentCommunityId"
         ])
     },
     data() {

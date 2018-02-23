@@ -1,3 +1,10 @@
+<style lang="less" scoped>
+@import "~@/assets/less/fn";
+.el-breadcrumb {
+    font-size: 16px;
+}
+</style>
+
 <template lang='html'>
     <div>
         <el-menu
@@ -5,16 +12,26 @@
             mode="horizontal"
             @select="handleSelect"
             background-color="#2196F3"
+            style="margin-bottom:20px;"
             router
             text-color="#fff"
             active-text-color="#fff">
             <el-menu-item index="/admin/orders">订单列表</el-menu-item>
-            <el-menu-item index="/admin/products">产品列表</el-menu-item>
+            <el-menu-item index="/admin/locations">位置列表</el-menu-item>
             <el-menu-item index="/admin/engineers">工程师列表</el-menu-item>
             <el-menu-item index="/admin/solutions">解决方案列表</el-menu-item>
             <el-menu-item index="/admin/communities">小区列表</el-menu-item>
         </el-menu>
-        <router-view class='subviews' style="position: relative;overflow-y: scroll" />
+        <div class="ui container">
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item 
+                    v-for="route in $route.matched.filter(item => item.meta.isBreadcrumb)"
+                >
+                    <dynamic-breadcrumb-item :route="route" />
+                </el-breadcrumb-item>
+            </el-breadcrumb>
+            <router-view class='subviews' style="position: relative;overflow-y: scroll" />
+        </div>
     </div>
 </template>
 
@@ -26,6 +43,14 @@ export default {
             percentage: 0,
             speed: 5
         };
+    },
+    watch: {
+        $route(val) {
+            console.log(val);
+        }
+    },
+    mounted () {
+        console.log(this.$route);
     },
     computed: {
         logoRes: function() {

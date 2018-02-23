@@ -3,13 +3,11 @@
 </style>
 
 <template>
-	<div class="communities">
+	<div class="locations">
 		<my-vuetable
-			ref="vuetable"
-			api="communities"
-			:fields="fields"
+			api="locations"
             @vuetable:row-clicked="onRowClicked"
-        >
+			:fields="fields">
 			<div
 				slot="status"
 				slot-scope="{rowData}">
@@ -17,38 +15,32 @@
 					class="circle icon"/>
 				<span> {{rowData.statusName}} </span>
 			</div>
-		</my-vuetable>
+    </my-vuetable>
 	</div>
 </template>
 
 <script>
 import Vue from "vue";
 import { mapState, mapMutations } from "vuex";
+
 const fields = [
-    { name: "communityName", title: "小区名称" },
-    { name: "createTime", title: "创建时间" },
-    {
-        name: "updateTime",
-        sortField: "updateTime",
-        title: "更新时间"
-    }
+    { name: "locationName", title: "位置名称" }
 ].map(field => ({...field, sortField: field.name}));
 
 export default {
-    name: "Communities",
+    name: "Locations",
     data() {
         return {
-            communityId: -1,
             fields
         };
     },
     methods: {
         ...mapMutations([
-            "changeCommunity"
+            "changeLocation"
         ]),
         onRowClicked (data) {
-            this.$router.push(`/admin/community-layout/communities/${data.id}/buildings`);
-            this.changeCommunity(data);
+            this.$router.push(`/admin/locations/${data.id}/products`);
+            this.changeLocation(data);
         }
     }
 };

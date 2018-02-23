@@ -16,8 +16,8 @@ Vue.use(AsyncComputed);
 import NetPlugin from "@/plugin/net";
 Vue.use(NetPlugin);
 
-import VueBreadcrumbs from "vue-breadcrumbs";
-Vue.use(VueBreadcrumbs);
+// import VueBreadcrumbs from "vue-breadcrumbs";
+// Vue.use(VueBreadcrumbs);
 
 import Vuedals, {Component as Vuedal, Bus as VuedalsBus} from "vuedals";
 Vue.use(Vuedals);
@@ -34,8 +34,9 @@ import moment from "moment";
 import MyVuetable from "@/components/MyVuetable";
 import WInput from "@/components/WInput";
 import WButton from "@/components/WButton";
+import DynamicBreadcrumbItem from "@/components/DynamicBreadcrumbItem";
 
-const components = [MyVuetable, WInput, WButton];
+const components = [MyVuetable, WInput, WButton, DynamicBreadcrumbItem];
 
 components.forEach(component => {
     console.log("component.name", component.name);

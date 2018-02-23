@@ -20,6 +20,10 @@ const roomsPath = `${buildingsPath}/:buildingId/rooms`;
 const communitiesRoute = {
     path: "community-layout",
     alias: "communities",
+    meta: {
+        isBreadcrumb: true,
+        breadcrumbText: "小区列表"
+    },
     component: (resolve) => require(["@/components/CommunityLayout"], resolve),
     children: [{
         path: "",
@@ -29,6 +33,11 @@ const communitiesRoute = {
         path: "communities/:communityId",
         redirect: buildingsPath,
         component: { template: "<router-view />" },
+        meta: {
+            isBreadcrumb: true,
+            breadcrumbItem: "currentCommunity",
+            formatter: item => item.communityName
+        },
         children: [{
             path: buildingsPath,
             props: true,
@@ -37,12 +46,38 @@ const communitiesRoute = {
             path: ":buildingId",
             redirect: roomsPath,
             component: { template: "<router-view />" },
+            meta: {
+                isBreadcrumb: true,
+                breadcrumbItem: "currentBuilding",
+                formatter: item => item.buildingName
+            },
             children: [{
                 path: roomsPath,
                 props: true,
                 component: (resolve) => require(["@/components/Rooms"], resolve)
             }]
         }]
+    }]
+};
+const locationsRoute = {
+    path: "locations",
+    component: { template: "<router-view />" },
+    meta: {
+        isBreadcrumb: true,
+        breadcrumbText: "位置列表"
+    },
+    children: [{
+        path: "",
+        component: (resolve) => require(["@/components/Locations"], resolve)
+    }, {
+        path: ":locationId/products",
+        props: true,
+        meta: {
+            isBreadcrumb: true,
+            breadcrumbItem: "currentLocation",
+            formatter: item => item.locationName
+        },
+        component: (resolve) => require(["@/components/Products"], resolve)
     }]
 };
 
@@ -66,15 +101,13 @@ const router = new Router({
                     path: "orders",
                     component: (resolve) => require(["@/components/Orders"], resolve)
                 }, {
-                    path: "products",
-                    component: (resolve) => require(["@/components/Products"], resolve)
-                }, {
                     path: "engineers",
                     component: (resolve) => require(["@/components/Engineers"], resolve)
                 }, {
                     path: "solutions",
                     component: (resolve) => require(["@/components/Solutions"], resolve)
                 },
+                locationsRoute,
                 communitiesRoute
             ]
         },

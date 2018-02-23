@@ -10,3 +10,5 @@ export const loginSuccess = "loginSuccess";
 export const logoutSuccess = "logoutSuccess";
 export const changeCommunity = "changeCommunity";
 export const changeBuilding = "changeBuilding";
+export const changeLocation = "changeLocation";
+

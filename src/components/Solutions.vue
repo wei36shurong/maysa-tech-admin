@@ -23,9 +23,18 @@
 <script>
 import Vue from "vue";
 import detail from "@/components/SolutionDetail";
-import fields from "@/components/FieldDefsSolution.js";
-
 Vue.component("solution-detail", detail);
+
+const fields = [
+    { name: "name", title: "解决方案名称" },
+    { name: "createTime", title: "创建时间" },
+    {
+        name: "updateTime",
+        sortField: "updateTime",
+        title: "更新时间"
+    }
+].map(field => ({...field, sortField: field.name}));
+
 export default {
     name: "Solutions",
     data() {

@@ -80,7 +80,7 @@ export default {
         if (this.detailModalComponent) {
             elems.push(this.renderDetailModal(h));
         }
-        return h("div", { class: ["ui", "container"] }, elems);
+        return h("div", {name: "MyVuetable"}, elems);
     },
     methods: {
         // render related functions
@@ -178,6 +178,7 @@ export default {
             ]);
         },
         onRowClicked(data, event) {
+            if (!this.detailModalComponent) return;
             this.id = data.id;
             // 显示详情
             const modal = $(`.detail-modal-${this.api}`).modal({

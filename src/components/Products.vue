@@ -5,9 +5,9 @@
 <template>
 	<div class="products">
 		<my-vuetable
-			api="products"
+			:api="`locations/${currentLocationId}/products`"
 			:fields="fields"
-			detail-modal-component="product-detail">
+        >
 			<div
 				slot="status"
 				slot-scope="{rowData}">
@@ -21,16 +21,19 @@
 
 <script>
 import Vue from "vue";
-import detail from "@/components/ProductDetail";
+import { mapState } from "vuex";
 
 const fields = [
-    { name: "productName", title: "产品名称" },
-    { name: "locationName", title: "所在位置" }
+    { name: "productName", title: "产品名称" }
 ].map(field => ({...field, sortField: field.name}));
 
-Vue.component("product-detail", detail);
 export default {
     name: "Products",
+    computed: {
+        ...mapState([
+            "currentLocationId"
+        ])
+    },
     data() {
         return {
             fields

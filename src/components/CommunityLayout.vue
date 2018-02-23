@@ -1,19 +1,6 @@
-<style lang="less" scoped>
-@import "~@/assets/less/fn";
-</style>
 
 <template>
 	<div class="communityLayout">
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item 
-                v-for="item in communityBreadcrumb"
-                :key="item.path"
-                v-if="item.title"
-                :to="{ path: item.path }"
-            >
-                {{item.title}}
-            </el-breadcrumb-item>
-        </el-breadcrumb>
         <router-view />
 	</div>
 </template>
