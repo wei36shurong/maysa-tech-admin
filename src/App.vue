@@ -73,6 +73,13 @@ table.table.no-header {
     // top: 50%;
     // transform: translateX(-50%) translateY(-50%);
 }
+.vuedal.image {
+    padding: 0;
+    img {
+        display: block;
+        width: 100%;
+    }
+}
 .vuedal header {
     margin-bottom: 0;
 }

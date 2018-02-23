@@ -195,6 +195,8 @@ export default {
             // const modal = $(`.ui.modal[data-url='${img}']`).modal();
             // modal.modal("show");
             this.$vuedals.open({
+                dismissable: false,
+                name: "image",
                 component: {
                     name: "ImageModal",
                     template: `<img src="${img}">`
