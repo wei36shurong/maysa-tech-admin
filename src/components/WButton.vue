@@ -5,15 +5,12 @@
 </style>
 <template>
 <el-button v-else
-    class="ui primary button"
-    :class="{
-        disabled: isLoading,
-        loading: isLoading,
-        basic: onOff
-    }"
     v-bind="$props"
+    :plain="onOff"
+    :disabled="isLoading"
+    :loading="isLoading"
     @click.stop="submit"
-    type="text">
+    >
     <slot></slot>
 </el-button>
 </template>

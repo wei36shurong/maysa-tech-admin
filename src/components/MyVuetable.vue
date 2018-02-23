@@ -94,9 +94,7 @@ export default {
                         ...this.fields,
                         {
                             name: "__slot:actions",
-                            title: "",
-                            titleClass: "center aligned",
-                            dataClass: "center aligned"
+                            dataClass: "right aligned"
                         }
                     ],
                     queryParams: (sortOrder, currentPage, perPage) => ({
@@ -136,18 +134,23 @@ export default {
                 scopedSlots: {
                     ...this.$vnode.data.scopedSlots,
                     actions: ({ rowData, rowIndex }) => {
+                        // return (
+                        //     <div class="ui dropdown item">
+                        //         <i class="options icon" />
+                        //         <div class="menu">
+                        //             <a class="item" onClick={
+                        //                 event => { this.remove(rowData, event); }
+                        //             }> 删除 </a>
+                        //             <a class="item" onClick={
+                        //                 event => { this.edit(rowData, event); }
+                        //             }> 编辑 </a>
+                        //         </div>
+                        //     </div>
+                        // );
                         return (
-                            <div class="ui dropdown item">
-                                <i class="options icon" />
-                                <div class="menu">
-                                    <a class="item" onClick={
-                                        event => { this.remove(rowData, event); }
-                                    }> 删除 </a>
-                                    <a class="item" onClick={
-                                        event => { this.edit(rowData, event); }
-                                    }> 编辑 </a>
-                                </div>
-                            </div>
+                            <el-button type="danger" onClick={
+                                event => { this.remove(rowData, event); }
+                            }> 删除 </el-button>
                         );
                     }
                 }
@@ -209,8 +212,22 @@ export default {
         },
         async remove(data, event) {
             event.stopPropagation();
+            await this.$confirm("确认删除?", {
+                confirmButtonText: "OK",
+                cancelButtonText: "Cancel",
+                type: "warning"
+            }).catch(() => {
+                this.$message({
+                    type: "info",
+                    message: "删除失败"
+                });
+            });
             console.log("删除", data.id);
             await this.$request({url: `${this.api}/${data.id}`, method: "delete"});
+            this.$message({
+                type: "success",
+                message: "删除成功"
+            });
             this.$refs.vuetable.reload();
         },
         formatDate(value, fmt = "D MMM YYYY") {
