@@ -97,8 +97,7 @@
 						<td>{{engineer.appointmentTimes}}</td>
 						<td class="right aligned ">
 							<w-button
-                                @success="engineer.occupied = !engineer.occupied"
-                                :selected="engineer.occupied"
+                                v-model="engineer.occupied"
 								:handler="() => choose(engineer.id, index)">
 								{{ engineer.occupied ? '取消派单' : '派单' }}
 							</w-button>
@@ -191,9 +190,6 @@ export default {
             this.engineers = await Promise.all(engineerPromises);
         },
         showImageModal(img) {
-            // console.log("showImageModal");
-            // const modal = $(`.ui.modal[data-url='${img}']`).modal();
-            // modal.modal("show");
             this.$vuedals.open({
                 dismissable: false,
                 name: "image",
@@ -212,9 +208,6 @@ export default {
                 const request = engineer.occupied
                     ? this.$request({url: `${url}/${engineerId}`, data, method: "delete"})
                     : this.$request({url, data, method: "post"});
-
-                engineer.isLoading = false;
-                engineer.occupied = !engineer.occupied;
                 resolve();
             });
         }

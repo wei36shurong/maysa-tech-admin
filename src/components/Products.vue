@@ -22,7 +22,11 @@
 <script>
 import Vue from "vue";
 import detail from "@/components/ProductDetail";
-import fields from "@/components/FieldDefsProduct.js";
+
+const fields = [
+    { name: "productName", title: "产品名称" },
+    { name: "locationName", title: "所在位置" }
+].map(field => ({...field, sortField: field.name}));
 
 Vue.component("product-detail", detail);
 export default {

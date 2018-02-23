@@ -18,6 +18,9 @@
         type="text">
         {{currentValue || placeholder}}
     </p>
+    <w-button
+    >保存</w-button>
+    <el-button plain>取消</el-button>
 </div>
 </template>
 

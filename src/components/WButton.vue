@@ -9,7 +9,7 @@
     :class="{
         disabled: isLoading,
         loading: isLoading,
-        basic: selected
+        basic: onOff
     }"
     v-bind="$props"
     @click.stop="submit"
@@ -31,13 +31,13 @@ export default {
     },
     props: {
         ...Button.props,
-        selected: { default: false, type: Boolean},
-        handler: Function,
-        // custom props
-        api: String,
-        data: Object,
-        method: String
-
+        // 开关状态
+        onOff: { default: false, type: Boolean}, // true = on, false = off
+        handler: Function
+    },
+    model: {
+        prop: "onOff",
+        event: "success"
     },
     methods: {
         async submit() {
@@ -52,7 +52,7 @@ export default {
                 })
             ]);
             this.isLoading = false;
-            this.$emit("success");
+            this.$emit("success", !this.onOff);
         }
     }
 };
