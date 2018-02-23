@@ -22,8 +22,7 @@
 </template>
 
 <script>
-import Vue from "vue";
-import { mapState, mapMutations } from "vuex";
+import { mapMutations } from "vuex";
 const fields = [
     { name: "communityName", title: "小区名称" },
     { name: "createTime", title: "创建时间" },
@@ -47,7 +46,7 @@ export default {
             "changeCommunity"
         ]),
         onRowClicked (data) {
-            this.$router.push(`/admin/community-layout/communities/${data.id}/buildings`);
+            this.$router.push(`/admin/communities/${data.id}/buildings`);
             this.changeCommunity(data);
         }
     }

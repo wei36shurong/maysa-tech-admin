@@ -61,7 +61,7 @@ module.exports = {
         "jsx-a11y/anchor-is-valid": 0,
         "no-mixed-operators": 0, // 字符混用的检验要关闭
         "no-restricted-syntax": 0, // 语法检查不要太严格
-        "no-unused-vars": 0, // 回调函数中进程有无用参数，所以这个规则不要打开为好
+        // "no-unused-vars": 0, // 回调函数中进程有无用参数，所以这个规则不要打开为好
         "no-else-return": 0, // return之后可以接else
         "no-lonely-if": 0, // 一个if也可以使用
         "import/no-dynamic-require": 0, // require不要动态的

@@ -124,7 +124,7 @@ export default {
                         this.isLoading = true;
                     },
                     "vuetable:load-success": payload => {
-                        const { orderBy, asc } = payload.config.params;
+                        const { orderBy } = payload.config.params;
                         this.orderBy = orderBy;
                     },
                     // 将所有的监听器port给Vuetable

@@ -1,61 +1,48 @@
 import Vue from "vue";
 import store from "@/store";
 import Router from "vue-router";
-import Orders from "@/components/Orders";
-import Products from "@/components/Products";
-import Engineers from "@/components/Engineers";
-import Solutions from "@/components/Solutions";
-import Communities from "@/components/Communities";
+// import Orders from "@/components/Orders";
+// import Products from "@/components/Products";
+// import Engineers from "@/components/Engineers";
+// import Solutions from "@/components/Solutions";
+// import Communities from "@/components/Communities";
 
 Vue.use(Router);
-
-import { CacheKeys } from "@/conf/constants";
 
 // 这里breadbrumb的链接不支持动态值的传（eg. :communityId)，
 // 需要依赖store里的currentCommunityId, 后期看有没有更好的方法
 
-const communitiesRoot = "/admin/community-layout/communities";
-const buildingsPath = `${communitiesRoot}/:communityId/buildings`;
-const roomsPath = `${buildingsPath}/:buildingId/rooms`;
 const communitiesRoute = {
-    path: "community-layout",
-    alias: "communities",
+    path: "communities",
     meta: {
         isBreadcrumb: true,
         breadcrumbText: "小区列表"
     },
-    component: (resolve) => require(["@/components/CommunityLayout"], resolve),
+    component: { template: "<router-view />" },
     children: [{
         path: "",
-        alias: "communities",
         component: (resolve) => require(["@/components/Communities"], resolve)
     }, {
-        path: "communities/:communityId",
-        redirect: buildingsPath,
-        component: { template: "<router-view />" },
+        path: ":communityId/buildings",
         meta: {
             isBreadcrumb: true,
             breadcrumbItem: "currentCommunity",
             formatter: item => item.communityName
         },
+        props: true,
+        component: { template: "<router-view />" },
         children: [{
-            path: buildingsPath,
-            props: true,
+            path: "",
             component: (resolve) => require(["@/components/Buildings"], resolve)
         }, {
-            path: ":buildingId",
-            redirect: roomsPath,
-            component: { template: "<router-view />" },
+            path: ":buildingId/rooms",
             meta: {
                 isBreadcrumb: true,
                 breadcrumbItem: "currentBuilding",
                 formatter: item => item.buildingName
             },
-            children: [{
-                path: roomsPath,
-                props: true,
-                component: (resolve) => require(["@/components/Rooms"], resolve)
-            }]
+            props: true,
+            component: (resolve) => require(["@/components/Rooms"], resolve)
         }]
     }]
 };

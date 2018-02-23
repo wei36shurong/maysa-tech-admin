@@ -9,7 +9,7 @@
 			:api="`communities/${currentCommunityId}/buildings`"
 			:fields="fields"
             @vuetable:row-clicked="onRowClicked"
-			detail-modal-component="community-detail">
+        >
 			<div
 				slot="status"
 				slot-scope="{rowData}">
@@ -22,7 +22,6 @@
 </template>
 
 <script>
-import Vue from "vue";
 import { mapState, mapMutations } from "vuex";
 
 export default {
@@ -50,7 +49,7 @@ export default {
             "changeBuilding"
         ]),
         onRowClicked (data) {
-            this.$router.push(`/admin/community-layout/communities/${this.currentCommunityId}/buildings/${data.id}/rooms`);
+            this.$router.push(`/admin/communities/${this.currentCommunityId}/buildings/${data.id}/rooms`);
             this.changeBuilding(data);
         }
     }

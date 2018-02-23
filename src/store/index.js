@@ -46,10 +46,6 @@ const isPermitted = (permissions, menuCode, action) => {
     return filterPermissions.length > 0;
 };
 
-const communitiesRoot = "/admin/community-layout/communities";
-const buildingsPath = `${communitiesRoot}/:communityId/buildings`;
-const roomsPath = `${buildingsPath}/:buildingId/rooms`;
-
 export default new Vuex.Store({
     state: {
         isLogin: false,
