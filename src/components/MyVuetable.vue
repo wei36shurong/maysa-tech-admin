@@ -111,6 +111,7 @@ export default {
                     multiSort: true,
                     sortOrder: this.sortOrder,
                     appendParams: { ...this.appendParams },
+                    rowClass: "clickable",
                     detailRowComponent: this.detailRowComponent
                 },
                 on: {

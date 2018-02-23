@@ -46,7 +46,7 @@ import { statusMap, statusColorMap } from "@/conf/constants";
 
 const fields = [
     { name: "code", title: "订单编号" },
-    { name: "__slot:detail", title: "故障描述" },
+    { name: "detail", title: "故障描述" },
     { name: "communityName", title: "小区" },
     { name: "buildingName", title: "楼栋" },
     { name: "roomName", title: "单元号" },

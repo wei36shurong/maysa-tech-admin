@@ -47,9 +47,6 @@ table.table.plain {
     & th {
         border: none;
     }
-    & tr {
-        cursor: pointer;
-    }
 }
 table.table.gapped {
     border-spacing: 0 20px;

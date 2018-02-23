@@ -1,6 +1,18 @@
 <style lang="less" scoped>
+@import "~@/assets/less/fn.less";
 .w-input {
-    cursor: pointer;
+    &:extend(.clickable);
+    &:hover {
+        color: @primary-color;
+    }
+}
+.unclickable {
+    color: "black";
+    cursor: "inherit";
+}
+.buttons {
+    float: right;
+    margin-top: 10px;
 }
 </style>
 <template>
@@ -8,22 +20,17 @@
     <el-input v-if="isEditing"
         v-bind="$props"
         v-model="currentValue"
-        @keyup.native.enter="save"
-        @keyup.native.esc="cancel"
+        autofocus
     />
     <p v-else
         @click="onClick"
-        :style="clickable ? {} : unclickableStyle"
         type="text">
         {{currentValue || placeholder}}
+        <i class="edit outline icon" />
     </p>
-    <div v-if="isEditing">
-        <w-button
-            :handler="() => save()"
-        >保存</w-button>
-        <el-button 
-            @click="cancel"
-        plain>取消</el-button>
+    <div v-if="isEditing" class="buttons">
+        <el-button @click="save" type="primary">保存</el-button>
+        <el-button @click="cancel" plain>取消</el-button>
     </div>
 </div>
 </template>
@@ -48,10 +55,6 @@ export default {
     },
     data() {
         return {
-            unclickableStyle: {
-                color: "black",
-                cursor: "inherit"
-            },
             isEditing: false,
             currentValue: "",
             events: {
@@ -68,16 +71,11 @@ export default {
         clearable: { default: true },
         placeholder: { default: "Please input" },
         // custom props
-        clickable: {
-            type: Boolean,
-            default: false
-        },
         name: String,
         api: String
     },
     methods: {
         onClick (event) {
-            if (!this.clickable) return;
             event.stopPropagation();
             this.isEditing = true;
         },

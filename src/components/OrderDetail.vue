@@ -42,19 +42,21 @@
 					<tr> <td>故障产品</td> <td>{{order.productName}}</td> </tr>
 					<tr> 
                         <td>故障描述</td> 
-                        <w-input
-                        type="textarea"
-                        :rows="2"
-                        name="detail"
-                        :api="`orders/${id}`"
-                        placeholder="请输入故障描述"
-                        clickable
-                        autofocus
-                        v-model="order.detail" />
+                        <td>
+                            <w-input
+                            type="textarea"
+                            :rows="2"
+                            name="detail"
+                            :api="`orders/${id}`"
+                            placeholder="请输入故障描述"
+                            v-model="order.detail" />
+                        </td>
                     </tr>
 					<tr> 
                         <td>工时</td> 
-                        <w-input v-model="order.workHours" />
+                        <td>
+                            <w-input v-model="order.workHours" />
+                        </td>
                     </tr>
 					<tr>
 						<td></td>
