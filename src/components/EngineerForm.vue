@@ -70,14 +70,19 @@ export default {
         this.communities = rows;
     },
     methods: {
-        async submit() {
-            await this.$request({
+        submit() {
+            this.$request({
                 url: "engineers",
                 method: "post",
                 data: this.form
+            }).then(() => {
+                this.$vuedals.close("success");
+            }).catch(res => {
+                this.$message({
+                    type: "error",
+                    message: res.message
+                });
             });
-            this.$vuedals.close("success");
-            // BUG 后端没有添加，虽然返回了成功
         },
         cancel() {
             this.$vuedals.close("cancel");

@@ -4,7 +4,9 @@
 
 <template>
 	<div class="products">
+        <el-button @click="add"> 添加产品 </el-button>
 		<my-vuetable
+			ref="vuetable"
 			:api="`locations/${currentLocationId}/products`"
 			:fields="fields"
         >
@@ -16,11 +18,13 @@
 				<span> {{rowData.statusName}} </span>
 			</div>
 		</my-vuetable>
+        <vuedals />
 	</div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import productForm from "@/components/ProductForm";
 
 const fields = [
     { name: "productName", title: "产品名称" }
@@ -38,6 +42,16 @@ export default {
             fields
         };
     },
-    methods: {}
+    methods: {
+        add() {
+            this.$vuedals.open({
+                title: "添加产品",
+                component: productForm,
+                onClose: (res) => {
+                    if (res === "success") this.$refs.vuetable.reload();
+                }
+            });
+        }
+    }
 };
 </script>

@@ -5,7 +5,7 @@
 <template>
     <div class="engineerForm">
         <el-form ref="form" :model="form" label-width="120px">
-            <el-form-item label="小区名称">
+            <el-form-item label="产品名称">
                 <el-input v-model="form.name"></el-input>
             </el-form-item>
             <el-form-item>
@@ -17,8 +17,9 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
-    name: "CommunityForm",
+    name: "BuildingForm",
     data() {
         return {
             form: {
@@ -26,10 +27,15 @@ export default {
             }
         };
     },
+    computed: {
+        ...mapState([
+            "currentLocationId"
+        ])
+    },
     methods: {
         submit() {
             this.$request({
-                url: "communities",
+                url: `locations/${this.currentLocationId}/products`,
                 method: "post",
                 data: this.form
             }).then(() => {
@@ -40,7 +46,6 @@ export default {
                     message: res.message
                 });
             });
-            this.$vuedals.close("success");
         },
         cancel() {
             this.$vuedals.close("cancel");

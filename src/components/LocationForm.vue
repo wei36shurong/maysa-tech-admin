@@ -5,7 +5,7 @@
 <template>
     <div class="engineerForm">
         <el-form ref="form" :model="form" label-width="120px">
-            <el-form-item label="小区名称">
+            <el-form-item label="位置名称">
                 <el-input v-model="form.name"></el-input>
             </el-form-item>
             <el-form-item>
@@ -18,7 +18,7 @@
 
 <script>
 export default {
-    name: "CommunityForm",
+    name: "BuildingForm",
     data() {
         return {
             form: {
@@ -27,13 +27,11 @@ export default {
         };
     },
     methods: {
-        submit() {
-            this.$request({
-                url: "communities",
+        async submit() {
+            await this.$request({
+                url: "locations",
                 method: "post",
                 data: this.form
-            }).then(() => {
-                this.$vuedals.close("success");
             }).catch(res => {
                 this.$message({
                     type: "error",

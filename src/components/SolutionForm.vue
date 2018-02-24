@@ -27,18 +27,19 @@ export default {
         };
     },
     methods: {
-        async submit() {
-            await this.$request({
+        submit() {
+            this.$request({
                 url: "solutions",
                 method: "post",
                 data: this.form
-            }).catch((message) => {
+            }).then(() => {
+                this.$vuedals.close("success");
+            }).catch(res => {
                 this.$message({
                     type: "error",
-                    message
+                    message: res.message
                 });
             });
-            this.$vuedals.close("success");
         },
         cancel() {
             this.$vuedals.close("cancel");

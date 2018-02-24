@@ -4,8 +4,10 @@
 
 <template>
 	<div class="locations">
+        <el-button @click="add"> 添加位置 </el-button>
 		<my-vuetable
 			api="locations"
+			ref="vuetable"
             @vuetable:row-clicked="onRowClicked"
 			:fields="fields">
 			<div
@@ -15,12 +17,14 @@
 					class="circle icon"/>
 				<span> {{rowData.statusName}} </span>
 			</div>
-    </my-vuetable>
+        </my-vuetable>
+        <vuedals />
 	</div>
 </template>
 
 <script>
 import { mapMutations } from "vuex";
+import locationForm from "@/components/LocationForm";
 
 const fields = [
     { name: "locationName", title: "位置名称" }
@@ -34,6 +38,15 @@ export default {
         };
     },
     methods: {
+        add() {
+            this.$vuedals.open({
+                title: "添加楼栋",
+                component: locationForm,
+                onClose: (res) => {
+                    if (res === "success") this.$refs.vuetable.reload();
+                }
+            });
+        },
         ...mapMutations([
             "changeLocation"
         ]),
