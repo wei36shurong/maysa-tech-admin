@@ -40,7 +40,6 @@
 </template>
 
 <script>
-import Vue from "vue";
 import detail from "@/components/OrderDetail";
 import { statusMap, statusColorMap } from "@/conf/constants";
 

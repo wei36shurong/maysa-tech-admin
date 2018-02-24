@@ -19,7 +19,7 @@ Vue.use(NetPlugin);
 // import VueBreadcrumbs from "vue-breadcrumbs";
 // Vue.use(VueBreadcrumbs);
 
-import Vuedals, {Component as Vuedal, Bus as VuedalsBus} from "vuedals";
+import Vuedals, {Component as Vuedal} from "vuedals";
 Vue.use(Vuedals);
 Vue.component("vuedals", Vuedal);
 

@@ -1,5 +1,4 @@
 import Axios from "axios";
-import VueLib from "vue";
 import config from "@/conf/config";
 
 // const root = "http://172.17.21.221:8088/admin";

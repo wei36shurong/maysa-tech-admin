@@ -207,9 +207,11 @@ export default {
                 const engineer = this.engineers[index];
                 const data = { id: engineerId };
                 const url = `orders/${this.order.id}/engineers`;
-                const request = engineer.occupied
-                    ? this.$request({url: `${url}/${engineerId}`, data, method: "delete"})
-                    : this.$request({url, data, method: "post"});
+                if (engineer.occupied) {
+                    this.$request({url: `${url}/${engineerId}`, data, method: "delete"});
+                } else {
+                    this.$request({url, data, method: "post"});
+                }
                 resolve();
             });
         }

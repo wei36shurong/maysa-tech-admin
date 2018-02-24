@@ -105,7 +105,7 @@
                 });
             },
             test: async function() {
-                const res = await this.$request({
+                await this.$request({
                     url: "http://172.17.21.221:8088/admin/orders/test",
                     method: "delete"
                 });

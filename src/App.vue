@@ -77,9 +77,6 @@ table.table.no-header {
         width: 100%;
     }
 }
-.vuedal header {
-    margin-bottom: 0;
-}
 
 .global-loading {
     background-color: white;

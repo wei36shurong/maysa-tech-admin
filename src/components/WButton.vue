@@ -6,6 +6,7 @@
 <template>
 <el-button v-else
     v-bind="$props"
+    type="primary"
     :plain="onOff"
     :disabled="isLoading"
     :loading="isLoading"

@@ -4,6 +4,7 @@
 
 <template>
 	<div class="buildings">
+        <el-button @click="add"> 添加楼栋 </el-button>
 		<my-vuetable
 			ref="vuetable"
 			:api="`communities/${currentCommunityId}/buildings`"
@@ -18,11 +19,13 @@
 				<span> {{rowData.statusName}} </span>
 			</div>
 		</my-vuetable>
+        <vuedals />
 	</div>
 </template>
 
 <script>
 import { mapState, mapMutations } from "vuex";
+import buildingForm from "@/components/BuildingForm";
 
 export default {
     name: "Buildings",
@@ -45,6 +48,15 @@ export default {
         };
     },
     methods: {
+        add() {
+            this.$vuedals.open({
+                title: "添加楼栋",
+                component: buildingForm,
+                onClose: (res) => {
+                    if (res === "success") this.$refs.vuetable.reload();
+                }
+            });
+        },
         ...mapMutations([
             "changeBuilding"
         ]),

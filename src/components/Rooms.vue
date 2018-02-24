@@ -22,9 +22,7 @@
 </template>
 
 <script>
-import Vue from "vue";
-// import FileUpload from "vue-upload-component";
-import { mapState, mapMutations } from "vuex";
+import { mapState } from "vuex";
 
 export default {
     name: "Rooms",

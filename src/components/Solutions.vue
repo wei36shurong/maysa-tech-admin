@@ -4,11 +4,12 @@
 
 <template>
 	<div class="solutions">
+        <el-button @click="add"> 添加解决方案 </el-button>
 		<my-vuetable
 			ref="vuetable"
 			api="solutions"
 			:fields="fields"
-			detail-modal-component="solution-detail">
+		>
 			<div
 				slot="status"
 				slot-scope="{rowData}">
@@ -17,13 +18,12 @@
 				<span> {{rowData.statusName}} </span>
 			</div>
 		</my-vuetable>
+        <vuedals />
 	</div>
 </template>
 
 <script>
-import Vue from "vue";
-import detail from "@/components/SolutionDetail";
-Vue.component("solution-detail", detail);
+import solutionForm from "@/components/solutionForm";
 
 const fields = [
     { name: "name", title: "解决方案名称" },
@@ -42,6 +42,16 @@ export default {
             fields
         };
     },
-    methods: {}
+    methods: {
+        add() {
+            this.$vuedals.open({
+                title: "添加解决方案",
+                component: solutionForm,
+                onClose: (res) => {
+                    if (res === "success") this.$refs.vuetable.reload();
+                }
+            });
+        }
+    }
 };
 </script>

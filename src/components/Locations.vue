@@ -20,8 +20,7 @@
 </template>
 
 <script>
-import Vue from "vue";
-import { mapState, mapMutations } from "vuex";
+import { mapMutations } from "vuex";
 
 const fields = [
     { name: "locationName", title: "位置名称" }

@@ -26,6 +26,7 @@
             <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item 
                     v-for="route in $route.matched.filter(item => item.meta.isBreadcrumb)"
+                    :key="route.path"
                 >
                     <dynamic-breadcrumb-item :route="route" />
                 </el-breadcrumb-item>

@@ -4,6 +4,7 @@
 
 <template>
 	<div class="communities">
+        <el-button @click="add"> 添加小区 </el-button>
 		<my-vuetable
 			ref="vuetable"
 			api="communities"
@@ -18,11 +19,14 @@
 				<span> {{rowData.statusName}} </span>
 			</div>
 		</my-vuetable>
+        <vuedals />
 	</div>
 </template>
 
 <script>
 import { mapMutations } from "vuex";
+import communityForm from "@/components/communityForm";
+
 const fields = [
     { name: "communityName", title: "小区名称" },
     { name: "createTime", title: "创建时间" },
@@ -42,6 +46,15 @@ export default {
         };
     },
     methods: {
+        add() {
+            this.$vuedals.open({
+                title: "添加工程师",
+                component: communityForm,
+                onClose: (res) => {
+                    if (res === "success") this.$refs.vuetable.reload();
+                }
+            });
+        },
         ...mapMutations([
             "changeCommunity"
         ]),

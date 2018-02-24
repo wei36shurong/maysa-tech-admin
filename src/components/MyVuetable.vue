@@ -214,14 +214,9 @@ export default {
         async remove(data, event) {
             event.stopPropagation();
             await this.$confirm("确认删除?", {
-                confirmButtonText: "OK",
-                cancelButtonText: "Cancel",
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
                 type: "warning"
-            }).catch(() => {
-                this.$message({
-                    type: "info",
-                    message: "删除失败"
-                });
             });
             console.log("删除", data.id);
             await this.$request({url: `${this.api}/${data.id}`, method: "delete"});

@@ -2,8 +2,9 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 
 import Vue from "vue";
-import init from "@/init";
 import store from "@/store";
+// eslint-disable-next-line no-unused-vars
+import init from "@/init";
 import router from "@/router";
 
 import App from "@/App";
