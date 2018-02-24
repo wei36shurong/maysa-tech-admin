@@ -65,11 +65,6 @@ table.table.no-header {
 }
 
 // vuedal
-.vuedal {
-    // 垂直居中
-    // top: 50%;
-    // transform: translateX(-50%) translateY(-50%);
-}
 .vuedal.image {
     padding: 0;
     img {

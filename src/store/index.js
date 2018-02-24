@@ -200,9 +200,9 @@ export default new Vuex.Store({
             });
         },
         async login ({ dispatch, commit }, obj) {
-            Vue.logger.log("login action", obj, api.login);
+            // Vue.logger.log("login action", obj, api.login);
             const res = await Vue.request({
-                url: api.login,
+                url: "login",
                 method: "post",
                 data: obj
             });

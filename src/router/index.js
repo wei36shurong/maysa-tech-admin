@@ -106,9 +106,8 @@ const router = new Router({
 });
 
 router.beforeEach(async (to, from, next) => {
-    // TEST
-    // const isLogin = store.state.isLogin;
-    const isLogin = true;
+    const isLogin = store.state.isLogin;
+    // const isLogin = true;
     console.log("isLogin", isLogin);
     document.body.scrollTop = 0;
     Vue.logger.log("from to =>", from.path, to.path, isLogin);

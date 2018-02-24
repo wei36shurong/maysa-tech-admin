@@ -94,6 +94,7 @@ export default {
                         ...this.fields,
                         {
                             name: "__slot:actions",
+                            title: "操作",
                             dataClass: "right aligned"
                         }
                     ],
@@ -148,7 +149,7 @@ export default {
                         //     </div>
                         // );
                         return (
-                            <el-button type="danger" onClick={
+                            <el-button type="text" class="danger" onClick={
                                 event => { this.remove(rowData, event); }
                             }> 删除 </el-button>
                         );

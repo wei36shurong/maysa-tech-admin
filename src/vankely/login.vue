@@ -15,12 +15,15 @@
                         <el-input type="password" v-model="ruleForm.password" placeholder="密码"></el-input>
                         <i class="tako-icon-login_icon_lock"></i>
                     </el-form-item>
+                    <el-form-item label="" prop="password">
+                        <el-input type="text" v-model="ruleForm.captcha" placeholder="验证码"></el-input>
+                    </el-form-item>
+                    <el-form-item label="" prop="password">
+                        <img src="http://111.231.142.117:8088/admin/captcha" />
+                    </el-form-item>
 
                     <el-form-item class="login-btn-form">
                         <el-button type="primary" @click="login">登录</el-button>
-                    </el-form-item>
-                    <el-form-item class="login-btn-form">
-                        <el-button type="primary" @click="test">测试</el-button>
                     </el-form-item>
                 </el-form>
             </section>
@@ -39,6 +42,7 @@
                 ruleForm: {
                     loginId: "",
                     password: "",
+                    userName: "2",
                     captcha: ""
                 },
 
@@ -102,12 +106,6 @@
             login: function () {
                 this.loginFunc().catch(err => {
 
-                });
-            },
-            test: async function() {
-                await this.$request({
-                    url: "http://172.17.21.221:8088/admin/orders/test",
-                    method: "delete"
                 });
             },
             loginFunc: function () {

@@ -79,26 +79,27 @@
 			<table class="ui very basic plain table">
 				<thead>
 					<tr>
-						<th class="center aligned">头像</th>
+						<!-- <th class="center aligned">头像</th> -->
 						<th>姓名</th>
 						<th>类型</th>
 						<th>等级</th>
 						<th>联系方式</th>
-						<th class="six wide"></th>
+						<th></th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr v-for="(engineer, index) in engineers" :key="`${order.id} ${engineer.id}`">
-						<td class="collapsing">
+						<!-- <td class="collapsing">
 							<img class="avatar" :src="engineer.avatar">
-						</td>
+						</td> -->
 						<td>{{engineer.name}}</td>
 						<td>{{engineer.type}}</td>
 						<td>{{engineer.level}}</td>
 						<td>{{engineer.phoneNum}}</td>
-						<td>{{engineer.appointmentTimes}}</td>
+						<td>查看时间表</td>
 						<td class="right aligned ">
-							<w-button
+							<w-button style="width:100%;"
                                 v-model="engineer.occupied"
 								:handler="() => choose(engineer.id, index)">
 								{{ engineer.occupied ? '取消派单' : '派单' }}

@@ -14,6 +14,9 @@
     float: right;
     margin-top: 10px;
 }
+.icon {
+    color: @primary-color;
+}
 </style>
 <template>
 <div class="w-input" :class="">
