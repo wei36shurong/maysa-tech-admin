@@ -160,7 +160,9 @@
             <el-tab-pane label="全部工程师" name="all">
                 <my-vuetable
                     :css="{tableClass: 'ui very basic plain table'}"
-                    ref="vuetable"
+                    :api-mode="false"
+                    :data="formattedAllEngineers"
+                    ref="allEngineersVuetable"
                     :per-page="5"
                     :load-on-start="false"
                     :api="`engineers?orderId=${id}`"
@@ -218,6 +220,8 @@ export default {
                 occupied: false, // 是否已经被派给当前订单
                 available: true // 是否订单当天是否有空
             },
+            allEngineersData: {},
+            formattedAllEngineers: [],
             engineers: []
         };
     },
@@ -227,6 +231,14 @@ export default {
     watch: {
         id(id) {
             this.load();
+        },
+        async allEngineersData(data) {
+            console.log(data);
+            this.$refs.allEngineersVuetable.transform(data);
+            this.formattedAllEngineers = {
+                ...data,
+                rows: await this.engineersDataFormatter(data.data.rows, this.order)
+            };
         },
         "order.locationId" () {
             this.loadProducts();
@@ -238,9 +250,12 @@ export default {
         await this.loadProducts();
     },
     methods: {
-        onTabClick(tab) {
+        async onTabClick(tab) {
             if (this.hasLoadAllEngineers) return;
-            this.$refs.vuetable.reload();
+            const data = await this.$request({
+                url: `engineers?orderId=${this.order.id}`
+            });
+            this.allEngineersData = data;
             this.hasLoadAllEngineers = true;
         },
         onTimeRangeChange(timeRange) {
@@ -285,6 +300,35 @@ export default {
                 resolve();
             });
         },
+        async load() {
+            return new Promise(async resolve => {
+                const id = this.id;
+                // 获取小区详情
+                if (!id) return;
+                const {data: order} = await this.$request({
+                    url: `orders/${id}`
+                });
+                const timeRange = [
+                    this.$utils.getDate(order.startTime),
+                    this.$utils.getDate(order.endTime)
+                ];
+                this.order = {
+                    ...this.order,
+                    ...order,
+                    timeRange,
+                    statusName: statusMap[order.status],
+                    statusClass: statusColorMap[order.status]
+                };
+
+                // 获取小区工程师列表
+                const { communityId } = order;
+                const { data: { rows: engineers } } = await this.$request({
+                    url: `communities/${communityId}/engineers?orderId=${id}`
+                });
+                this.engineers = await this.engineersDataFormatter(engineers, order);
+                resolve();
+            });
+        },
         engineersDataFormatter(engineers, order) {
             return new Promise(async resolve => {
                 const engineerPromises = engineers.map(engineer => {
@@ -321,38 +365,6 @@ export default {
                 });
                 const formattedData = await Promise.all(engineerPromises);
                 resolve(formattedData);
-            });
-        },
-        async load() {
-            return new Promise(async resolve => {
-                const id = this.id;
-                // 获取小区详情
-                if (!id) return;
-                const {data: order} = await this.$request({
-                    url: `orders/${id}`
-                });
-                // const startTime = this.$utils.formatDate(order.startTime, "LT");
-                // const endTime = this.$utils.formatDate(order.endTime, "LT");
-                const timeRange = [
-                    this.$utils.getDate(order.startTime),
-                    this.$utils.getDate(order.endTime)
-                ];
-                this.order = {
-                    ...this.order,
-                    ...order,
-                    timeRange,
-                    // imgs,
-                    statusName: statusMap[order.status],
-                    statusClass: statusColorMap[order.status]
-                };
-
-                // 获取小区工程师列表
-                const { communityId } = order;
-                const { data: { rows: engineers } } = await this.$request({
-                    url: `communities/${communityId}/engineers?orderId=${id}`
-                });
-                this.engineers = await this.engineersDataFormatter(engineers, order);
-                resolve();
             });
         },
         showImageModal(src) {
