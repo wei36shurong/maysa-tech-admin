@@ -18,7 +18,9 @@ const communitiesRoute = {
         isBreadcrumb: true,
         breadcrumbText: "小区列表"
     },
-    component: { template: "<router-view />" },
+    component: {
+        template: "<router-view />"
+    },
     children: [{
         path: "",
         component: (resolve) => require(["@/components/Communities"], resolve)
@@ -48,7 +50,12 @@ const communitiesRoute = {
 };
 const locationsRoute = {
     path: "locations",
-    component: { template: "<router-view />" },
+    component: {
+        template: `
+            <router-view />
+        `,
+        name: "Location"
+    },
     meta: {
         isBreadcrumb: true,
         breadcrumbText: "位置列表"

@@ -1,10 +1,18 @@
-<style scoped>
-
+<style lang="less" scoped>
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .breadcrumb { flex: 1; }
+}
 </style>
 
 <template>
 	<div class="communities">
-        <el-button @click="add"> 添加小区 </el-button>
+        <nav>
+            <breadcrumb />
+            <el-button @click="add"> 添加小区 </el-button>
+        </nav>
 		<my-vuetable
 			ref="vuetable"
 			api="communities"
@@ -19,7 +27,6 @@
 				<span> {{rowData.statusName}} </span>
 			</div>
 		</my-vuetable>
-        <vuedals />
 	</div>
 </template>
 

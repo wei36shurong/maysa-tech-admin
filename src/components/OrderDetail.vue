@@ -21,137 +21,147 @@
 
 <template>
 	<div class="order-detail">
-		<div class="ui vertical segment">
-			<table class="ui very basic plain table detail">
-				<tbody>
-					<tr>
-                        <td>编号</td>
-                        <td>{{order.code}}</td>
-                    </tr>
-					<tr> <td>小区</td> <td>{{order.communityName}}</td> </tr>
-					<tr> <td>楼栋</td> <td>{{order.buildingName}}</td> </tr>
-					<tr> <td>单元号</td> <td>{{order.roomName}}</td> </tr>
-					<tr> <td>创建者</td> <td>{{order.residentName}}</td> </tr>
-					<tr> <td>创建时间</td> <td>{{order.createTime}}</td> </tr>
-					<tr> <td>预约时间</td> <td>{{order.appointmentTime}}</td> </tr>
-					<tr> 
-                        <td>可预约时间段</td>
-                        <td> 
-                          <el-time-picker
-                            is-range
-                            v-model="order.timeRange" />
-                        </td>
-                    </tr>
-					<tr> 
-                        <td>故障位置</td>
-                        <td>
-                            <el-select
-                            v-model="order.locationId"
-                            filterable>
-                                <el-option
-                                v-for="location in locations"
-                                :key="location.id"
-                                :label="location.locationName"
-                                :value="location.id" />
-                            </el-select>
-                        </td>
-                    </tr>
-					<tr>
-                        <td>故障产品</td>
-                        <td>
-                            <el-select
-                            v-model="order.productId"
-                            @change="onProductChange"
-                            filterable>
-                                <el-option
-                                v-for="product in products"
-                                :key="product.id"
-                                :label="product.productName"
-                                :value="product.id" />
-                            </el-select>
-                        </td>
-                    </tr>
-					<tr> 
-                        <td>故障描述</td> 
-                        <td>
-                            <w-input
-                                type="textarea"
-                                :rows="2"
-                                name="detail"
-                                :api="`orders/${id}`"
-                                placeholder="请输入故障描述"
-                                v-model="order.detail" 
-                            />
-                        </td>
-                    </tr>
-					<tr> 
-                        <td>工时</td> 
-                        <td>
-                            <w-input
-                                v-model="order.workHours" 
-                                :api="`orders/${id}`"
-                            />
-                        </td>
-                    </tr>
-					<tr>
-						<td></td>
-						<td>
-							<template
-								v-for="img in order.imgs"
-								:src="img">
-								<img style="width:120px;height:120px;"
-									@click="showImageModal(img)"
-									:key="img" :src="img">
-								<!-- 图片modal -->
-							</template>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			<h4> 维修人员 </h4>
-		</div>
-		<div class="ui vertical segment">
-			<table class="ui very basic plain table">
-				<thead>
-					<tr>
-						<!-- <th class="center aligned">头像</th> -->
-						<th>姓名</th>
-						<th>类型</th>
-						<th>等级</th>
-						<th>联系方式</th>
-						<th></th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr v-for="(engineer, index) in engineers" :key="`${order.id} ${engineer.id}`">
-						<!-- <td class="collapsing">
-							<img class="avatar" :src="engineer.avatar">
-						</td> -->
-						<td>{{engineer.name}}</td>
-						<td>{{engineer.type}}</td>
-						<td>{{engineer.level}}</td>
-						<td>{{engineer.phoneNum}}</td>
-						<td>
-                            <el-button 
-                                :type="engineer.available ? 'success' : 'warning'" 
-                                @click="showScheduleModal(engineer.orders)"
-                                plain
-                            >
-                                查看当天时间表
-                            </el-button>
-                        </td>
-						<td class="right aligned ">
-							<w-button style="width:100%;"
-                                v-model="engineer.occupied"
-								:handler="() => choose(engineer.id, index)">
-								{{ engineer.occupied ? '取消派单' : '派单' }}
-							</w-button>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+        <table class="ui very basic plain table detail">
+            <tbody>
+                <tr>
+                    <td>编号</td>
+                    <td>{{order.code}}</td>
+                </tr>
+                <tr> <td>小区</td> <td>{{order.communityName}}</td> </tr>
+                <tr> <td>楼栋</td> <td>{{order.buildingName}}</td> </tr>
+                <tr> <td>单元号</td> <td>{{order.roomName}}</td> </tr>
+                <tr> <td>创建者</td> <td>{{order.residentName}}</td> </tr>
+                <tr> <td>创建时间</td> <td>{{order.createTime}}</td> </tr>
+                <tr> 
+                    <td>可上门时间段</td>
+                    <td> 
+                        <el-time-picker
+                        @change="onTimeRangeChange"
+                        is-range
+                        v-model="order.timeRange" />
+                    </td>
+                </tr>
+                <tr> 
+                    <td>上门时间</td> 
+                    <td>{{$utils.formatDate(order.appointmentTime, "lll")}}</td> 
+                </tr>
+                <tr> 
+                    <td>故障位置</td>
+                    <td>
+                        <el-select
+                        v-model="order.locationId"
+                        filterable>
+                            <el-option
+                            v-for="location in locations"
+                            :key="location.id"
+                            :label="location.locationName"
+                            :value="location.id" />
+                        </el-select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>故障产品</td>
+                    <td>
+                        <el-select
+                        v-model="order.productId"
+                        @change="onProductChange"
+                        filterable>
+                            <el-option
+                            v-for="product in products"
+                            :key="product.id"
+                            :label="product.productName"
+                            :value="product.id" />
+                        </el-select>
+                    </td>
+                </tr>
+                <tr> 
+                    <td>故障描述</td> 
+                    <td>
+                        <w-input
+                            type="textarea"
+                            :rows="2"
+                            name="detail"
+                            :api="`orders/${id}`"
+                            placeholder="请输入故障描述"
+                            v-model="order.detail" 
+                        />
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <template
+                            v-for="img in order.orderImgs">
+                            <img style="width:120px;height:120px;"
+                                @click="showImageModal(img.url)"
+                                :key="img.url" :src="img.url">
+                            <!-- 图片modal -->
+                        </template>
+                    </td>
+                </tr>
+                <tr> 
+                    <td>工时</td> 
+                    <td>
+                        <w-input
+                            v-model="order.workTime"
+                            :formatter="val => `${val}小时`"
+                            placeholder="待定"
+                            data-type="number"
+                            name="workTime"
+                            :api="`orders/${id}`"
+                        />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <el-tabs v-model="activeName">
+            <el-tab-pane label="所在小区工程师" name="community">
+                <table class="ui very basic plain table">
+                    <thead>
+                        <tr>
+                            <!-- <th class="center aligned">头像</th> -->
+                            <th>姓名</th>
+                            <th>类型</th>
+                            <th>等级</th>
+                            <th>联系方式</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(engineer, index) in engineers" :key="`${order.id} ${engineer.id}`">
+                            <!-- <td class="collapsing">
+                                <img class="avatar" :src="engineer.avatar">
+                            </td> -->
+                            <td>{{engineer.name}}</td>
+                            <td>{{engineer.type}}</td>
+                            <td>{{engineer.level}}</td>
+                            <td>{{engineer.phoneNum}}</td>
+                            <td>
+                                <el-button 
+                                    :type="engineer.available ? 'success' : 'warning'" 
+                                    @click="showScheduleModal(engineer.orders)"
+                                    plain
+                                >
+                                    查看当天时间表
+                                </el-button>
+                            </td>
+                            <td class="right aligned ">
+                                <w-button style="width:100%;"
+                                    v-model="engineer.occupied"
+                                    :handler="() => choose(engineer.id, index)">
+                                    {{ engineer.occupied ? '取消派单' : '派单' }}
+                                </w-button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </el-tab-pane>
+            <el-tab-pane label="全部工程师" name="all">
+                <div class="ui vertical segment">
+                </div>
+            </el-tab-pane>
+        </el-tabs>
 	</div>
 </template>
 
@@ -162,6 +172,7 @@ export default {
     components: {},
     data() {
         return {
+            activeName: "community", // all: 全部工程师, community: 当前小区工程师
             timeRange: [new Date(), new Date()],
             productId: "",
             products: [],
@@ -169,7 +180,9 @@ export default {
             locations: [],
             order: {
                 locationId: null,
-                productId: null
+                productId: null,
+                occupied: false, // 是否已经被派给当前订单
+                available: true // 是否订单当天是否有空
             },
             engineers: []
         };
@@ -191,18 +204,25 @@ export default {
         await this.loadProducts();
     },
     methods: {
+        onTimeRangeChange(timeRange) {
+            console.log(timeRange);
+            const startTime = this.$utils.getTimestamp(timeRange[0]);
+            const endTime = this.$utils.getTimestamp(timeRange[1]);
+            return new Promise(async resolve => {
+                await this.$request({
+                    url: `orders/${this.order.id}`,
+                    method: "put",
+                    data: { startTime, endTime }
+                });
+                resolve();
+            });
+        },
         loadProducts() {
             return new Promise(async resolve => {
                 const {data: {rows}} = await this.$request({
                     url: `locations/${this.order.locationId}/products`
                 });
                 this.products = rows;
-                // for (const {productName, id} of this.products) {
-                //     if (productName === this.order.productName) {
-                //         this.productId = id;
-                //         break;
-                //     }
-                // }
                 resolve();
             });
         },
@@ -223,12 +243,6 @@ export default {
                     url: "locations"
                 });
                 this.locations = rows;
-                // for (const {locationName, id} of this.locations) {
-                //     if (locationName === this.order.locationName) {
-                //         this.order.locationId = id;
-                //         break;
-                //     }
-                // }
                 resolve();
             });
         },
@@ -240,29 +254,17 @@ export default {
                 const {data: order} = await this.$request({
                     url: `orders/${id}`
                 });
-                console.log(order);
-                // const startDate = this.$utils.formatDate(order.startTime);
-                // const endDate = this.$utils.formatDate(order.endTime);
-                const startTime = this.$utils.formatDate(order.startTime, "LT");
-                const endTime = this.$utils.formatDate(order.endTime, "LT");
-                // let timeRange = `${startTime} - ${endTime}`;
-                // timeRange = startDate === endDate
-                //     ? `${startDate} ${timeRange}`
-                //     : `${startDate} ${startTime} - ${endDate} ${endTime}`;
+                // const startTime = this.$utils.formatDate(order.startTime, "LT");
+                // const endTime = this.$utils.formatDate(order.endTime, "LT");
                 const timeRange = [
-                    new Date(order.startTime * 1000),
-                    new Date(order.endTime * 1000)
+                    this.$utils.getDate(order.startTime),
+                    this.$utils.getDate(order.endTime)
                 ];
-                // TEST 图片mock
-                const imgs = [];
-                for (let index = 0; index < 3; index++) {
-                    imgs[index] = `https://api.adorable.io/avatars/1280/${id + index}`;
-                }
                 this.order = {
+                    ...this.order,
                     ...order,
                     timeRange,
-                    imgs,
-                    workHours: order.workHours || 1,
+                    // imgs,
                     statusName: statusMap[order.status],
                     statusClass: statusColorMap[order.status]
                 };
@@ -281,11 +283,17 @@ export default {
                         let available = true;
                         for (const _order of orders) {
                             const start = _order.appointmentTime;
-                            const end = _order.appointmentTime + _order.workHours;
+                            const end = _order.appointmentTime + _order.workTime * 3600;
                             if (
-                                (start > startTime && start < endTime) ||
-                                (end > startTime && end < endTime)
+                                (start && end && order.startTime && order.endTime) && // 数据校验
+                                (_order.id !== order.id) && ( // 当前订单不记入冲突
+                                    start < order.endTime ||
+                                    end > order.startTime
+                                )
                             ) {
+                                console.log("时间冲突的订单", _order);
+                                console.log(start, end, order.startTime, order.endTime);
+                                console.log(_order.id, order.id, _order.id !== order.id);
                                 available = false;
                                 break;
                             }
@@ -303,30 +311,27 @@ export default {
                 resolve();
             });
         },
-        showImageModal(img) {
+        showImageModal(src) {
             this.$vuedals.open({
                 name: "image",
+                size: "lg",
+                dismissable: false,
                 component: {
                     name: "ImageModal",
-                    template: `<img src="${img}">`
+                    template: `<img src="${src}">`
                 }
             });
         },
         showScheduleModal(orders) {
             const schedule = orders.map(order => {
-                // 只显示当前订单时间段内的安排
-                // if (appointmentTime < order.startTime) return null;
-                // if (appointmentTime > order.endTime) return null;
-                //
                 const date = this.$utils.formatDate(order.appointmentTime, "lll") || "待定";
-                const workHours = order.workHours || "待定";
-                // const time = this.$utils.formatDate(appointmentTime, "LT");
-                // return today === date ? null : time;
-                return { ...order, workHours, date };
+                const workTime = order.workTime || "待定";
+                return { ...order, workTime, date };
             }).sort((a, b) => b.appointmentTime > a.appointmentTime);
             this.$vuedals.open({
                 title: "维修人员工作安排",
                 name: "schedule",
+                size: "lg",
                 props: { schedule },
                 component: {
                     name: "ScheduleModal",
@@ -338,7 +343,7 @@ export default {
                                 { name: "communityName", title: "小区"},
                                 { name: "buildingName", title: "楼栋" },
                                 { name: "roomName", title: "单元号" },
-                                { name: "workHours", title: "预计时长"}
+                                { name: "workTime", title: "预计时长"}
                             ]
                         };
                     },

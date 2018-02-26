@@ -4,9 +4,19 @@
 
 <template>
 	<div class="orders">
+        <el-menu default-active="0" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+            <el-menu-item index="0"> 全部 </el-menu-item>
+            <el-menu-item 
+            v-for="(status, key) in statusMap"
+            :key="status"
+            :index="key">
+                {{status}}
+            </el-menu-item>
+        </el-menu>
 		<my-vuetable
 			ref="vuetable"
 			api="orders"
+            :appendParams="{status}"
 			:fields="fields"
 			:formatter="formatter"
             @vuetable:row-clicked="onRowClicked"
@@ -53,6 +63,9 @@ const fields = [
     },
     { name: "buildingName", title: "楼栋" },
     { name: "roomName", title: "单元号" },
+    // { name: "startTime", title: "预约开始时间" },
+    // { name: "endTime", title: "预约开始时间" },
+    // { name: "appointmentTime", title: "预约开始时间" }
     { name: "createTime", title: "创建时间" },
     { name: "updateTime", title: "更新时间" }
 ];
@@ -67,6 +80,8 @@ export default {
     components: {detail},
     data() {
         return {
+            status: "",
+            statusMap,
             editing: false,
             id: null,
             fields: [
@@ -90,7 +105,17 @@ export default {
             }
         };
     },
+    watch: {
+        status() {
+            this.$nextTick(() => {
+                this.$refs.vuetable.reload();
+            });
+        }
+    },
     methods: {
+        handleSelect(status) {
+            this.status = status;
+        },
         onEdit (id) {
             this.editing = true;
             this.$refs[`input-${id}`].edit();

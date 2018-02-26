@@ -28,7 +28,7 @@
     <p v-else
         @click="onClick"
         type="text">
-        {{currentValue || placeholder}}
+        {{currentValue ? formatter(currentValue) : placeholder}}
         <i class="edit outline icon" />
     </p>
     <div v-if="isEditing" class="buttons">
@@ -46,13 +46,11 @@ export default {
     name: "WInput",
     watch: {
         value(val) {
-            console.log("watch");
             this.currentValue = val;
         }
     },
     mounted () {
         this.$nextTick(() => {
-            console.log("nextTick");
             this.currentValue = this.value;
         });
     },
@@ -74,6 +72,14 @@ export default {
         clearable: { default: true },
         placeholder: { default: "Please input" },
         // custom props
+        dataType: {
+            type: String,
+            default: "String"
+        },
+        formatter: {
+            type: Function,
+            default: val => val
+        },
         name: String,
         api: String
     },
@@ -96,9 +102,13 @@ export default {
         },
         async save() {
             this.isEditing = false;
+            let value = this.currentValue;
             if (!this.name || !this.api) return;
+            if (this.dataType === "number") value = Number(this.currentValue);
+            if (this.dataType === "boolean") value = Boolean(this.currentValue);
+
             const data = {
-                [this.name]: this.currentValue
+                [this.name]: value
             };
             await this.$request({ url: this.api, data, method: "put"});
             this.$emit("save", this.currentValue);

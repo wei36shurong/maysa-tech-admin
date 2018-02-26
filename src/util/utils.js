@@ -189,14 +189,23 @@ const funcs = {
         nextStart.setDate(31);
         return nextStart;
     },
-
+    getDate(timestamp) {
+        return new Date(funcs.getTimestamp(timestamp, 13));
+    },
+    getTimestamp(date, digitNum = 10) {
+        let timestamp = new Date(date).valueOf();
+        console.log(timestamp);
+        // 转换成digitNum位数的timestamp
+        timestamp *= 10 ** (digitNum - String(timestamp).length);
+        console.log(timestamp);
+        return timestamp;
+    },
     formatterTime (row, column) {
         return funcs.formatDate(row[column.property], "YYYY-MM-DD HH:mm:ss");
     },
     formatterDate (row, column) {
         return funcs.formatDate(row[column.property], "YYYY-MM-DD");
     },
-
     formatDate (date, format) {
         if (!date) {
             return "";

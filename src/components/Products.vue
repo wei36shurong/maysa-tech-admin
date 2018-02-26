@@ -1,10 +1,18 @@
-<style scoped>
-
+<style lang="less" scoped>
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .breadcrumb { flex: 1; }
+}
 </style>
 
 <template>
 	<div class="products">
-        <el-button @click="add"> 添加产品 </el-button>
+        <nav>
+            <breadcrumb />
+            <el-button @click="add"> 添加产品 </el-button>
+        </nav>
 		<my-vuetable
 			ref="vuetable"
 			:api="`locations/${currentLocationId}/products`"
