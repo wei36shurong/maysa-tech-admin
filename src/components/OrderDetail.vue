@@ -177,9 +177,9 @@
                     </el-button>
                     <w-button style="width:100%;"
                         slot="actionButton"
-                        slot-scope="{rowData}"
+                        slot-scope="{rowData, rowIndex}"
                         v-model="rowData.occupied"
-                        :handler="() => choose(rowData.id, index)">
+                        :handler="() => choose(rowData.id, rowIndex)">
                         {{ rowData.occupied ? '取消派单' : '派单' }}
                     </w-button>
                 </my-vuetable>
@@ -286,7 +286,7 @@ export default {
             });
         },
         engineersDataFormatter(engineers, order) {
-            return Promise(async resolve => {
+            return new Promise(async resolve => {
                 const engineerPromises = engineers.map(engineer => {
                     return new Promise(async (resolve, reject) => {
                         // 获取工程师的工作安排
@@ -351,7 +351,8 @@ export default {
                 const { data: { rows: engineers } } = await this.$request({
                     url: `communities/${communityId}/engineers?orderId=${id}`
                 });
-                resolve(await this.engineersDataFormatter(engineers, order));
+                this.engineers = await this.engineersDataFormatter(engineers, order);
+                resolve();
             });
         },
         showImageModal(src) {
