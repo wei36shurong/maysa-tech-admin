@@ -114,7 +114,7 @@
                 </tr>
             </tbody>
         </table>
-        <el-tabs v-model="activeName">
+        <el-tabs v-model="activeName" @tab-click="onTabClick">
             <el-tab-pane label="所在小区工程师" name="community">
                 <table class="ui very basic plain table">
                     <thead>
@@ -158,20 +158,54 @@
                 </table>
             </el-tab-pane>
             <el-tab-pane label="全部工程师" name="all">
-                <div class="ui vertical segment">
-                </div>
+                <my-vuetable
+                    :css="{tableClass: 'ui very basic plain table'}"
+                    ref="vuetable"
+                    :per-page="5"
+                    :load-on-start="false"
+                    :api="`engineers?orderId=${id}`"
+                    :fields="fields"
+                >
+                    <el-button 
+                        slot="scheduleButton"
+                        slot-scope="{rowData}"
+                        :type="rowData.available ? 'success' : 'warning'" 
+                        @click="showScheduleModal(rowData.orders)"
+                        plain
+                    >
+                        查看当天时间表
+                    </el-button>
+                    <w-button style="width:100%;"
+                        slot="actionButton"
+                        slot-scope="{rowData}"
+                        v-model="rowData.occupied"
+                        :handler="() => choose(rowData.id, index)">
+                        {{ rowData.occupied ? '取消派单' : '派单' }}
+                    </w-button>
+                </my-vuetable>
             </el-tab-pane>
         </el-tabs>
 	</div>
 </template>
 
 <script>
+import config from "@/conf/config";
 import { levelMap, statusMap, statusColorMap } from "@/conf/constants";
 export default {
     name: "OrdersDetail",
     components: {},
     data() {
         return {
+            config,
+            hasLoadAllEngineers: false,
+            fields: [
+                {name: "name", title: "姓名"},
+                {name: "type", title: "类型"},
+                {name: "level", title: "等级"},
+                {name: "phoneNum", title: "联系方式"},
+                {name: "__slot:scheduleButton"},
+                {name: "__slot:actionButton"}
+            ],
             activeName: "community", // all: 全部工程师, community: 当前小区工程师
             timeRange: [new Date(), new Date()],
             productId: "",
@@ -204,6 +238,11 @@ export default {
         await this.loadProducts();
     },
     methods: {
+        onTabClick(tab) {
+            if (this.hasLoadAllEngineers) return;
+            this.$refs.vuetable.reload();
+            this.hasLoadAllEngineers = true;
+        },
         onTimeRangeChange(timeRange) {
             console.log(timeRange);
             const startTime = this.$utils.getTimestamp(timeRange[0]);
@@ -246,35 +285,8 @@ export default {
                 resolve();
             });
         },
-        async load() {
-            return new Promise(async resolve => {
-                const id = this.id;
-                // 获取小区详情
-                if (!id) return;
-                const {data: order} = await this.$request({
-                    url: `orders/${id}`
-                });
-                // const startTime = this.$utils.formatDate(order.startTime, "LT");
-                // const endTime = this.$utils.formatDate(order.endTime, "LT");
-                const timeRange = [
-                    this.$utils.getDate(order.startTime),
-                    this.$utils.getDate(order.endTime)
-                ];
-                this.order = {
-                    ...this.order,
-                    ...order,
-                    timeRange,
-                    // imgs,
-                    statusName: statusMap[order.status],
-                    statusClass: statusColorMap[order.status]
-                };
-
-                // 获取小区工程师列表
-                const { communityId } = order;
-                const { data: { rows: engineers } } = await this.$request({
-                    url: `communities/${communityId}/engineers?orderId=${id}`
-                });
-
+        engineersDataFormatter(engineers, order) {
+            return Promise(async resolve => {
                 const engineerPromises = engineers.map(engineer => {
                     return new Promise(async (resolve, reject) => {
                         // 获取工程师的工作安排
@@ -307,8 +319,39 @@ export default {
                         });
                     });
                 });
-                this.engineers = await Promise.all(engineerPromises);
-                resolve();
+                const formattedData = await Promise.all(engineerPromises);
+                resolve(formattedData);
+            });
+        },
+        async load() {
+            return new Promise(async resolve => {
+                const id = this.id;
+                // 获取小区详情
+                if (!id) return;
+                const {data: order} = await this.$request({
+                    url: `orders/${id}`
+                });
+                // const startTime = this.$utils.formatDate(order.startTime, "LT");
+                // const endTime = this.$utils.formatDate(order.endTime, "LT");
+                const timeRange = [
+                    this.$utils.getDate(order.startTime),
+                    this.$utils.getDate(order.endTime)
+                ];
+                this.order = {
+                    ...this.order,
+                    ...order,
+                    timeRange,
+                    // imgs,
+                    statusName: statusMap[order.status],
+                    statusClass: statusColorMap[order.status]
+                };
+
+                // 获取小区工程师列表
+                const { communityId } = order;
+                const { data: { rows: engineers } } = await this.$request({
+                    url: `communities/${communityId}/engineers?orderId=${id}`
+                });
+                resolve(await this.engineersDataFormatter(engineers, order));
             });
         },
         showImageModal(src) {

@@ -1,8 +1,6 @@
 import Axios from "axios";
 import config from "@/conf/config";
 
-// const root = "http://172.17.21.221:8088/admin";
-
 console.log(config);
 const axios = Axios.create({
     baseURL: config.api

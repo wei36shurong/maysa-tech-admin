@@ -2,10 +2,13 @@
 import moment from "moment";
 import Vue from "vue";
 import CssConfig from "./VuetableCssConfig.js";
+import config from "@/conf/config";
+import Vuetable from "vuetable-2/src/components/Vuetable";
 
 export default {
     name: "MyVuetable",
     props: {
+        ...Vuetable.props,
         api: {
             type: String,
             required: true
@@ -46,9 +49,8 @@ export default {
         return {
             isLoading: false,
             id: null,
-            perPage: 20,
             page: 1,
-            apiRoot: "http://111.231.142.117:8088/admin/"
+            apiRoot: config.api
         };
     },
     computed: {
@@ -81,7 +83,7 @@ export default {
                 ref: "vuetable",
                 props: {
                     css: CssConfig,
-                    apiUrl: this.apiRoot + this.api,
+                    apiUrl: `${this.apiRoot}/${this.api}`,
                     fields: [
                         ...this.fields,
                         {
@@ -97,14 +99,16 @@ export default {
                         page: this.page,
                         rows: perPage
                     }),
-                    perPage: this.perPage,
+                    perPage: 20,
                     dataPath: "data.rows",
                     paginationPath: "data",
                     multiSort: true,
                     sortOrder: this.sortOrder,
                     appendParams: { ...this.appendParams },
                     rowClass: "clickable",
-                    detailRowComponent: this.detailRowComponent
+                    noDataTemplate: "没有数据",
+                    detailRowComponent: this.detailRowComponent,
+                    ...this.$options.propsData
                 },
                 on: {
                     // custom events
@@ -124,8 +128,8 @@ export default {
                     // 将所有的监听器port给Vuetable
                     ...this.$listeners
                 },
-                // thats why use render function instead of template
                 scopedSlots: {
+                    // thats why use render function instead of template
                     ...this.$vnode.data.scopedSlots,
                     actions: ({ rowData, rowIndex }) => {
                         // return (
@@ -155,8 +159,17 @@ export default {
                 class: ["vuetable-pagination", "ui", "basic", "segment", "grid"]
             };
             return h("div", dataObj, [
-                h("vuetable-pagination-info", { ref: "paginationInfo" }),
+                h("vuetable-pagination-info", {
+                    props: {
+                        noDataTemplate: "",
+                        infoTemplate: "显示第{from}到{to}页, 总共{total}条数据"
+                    },
+                    ref: "paginationInfo"
+                }),
                 h("vuetable-pagination", {
+                    props: {
+                        noDataTemplate: ""
+                    },
                     ref: "pagination",
                     on: {
                         "vuetable-pagination:change-page": this.onChangePage,
