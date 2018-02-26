@@ -1,18 +1,10 @@
 <script>
 import moment from "moment";
 import Vue from "vue";
-import Vuetable from "vuetable-2/src/components/Vuetable";
-import VuetablePagination from "vuetable-2/src/components/VuetablePagination";
-import VuetablePaginationInfo from "vuetable-2/src/components/VuetablePaginationInfo";
 import CssConfig from "./VuetableCssConfig.js";
 
 export default {
     name: "MyVuetable",
-    components: {
-        Vuetable,
-        VuetablePagination,
-        VuetablePaginationInfo
-    },
     props: {
         api: {
             type: String,
@@ -29,7 +21,7 @@ export default {
                     {
                         field: "updateTime",
                         sortField: "updateTime",
-                        direction: "asc"
+                        direction: "desc"
                     }
                 ];
             }
@@ -95,7 +87,8 @@ export default {
                         {
                             name: "__slot:actions",
                             title: "操作",
-                            dataClass: "right aligned"
+                            titleClass: "center aligned",
+                            dataClass: "collapsing center aligned"
                         }
                     ],
                     queryParams: (sortOrder, currentPage, perPage) => ({
@@ -220,7 +213,15 @@ export default {
                 type: "warning"
             });
             console.log("删除", data.id);
-            await this.$request({url: `${this.api}/${data.id}`, method: "delete"});
+            const slashIndex = this.api.lastIndexOf("/");
+            // eg. community/13/building => building
+            const api = slashIndex === -1
+                ? this.api
+                : this.api.substr(slashIndex + 1);
+            await this.$request({
+                url: `${api}/${data.id}`,
+                method: "delete"
+            });
             this.$message({
                 type: "success",
                 message: "删除成功"

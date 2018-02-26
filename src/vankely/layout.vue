@@ -19,6 +19,7 @@
             <el-menu-item index="/admin/orders">订单列表</el-menu-item>
             <el-menu-item index="/admin/locations">位置列表</el-menu-item>
             <el-menu-item index="/admin/engineers">工程师列表</el-menu-item>
+            <el-menu-item index="/admin/residents">住户列表</el-menu-item>
             <el-menu-item index="/admin/solutions">解决方案列表</el-menu-item>
             <el-menu-item index="/admin/communities">小区列表</el-menu-item>
         </el-menu>
@@ -31,6 +32,7 @@
                     <dynamic-breadcrumb-item :route="route" />
                 </el-breadcrumb-item>
             </el-breadcrumb>
+            <vuedals />
             <router-view class='subviews' style="position: relative;overflow-y: scroll" />
         </div>
     </div>

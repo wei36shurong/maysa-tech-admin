@@ -18,7 +18,6 @@
 				<span> {{rowData.statusName}} </span>
 			</div>
 		</my-vuetable>
-        <vuedals />
 	</div>
 </template>
 
@@ -46,7 +45,6 @@ export default {
                 title: "添加工程师",
                 component: engineerForm,
                 onClose: (res) => {
-                    debugger;
                     if (res === "success") this.$refs.vuetable.reload();
                 }
             });

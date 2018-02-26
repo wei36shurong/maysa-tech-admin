@@ -18,7 +18,6 @@
 				<span> {{rowData.statusName}} </span>
 			</div>
 		</my-vuetable>
-        <vuedals />
 	</div>
 </template>
 

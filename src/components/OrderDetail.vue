@@ -36,26 +36,61 @@
 					<tr> <td>预约时间</td> <td>{{order.appointmentTime}}</td> </tr>
 					<tr> 
                         <td>可预约时间段</td>
-                        <td> {{order.timeRange}} </td>
+                        <td> 
+                          <el-time-picker
+                            is-range
+                            v-model="order.timeRange" />
+                        </td>
                     </tr>
-					<tr> <td>故障位置</td> <td>{{order.locationName}}</td> </tr>
-					<tr> <td>故障产品</td> <td>{{order.productName}}</td> </tr>
+					<tr> 
+                        <td>故障位置</td>
+                        <td>
+                            <el-select
+                            v-model="order.locationId"
+                            filterable>
+                                <el-option
+                                v-for="location in locations"
+                                :key="location.id"
+                                :label="location.locationName"
+                                :value="location.id" />
+                            </el-select>
+                        </td>
+                    </tr>
+					<tr>
+                        <td>故障产品</td>
+                        <td>
+                            <el-select
+                            v-model="order.productId"
+                            @change="onProductChange"
+                            filterable>
+                                <el-option
+                                v-for="product in products"
+                                :key="product.id"
+                                :label="product.productName"
+                                :value="product.id" />
+                            </el-select>
+                        </td>
+                    </tr>
 					<tr> 
                         <td>故障描述</td> 
                         <td>
                             <w-input
-                            type="textarea"
-                            :rows="2"
-                            name="detail"
-                            :api="`orders/${id}`"
-                            placeholder="请输入故障描述"
-                            v-model="order.detail" />
+                                type="textarea"
+                                :rows="2"
+                                name="detail"
+                                :api="`orders/${id}`"
+                                placeholder="请输入故障描述"
+                                v-model="order.detail" 
+                            />
                         </td>
                     </tr>
 					<tr> 
                         <td>工时</td> 
                         <td>
-                            <w-input v-model="order.workHours" />
+                            <w-input
+                                v-model="order.workHours" 
+                                :api="`orders/${id}`"
+                            />
                         </td>
                     </tr>
 					<tr>
@@ -97,7 +132,15 @@
 						<td>{{engineer.type}}</td>
 						<td>{{engineer.level}}</td>
 						<td>{{engineer.phoneNum}}</td>
-						<td>查看时间表</td>
+						<td>
+                            <el-button 
+                                :type="engineer.available ? 'success' : 'warning'" 
+                                @click="showScheduleModal(engineer.orders)"
+                                plain
+                            >
+                                查看当天时间表
+                            </el-button>
+                        </td>
 						<td class="right aligned ">
 							<w-button style="width:100%;"
                                 v-model="engineer.occupied"
@@ -119,7 +162,15 @@ export default {
     components: {},
     data() {
         return {
-            order: {},
+            timeRange: [new Date(), new Date()],
+            productId: "",
+            products: [],
+            locationId: "",
+            locations: [],
+            order: {
+                locationId: null,
+                productId: null
+            },
             engineers: []
         };
     },
@@ -129,76 +180,175 @@ export default {
     watch: {
         id(id) {
             this.load();
+        },
+        "order.locationId" () {
+            this.loadProducts();
         }
     },
-    created() {
-        this.load();
+    async created() {
+        await this.load();
+        await this.loadLocations();
+        await this.loadProducts();
     },
     methods: {
+        loadProducts() {
+            return new Promise(async resolve => {
+                const {data: {rows}} = await this.$request({
+                    url: `locations/${this.order.locationId}/products`
+                });
+                this.products = rows;
+                // for (const {productName, id} of this.products) {
+                //     if (productName === this.order.productName) {
+                //         this.productId = id;
+                //         break;
+                //     }
+                // }
+                resolve();
+            });
+        },
+        onProductChange(productId) {
+            // 在产品变化时，提交信息
+            this.$request({
+                url: `orders/${this.order.id}`,
+                method: "put",
+                data: {
+                    locationId: this.order.locationId,
+                    productId
+                }
+            });
+        },
+        loadLocations() {
+            return new Promise(async resolve => {
+                const {data: {rows}} = await this.$request({
+                    url: "locations"
+                });
+                this.locations = rows;
+                // for (const {locationName, id} of this.locations) {
+                //     if (locationName === this.order.locationName) {
+                //         this.order.locationId = id;
+                //         break;
+                //     }
+                // }
+                resolve();
+            });
+        },
         async load() {
-            const id = this.id;
-            // 获取小区详情
-            if (!id) return;
-            const {data: order} = await this.$request({
-                url: `orders/${id}`
-            });
-            console.log(order);
-            const startDate = this.$utils.formatDate(order.startTime);
-            const endDate = this.$utils.formatDate(order.endTime);
-            const startTime = this.$utils.formatDate(order.startTime, "LT");
-            const endTime = this.$utils.formatDate(order.endTime, "LT");
-            let timeRange = `${startTime} - ${endTime}`;
-            timeRange = startDate === endDate
-                ? `${startDate} ${timeRange}`
-                : `${startDate} ${startTime} - ${endDate} ${endTime}`;
-            // TEST 图片mock
-            const imgs = [];
-            for (let index = 0; index < 3; index++) {
-                imgs[index] = `https://api.adorable.io/avatars/1280/${id + index}`;
-            }
-            this.order = {
-                ...order,
-                timeRange,
-                imgs,
-                workHours: order.workHours || 1,
-                statusName: statusMap[order.status],
-                statusClass: statusColorMap[order.status]
-            };
+            return new Promise(async resolve => {
+                const id = this.id;
+                // 获取小区详情
+                if (!id) return;
+                const {data: order} = await this.$request({
+                    url: `orders/${id}`
+                });
+                console.log(order);
+                // const startDate = this.$utils.formatDate(order.startTime);
+                // const endDate = this.$utils.formatDate(order.endTime);
+                const startTime = this.$utils.formatDate(order.startTime, "LT");
+                const endTime = this.$utils.formatDate(order.endTime, "LT");
+                // let timeRange = `${startTime} - ${endTime}`;
+                // timeRange = startDate === endDate
+                //     ? `${startDate} ${timeRange}`
+                //     : `${startDate} ${startTime} - ${endDate} ${endTime}`;
+                const timeRange = [
+                    new Date(order.startTime * 1000),
+                    new Date(order.endTime * 1000)
+                ];
+                // TEST 图片mock
+                const imgs = [];
+                for (let index = 0; index < 3; index++) {
+                    imgs[index] = `https://api.adorable.io/avatars/1280/${id + index}`;
+                }
+                this.order = {
+                    ...order,
+                    timeRange,
+                    imgs,
+                    workHours: order.workHours || 1,
+                    statusName: statusMap[order.status],
+                    statusClass: statusColorMap[order.status]
+                };
 
-            // 获取小区工程师列表
-            const { communityId } = order;
-            const { data: { rows: engineers } } = await this.$request({
-                url: `communities/${communityId}/engineers?orderId=${id}`
-            });
+                // 获取小区工程师列表
+                const { communityId } = order;
+                const { data: { rows: engineers } } = await this.$request({
+                    url: `communities/${communityId}/engineers?orderId=${id}`
+                });
 
-            const engineerPromises = engineers.map(engineer => {
-                return new Promise(async (resolve, reject) => {
-                    // 获取工程师的工作安排
-                    const {data: {rows: orders}} = await this.$request(`engineers/${engineer.id}/orders`);
-                    // 处理数据
-                    resolve({
-                        ...engineer,
-                        appointmentTimes: orders.map(_order => {
-                            // TODO 早于今天的不显示
-                            const date = this.$utils.formatDate(_order.appointmentTime);
-                            const time = this.$utils.formatDate(_order.appointmentTime, "LT");
-                            const today = this.$utils.formatDate(new Date());
-                            return today === date ? null : time;
-                        }).filter(item => item).join(","),
-                        level: levelMap[engineer.level],
-                        isLoading: false
+                const engineerPromises = engineers.map(engineer => {
+                    return new Promise(async (resolve, reject) => {
+                        // 获取工程师的工作安排
+                        const {data: {rows: orders}} = await this.$request(`engineers/${engineer.id}/orders`);
+                        // 处理数据
+                        let available = true;
+                        for (const _order of orders) {
+                            const start = _order.appointmentTime;
+                            const end = _order.appointmentTime + _order.workHours;
+                            if (
+                                (start > startTime && start < endTime) ||
+                                (end > startTime && end < endTime)
+                            ) {
+                                available = false;
+                                break;
+                            }
+                        }
+                        resolve({
+                            ...engineer,
+                            orders,
+                            available,
+                            level: levelMap[engineer.level],
+                            isLoading: false
+                        });
                     });
                 });
+                this.engineers = await Promise.all(engineerPromises);
+                resolve();
             });
-            this.engineers = await Promise.all(engineerPromises);
         },
         showImageModal(img) {
             this.$vuedals.open({
-                dismissable: false,
                 name: "image",
                 component: {
                     name: "ImageModal",
                     template: `<img src="${img}">`
+                }
+            });
+        },
+        showScheduleModal(orders) {
+            const schedule = orders.map(order => {
+                // 只显示当前订单时间段内的安排
+                // if (appointmentTime < order.startTime) return null;
+                // if (appointmentTime > order.endTime) return null;
+                //
+                const date = this.$utils.formatDate(order.appointmentTime, "lll") || "待定";
+                const workHours = order.workHours || "待定";
+                // const time = this.$utils.formatDate(appointmentTime, "LT");
+                // return today === date ? null : time;
+                return { ...order, workHours, date };
+            }).sort((a, b) => b.appointmentTime > a.appointmentTime);
+            this.$vuedals.open({
+                title: "维修人员工作安排",
+                name: "schedule",
+                props: { schedule },
+                component: {
+                    name: "ScheduleModal",
+                    props: ["schedule"],
+                    data() {
+                        return {
+                            fields: [
+                                { name: "date", title: "维修时间"},
+                                { name: "communityName", title: "小区"},
+                                { name: "buildingName", title: "楼栋" },
+                                { name: "roomName", title: "单元号" },
+                                { name: "workHours", title: "预计时长"}
+                            ]
+                        };
+                    },
+                    template: `
+                        <vuetable 
+                            :api-mode="false"
+                            :data="schedule"
+                            :fields="fields"
+                        />
+                    `
                 }
             });
         },

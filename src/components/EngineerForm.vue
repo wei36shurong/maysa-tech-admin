@@ -55,7 +55,7 @@ export default {
     data() {
         return {
             communities: [],
-            types: ["机械", "水电"],
+            types: ["水电", "泥水", "涂料", "木", "门窗"],
             form: {
                 name: "",
                 phoneNum: "",

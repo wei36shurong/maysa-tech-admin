@@ -111,25 +111,12 @@ export default new Vuex.Store({
             }
         },
         [types.changeCommunity] (state, {id, communityName}) {
-            // const newItem = {
-            //     title: communityName,
-            //     path: `${communitiesRoot}/${id}/buildings`
-            // };
             state.currentCommunity = { id, communityName };
             state.currentCommunityId = id;
-            // state.communityBreadcrumb.splice(1);
-            // state.communityBreadcrumb.push(newItem);
-            // Vue.set(state.communityBreadcrumb, 0, newItem)
         },
         [types.changeBuilding] (state, {id, buildingName}) {
-            // const newItem = {
-            //     title: buildingName,
-            //     path: `${communitiesRoot}/${state.currentCommunityId}/buildings/${id}/rooms`
-            // };
             state.currentBuilding = { id, buildingName };
             state.currentBuildingId = id;
-            // state.communityBreadcrumb.splice(2);
-            // state.communityBreadcrumb.push(newItem);
         },
         [types.changeLocation] (state, {id, locationName}) {
             state.currentLocation = { id, locationName };

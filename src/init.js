@@ -16,13 +16,20 @@ Vue.use(AsyncComputed);
 import NetPlugin from "@/plugin/net";
 Vue.use(NetPlugin);
 
-// import VueBreadcrumbs from "vue-breadcrumbs";
-// Vue.use(VueBreadcrumbs);
-
+// Vuedals
 import Vuedals, {Component as Vuedal} from "vuedals";
 Vue.use(Vuedals);
-Vue.component("vuedals", Vuedal);
+Vue.component("Vuedals", Vuedal);
 
+// Vuetables
+import Vuetable from "vuetable-2/src/components/Vuetable";
+import VuetablePagination from "vuetable-2/src/components/VuetablePagination";
+import VuetablePaginationInfo from "vuetable-2/src/components/VuetablePaginationInfo";
+Vue.component("Vuetable", Vuetable);
+Vue.component("VuetablePagination", VuetablePagination);
+Vue.component("VuetablePaginationInfo", VuetablePaginationInfo);
+
+//
 import logger from "@/util/logger";
 import api from "@/conf/api";
 import * as constants from "@/conf/constants";

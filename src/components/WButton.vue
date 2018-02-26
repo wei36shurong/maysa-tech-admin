@@ -7,7 +7,7 @@
 <el-button v-else
     v-bind="$props"
     type="primary"
-    :plain="onOff"
+    :plain="!onOff"
     :disabled="isLoading"
     :loading="isLoading"
     @click.stop="submit"
