@@ -4,7 +4,14 @@
 
 <template>
 	<div class="engineers">
-        <el-button @click="add"> 添加工程师 </el-button>
+        <el-button 
+            type="primary"
+            icon="el-icon-circle-plus-outline"
+            style="float:right;"
+            @click="add"
+        > 
+            添加工程师 
+        </el-button>
 		<my-vuetable
 			ref="vuetable"
 			api="engineers"

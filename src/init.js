@@ -36,7 +36,6 @@ import * as constants from "@/conf/constants";
 import cache from "@/util/cache";
 import utils from "@/util/utils";
 import debounce from "throttle-debounce/debounce";
-import moment from "moment";
 
 import MyVuetable from "@/components/MyVuetable";
 import WInput from "@/components/WInput";
@@ -51,7 +50,10 @@ components.forEach(component => {
     Vue.component(component.name, component);
 });
 
+import moment from "moment";
+moment.locale("zh-cn");
 window.moment = moment;
+
 const install = function (VueClass, opts = {}) {
     /* istanbul ignore if */
 

@@ -43,7 +43,7 @@
                 </tr>
                 <tr> 
                     <td>上门时间</td> 
-                    <td>{{$utils.formatDate(order.appointmentTime, "lll")}}</td> 
+                    <td>{{$utils.formatDate(order.appointmentTime)}}</td> 
                 </tr>
                 <tr> 
                     <td>故障位置</td>
@@ -160,9 +160,12 @@
             <el-tab-pane label="全部工程师" name="all">
                 <my-vuetable
                     :css="{tableClass: 'ui very basic plain table'}"
-                    ref="vuetable"
+                    :api-mode="false"
+                    :data="formattedAllEngineers"
+                    ref="allEngineersVuetable"
                     :per-page="5"
                     :load-on-start="false"
+                    @vuetable-pagination:change-page="onChangePage"
                     :api="`engineers?orderId=${id}`"
                     :fields="fields"
                 >
@@ -177,9 +180,9 @@
                     </el-button>
                     <w-button style="width:100%;"
                         slot="actionButton"
-                        slot-scope="{rowData}"
+                        slot-scope="{rowData, rowIndex}"
                         v-model="rowData.occupied"
-                        :handler="() => choose(rowData.id, index)">
+                        :handler="() => choose(rowData.id, rowIndex)">
                         {{ rowData.occupied ? '取消派单' : '派单' }}
                     </w-button>
                 </my-vuetable>
@@ -218,6 +221,8 @@ export default {
                 occupied: false, // 是否已经被派给当前订单
                 available: true // 是否订单当天是否有空
             },
+            allEngineersData: {},
+            formattedAllEngineers: {},
             engineers: []
         };
     },
@@ -227,6 +232,15 @@ export default {
     watch: {
         id(id) {
             this.load();
+        },
+        async allEngineersData(data) {
+            this.$refs.allEngineersVuetable.transform(data);
+            this.formattedAllEngineers = {
+                data: {
+                    ...data.data,
+                    rows: await this.engineersDataFormatter(data.data.rows, this.order)
+                }
+            };
         },
         "order.locationId" () {
             this.loadProducts();
@@ -238,9 +252,20 @@ export default {
         await this.loadProducts();
     },
     methods: {
-        onTabClick(tab) {
+        async onChangePage (page) {
+            console.log(page);
+            this.$refs.allEngineersVuetable.onChangePage(page);
+            const data = await this.$request({
+                url: `engineers?orderId=${this.order.id}&page=${page}&rows=5`
+            });
+            this.allEngineersData = data;
+        },
+        async onTabClick(tab) {
             if (this.hasLoadAllEngineers) return;
-            this.$refs.vuetable.reload();
+            const data = await this.$request({
+                url: `engineers?orderId=${this.order.id}&page=1&rows=5`
+            });
+            this.allEngineersData = data;
             this.hasLoadAllEngineers = true;
         },
         onTimeRangeChange(timeRange) {
@@ -285,12 +310,42 @@ export default {
                 resolve();
             });
         },
+        async load() {
+            return new Promise(async resolve => {
+                const id = this.id;
+                // 获取小区详情
+                if (!id) return;
+                const {data: order} = await this.$request({
+                    url: `orders/${id}`
+                });
+                const timeRange = [
+                    this.$utils.getDate(order.startTime),
+                    this.$utils.getDate(order.endTime)
+                ];
+                this.order = {
+                    ...this.order,
+                    ...order,
+                    timeRange,
+                    statusName: statusMap[order.status],
+                    statusClass: statusColorMap[order.status]
+                };
+
+                // 获取小区工程师列表
+                const { communityId } = order;
+                const { data: { rows: engineers } } = await this.$request({
+                    url: `communities/${communityId}/engineers?orderId=${id}`
+                });
+                this.engineers = await this.engineersDataFormatter(engineers, order);
+                resolve();
+            });
+        },
         engineersDataFormatter(engineers, order) {
-            return Promise(async resolve => {
+            return new Promise(async resolve => {
                 const engineerPromises = engineers.map(engineer => {
                     return new Promise(async (resolve, reject) => {
                         // 获取工程师的工作安排
-                        const {data: {rows: orders}} = await this.$request(`engineers/${engineer.id}/orders`);
+                        // TODO 当天的
+                        const {data: {rows: orders}} = await this.$request(`engineers/${engineer.id}/orders?date=${order.startTime}`);
                         // 处理数据
                         let available = true;
                         for (const _order of orders) {
@@ -323,37 +378,6 @@ export default {
                 resolve(formattedData);
             });
         },
-        async load() {
-            return new Promise(async resolve => {
-                const id = this.id;
-                // 获取小区详情
-                if (!id) return;
-                const {data: order} = await this.$request({
-                    url: `orders/${id}`
-                });
-                // const startTime = this.$utils.formatDate(order.startTime, "LT");
-                // const endTime = this.$utils.formatDate(order.endTime, "LT");
-                const timeRange = [
-                    this.$utils.getDate(order.startTime),
-                    this.$utils.getDate(order.endTime)
-                ];
-                this.order = {
-                    ...this.order,
-                    ...order,
-                    timeRange,
-                    // imgs,
-                    statusName: statusMap[order.status],
-                    statusClass: statusColorMap[order.status]
-                };
-
-                // 获取小区工程师列表
-                const { communityId } = order;
-                const { data: { rows: engineers } } = await this.$request({
-                    url: `communities/${communityId}/engineers?orderId=${id}`
-                });
-                resolve(await this.engineersDataFormatter(engineers, order));
-            });
-        },
         showImageModal(src) {
             this.$vuedals.open({
                 name: "image",
@@ -367,9 +391,10 @@ export default {
         },
         showScheduleModal(orders) {
             const schedule = orders.map(order => {
-                const date = this.$utils.formatDate(order.appointmentTime, "lll") || "待定";
-                const workTime = order.workTime || "待定";
-                return { ...order, workTime, date };
+                const start = this.$utils.formatDate(order.appointmentTime) || "待定";
+                const end = start === "待定" ? "待定" : this.$utils.formatDate(order.appointmentTime + order.workTime * 3600);
+                // const workTime = order.workTime || "待定";
+                return { ...order, start, end };
             }).sort((a, b) => b.appointmentTime > a.appointmentTime);
             this.$vuedals.open({
                 title: "维修人员工作安排",
@@ -382,11 +407,11 @@ export default {
                     data() {
                         return {
                             fields: [
-                                { name: "date", title: "维修时间"},
+                                { name: "start", title: "开始时间"},
+                                { name: "end", title: "结束时间"},
                                 { name: "communityName", title: "小区"},
                                 { name: "buildingName", title: "楼栋" },
-                                { name: "roomName", title: "单元号" },
-                                { name: "workTime", title: "预计时长"}
+                                { name: "roomName", title: "单元号" }
                             ]
                         };
                     },

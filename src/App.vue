@@ -34,7 +34,7 @@ body {
     margin: 0;
 }
 #app {
-    font-family: "Avenir", Helvetica, Arial, sans-serif;
+    font-family: PingFangSC-Light, 'helvetica neue', 'hiragino sans gb', arial, 'microsoft yahei ui', 'microsoft yahei', simsun, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;

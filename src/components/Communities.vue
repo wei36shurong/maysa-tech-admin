@@ -11,7 +11,11 @@ nav {
 	<div class="communities">
         <nav>
             <breadcrumb />
-            <el-button @click="add"> 添加小区 </el-button>
+            <el-button 
+                type="primary"
+                icon="el-icon-circle-plus-outline"
+                @click="add"
+            > 添加小区 </el-button>
         </nav>
 		<my-vuetable
 			ref="vuetable"
