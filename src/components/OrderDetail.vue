@@ -165,6 +165,7 @@
                     ref="allEngineersVuetable"
                     :per-page="5"
                     :load-on-start="false"
+                    @vuetable-pagination:change-page="onChangePage"
                     :api="`engineers?orderId=${id}`"
                     :fields="fields"
                 >
@@ -221,7 +222,7 @@ export default {
                 available: true // 是否订单当天是否有空
             },
             allEngineersData: {},
-            formattedAllEngineers: [],
+            formattedAllEngineers: {},
             engineers: []
         };
     },
@@ -233,11 +234,12 @@ export default {
             this.load();
         },
         async allEngineersData(data) {
-            console.log(data);
             this.$refs.allEngineersVuetable.transform(data);
             this.formattedAllEngineers = {
-                ...data,
-                rows: await this.engineersDataFormatter(data.data.rows, this.order)
+                data: {
+                    ...data.data,
+                    rows: await this.engineersDataFormatter(data.data.rows, this.order)
+                }
             };
         },
         "order.locationId" () {
@@ -250,10 +252,36 @@ export default {
         await this.loadProducts();
     },
     methods: {
+        // onChangePage (page) {
+        //     this.$refs.allEngineersVuetable.changePage(page);
+        // },
+        // dataManager (sortOrder, pagination) {
+        //     console.log("dataManager: ", sortOrder, pagination);
+
+        //     let data = this.formattedAllEngineers;
+
+        //     // since the filter might affect the total number of records
+        //     // we can ask Vuetable to recalculate the pagination for us
+        //     // by calling makePagination(). this will make VuetablePagination
+        //     // work just like in API mode
+        //     pagination = this.$refs.vuetable.makePagination(data.length);
+
+        //     // if you don"t want to use pagination component, you can just
+        //     // return the data array
+        //     return data;
+        // },
+        async onChangePage (page) {
+            console.log(page);
+            this.$refs.allEngineersVuetable.onChangePage(page);
+            const data = await this.$request({
+                url: `engineers?orderId=${this.order.id}&page=${page}&rows=5`
+            });
+            this.allEngineersData = data;
+        },
         async onTabClick(tab) {
             if (this.hasLoadAllEngineers) return;
             const data = await this.$request({
-                url: `engineers?orderId=${this.order.id}`
+                url: `engineers?orderId=${this.order.id}&page=1&rows=5`
             });
             this.allEngineersData = data;
             this.hasLoadAllEngineers = true;

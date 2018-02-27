@@ -276,6 +276,7 @@ export default {
                 prev_page_url: prevPageUrl,
                 next_page_url: nextPageUrl
             };
+            console.log("pagination", data);
             return data;
         }
     }
