@@ -84,15 +84,6 @@ export default {
                 props: {
                     css: CssConfig,
                     apiUrl: `${this.apiRoot}/${this.api}`,
-                    fields: [
-                        ...this.fields,
-                        {
-                            name: "__slot:actions",
-                            title: "操作",
-                            titleClass: "center aligned",
-                            dataClass: "collapsing center aligned"
-                        }
-                    ],
                     queryParams: (sortOrder, currentPage, perPage) => ({
                         asc: sortOrder[0].direction === "asc",
                         orderBy: Vue.utils.toSnakeCase(sortOrder[0].field),
@@ -108,7 +99,16 @@ export default {
                     rowClass: "clickable",
                     noDataTemplate: "没有数据",
                     detailRowComponent: this.detailRowComponent,
-                    ...this.$options.propsData
+                    ...this.$options.propsData,
+                    fields: [
+                        ...this.fields,
+                        {
+                            name: "__slot:actions",
+                            title: "操作",
+                            titleClass: "center aligned",
+                            dataClass: "collapsing center aligned"
+                        }
+                    ]
                 },
                 on: {
                     // custom events
