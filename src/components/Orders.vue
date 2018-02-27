@@ -1,5 +1,10 @@
-<style scoped>
-
+<style>
+.detail-cell {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 </style>
 
 <template>
@@ -54,12 +59,11 @@ const fields = [
     {
         name: "detail",
         title: "故障描述",
-        dataClass: "three wide",
-        titleClass: "three wide"
+        dataClass: "three wide detail-cell"
     }, {
         name: "communityName",
         title: "小区",
-        titleClass: "two wide"
+        dataClass: "three wide detail-cell"
     },
     { name: "buildingName", title: "楼栋" },
     { name: "roomName", title: "单元号" },

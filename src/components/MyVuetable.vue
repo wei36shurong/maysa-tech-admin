@@ -9,6 +9,14 @@ export default {
     name: "MyVuetable",
     props: {
         ...Vuetable.props,
+        perPage: {
+            type: Number,
+            default: 20
+        },
+        paramPrefix: {
+            type: String,
+            default: ""
+        },
         api: {
             type: String,
             required: true
@@ -96,11 +104,11 @@ export default {
                     apiUrl: `${this.apiRoot}/${this.api}`,
                     queryParams: (sortOrder, currentPage, perPage) => ({
                         asc: sortOrder[0].direction === "asc",
-                        orderBy: Vue.utils.toSnakeCase(sortOrder[0].field),
+                        orderBy: `${this.paramPrefix}${Vue.utils.toSnakeCase(sortOrder[0].field)}`,
                         page: this.page,
                         rows: perPage
                     }),
-                    perPage: 20,
+                    perPage: this.perPage,
                     dataPath: "data.rows",
                     paginationPath: "data",
                     multiSort: true,
@@ -153,7 +161,7 @@ export default {
                 h("vuetable-pagination-info", {
                     props: {
                         noDataTemplate: "",
-                        infoTemplate: "显示第{from}到{to}页, 总共{total}条数据"
+                        infoTemplate: "显示第{from}到{to}条数据, 总共{total}条数据"
                     },
                     ref: "paginationInfo"
                 }),
@@ -252,9 +260,8 @@ export default {
             const lastPage = Math.ceil(total / this.perPage);
             const from = (this.page - 1) * this.perPage + 1;
             const to = total < this.perPage ? total : from + this.perPage - 1;
-            const queryUrl = `${this.apiRoot}${this.api}?orderBy=${
-                this.orderBy
-            }&asc=${this.asc}&rows=${this.perPage}`;
+            const queryUrl = `${this.apiRoot}${this.api}?orderBy=${this.orderBy}&asc=${this.asc}&rows=${this.perPage}`;
+            console.log(queryUrl);
             const prevPageUrl = `${queryUrl}?page=${this.page - 1}`;
             const nextPageUrl = `${queryUrl}?page=${this.page + 1}`;
             data.data = {

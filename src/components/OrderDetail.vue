@@ -114,7 +114,7 @@
                 </tr>
             </tbody>
         </table>
-        <el-tabs v-model="activeName" @tab-click="onTabClick">
+        <el-tabs v-if="order.status < 2" v-model="activeName" @tab-click="onTabClick">
             <el-tab-pane label="所在小区工程师" name="community">
                 <table class="ui very basic plain table">
                     <thead>
@@ -346,7 +346,7 @@ export default {
                     return new Promise(async (resolve, reject) => {
                         // 获取工程师的工作安排
                         // TODO 当天的
-                        const {data: {rows: orders}} = await this.$request(`engineers/${engineer.id}/orders?date=${order.startTime}`);
+                        const {data: {rows: orders}} = await this.$request(`engineers/${engineer.id}/orders`);
                         // 处理数据
                         let available = true;
                         for (const _order of orders) {
@@ -354,9 +354,9 @@ export default {
                             const end = _order.appointmentTime + _order.workTime * 3600;
                             if (
                                 (start && end && order.startTime && order.endTime) && // 数据校验
-                                (_order.id !== order.id) && ( // 当前订单不记入冲突
-                                    start < order.endTime ||
-                                    end > order.startTime
+                                (_order.id !== order.id) && !( // 当前订单不记入冲突
+                                    end < order.startTime ||
+                                    start > order.endTime
                                 )
                             ) {
                                 console.log("时间冲突的订单", _order);
@@ -435,7 +435,15 @@ export default {
                 if (engineer.occupied) {
                     this.$request({url: `${url}/${engineerId}`, data, method: "delete"});
                 } else {
-                    this.$request({url, data, method: "post"});
+                    await this.$request({url, data, method: "post"});
+                    await this.$request({
+                        url: "message",
+                        method: "post",
+                        data: {
+                            mobile: engineer.phoneNum,
+                            content: "您有新的订单,请查看微信小程序"
+                        }
+                    });
                 }
                 resolve();
             });
