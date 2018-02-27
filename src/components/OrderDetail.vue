@@ -43,7 +43,7 @@
                 </tr>
                 <tr> 
                     <td>上门时间</td> 
-                    <td>{{$utils.formatDate(order.appointmentTime, "lll")}}</td> 
+                    <td>{{$utils.formatDate(order.appointmentTime)}}</td> 
                 </tr>
                 <tr> 
                     <td>故障位置</td>
@@ -252,24 +252,6 @@ export default {
         await this.loadProducts();
     },
     methods: {
-        // onChangePage (page) {
-        //     this.$refs.allEngineersVuetable.changePage(page);
-        // },
-        // dataManager (sortOrder, pagination) {
-        //     console.log("dataManager: ", sortOrder, pagination);
-
-        //     let data = this.formattedAllEngineers;
-
-        //     // since the filter might affect the total number of records
-        //     // we can ask Vuetable to recalculate the pagination for us
-        //     // by calling makePagination(). this will make VuetablePagination
-        //     // work just like in API mode
-        //     pagination = this.$refs.vuetable.makePagination(data.length);
-
-        //     // if you don"t want to use pagination component, you can just
-        //     // return the data array
-        //     return data;
-        // },
         async onChangePage (page) {
             console.log(page);
             this.$refs.allEngineersVuetable.onChangePage(page);
@@ -362,7 +344,8 @@ export default {
                 const engineerPromises = engineers.map(engineer => {
                     return new Promise(async (resolve, reject) => {
                         // 获取工程师的工作安排
-                        const {data: {rows: orders}} = await this.$request(`engineers/${engineer.id}/orders`);
+                        // TODO 当天的
+                        const {data: {rows: orders}} = await this.$request(`engineers/${engineer.id}/orders?date=${order.startTime}`);
                         // 处理数据
                         let available = true;
                         for (const _order of orders) {
@@ -408,9 +391,10 @@ export default {
         },
         showScheduleModal(orders) {
             const schedule = orders.map(order => {
-                const date = this.$utils.formatDate(order.appointmentTime, "lll") || "待定";
-                const workTime = order.workTime || "待定";
-                return { ...order, workTime, date };
+                const start = this.$utils.formatDate(order.appointmentTime) || "待定";
+                const end = start === "待定" ? "待定" : this.$utils.formatDate(order.appointmentTime + order.workTime * 3600);
+                // const workTime = order.workTime || "待定";
+                return { ...order, start, end };
             }).sort((a, b) => b.appointmentTime > a.appointmentTime);
             this.$vuedals.open({
                 title: "维修人员工作安排",
@@ -423,11 +407,11 @@ export default {
                     data() {
                         return {
                             fields: [
-                                { name: "date", title: "维修时间"},
+                                { name: "start", title: "开始时间"},
+                                { name: "end", title: "结束时间"},
                                 { name: "communityName", title: "小区"},
                                 { name: "buildingName", title: "楼栋" },
-                                { name: "roomName", title: "单元号" },
-                                { name: "workTime", title: "预计时长"}
+                                { name: "roomName", title: "单元号" }
                             ]
                         };
                     },

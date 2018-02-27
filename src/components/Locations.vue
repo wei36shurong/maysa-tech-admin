@@ -11,7 +11,11 @@ nav {
 	<div class="locations">
         <nav>
             <breadcrumb />
-            <el-button @click="add"> 添加位置 </el-button>
+            <el-button 
+                type="primary"
+                icon="el-icon-circle-plus-outline"
+                @click="add"
+            > 添加位置 </el-button>
         </nav>
 		<my-vuetable
 			api="locations"

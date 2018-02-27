@@ -206,7 +206,7 @@ const funcs = {
     formatterDate (row, column) {
         return funcs.formatDate(row[column.property], "YYYY-MM-DD");
     },
-    formatDate (date, format) {
+    formatDate (date, format = "YYYY-MM-DD hh:mm:ss") {
         if (!date) {
             return "";
         }
@@ -214,9 +214,6 @@ const funcs = {
             // 获取13位的timestamp
             const timestamp = date * 10 ** (13 - String(date).length);
             date = new Date(timestamp);
-        }
-        if (!format) {
-            format = "YYYY-MM-DD";
         }
         const formatStr = moment(date).format(format);
         return formatStr;

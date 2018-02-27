@@ -132,19 +132,6 @@ export default {
                     // thats why use render function instead of template
                     ...this.$vnode.data.scopedSlots,
                     actions: ({ rowData, rowIndex }) => {
-                        // return (
-                        //     <div class="ui dropdown item">
-                        //         <i class="options icon" />
-                        //         <div class="menu">
-                        //             <a class="item" onClick={
-                        //                 event => { this.remove(rowData, event); }
-                        //             }> 删除 </a>
-                        //             <a class="item" onClick={
-                        //                 event => { this.edit(rowData, event); }
-                        //             }> 编辑 </a>
-                        //         </div>
-                        //     </div>
-                        // );
                         return (
                             <el-button type="text" class="danger" onClick={
                                 event => { this.remove(rowData, event); }
@@ -276,7 +263,6 @@ export default {
                 prev_page_url: prevPageUrl,
                 next_page_url: nextPageUrl
             };
-            console.log("pagination", data);
             return data;
         }
     }
