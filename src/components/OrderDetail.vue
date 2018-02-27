@@ -167,6 +167,7 @@
                     :load-on-start="false"
                     @vuetable-pagination:change-page="onChangePage"
                     :api="`engineers?orderId=${id}`"
+                    :showActions="false"
                     :fields="fields"
                 >
                     <el-button 

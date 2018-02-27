@@ -17,6 +17,10 @@ export default {
             type: Array,
             required: true
         },
+        showActions: {
+            type: Boolean,
+            default: true
+        },
         sortOrder: {
             type: Array,
             default() {
@@ -79,6 +83,12 @@ export default {
     methods: {
         // render related functions
         renderVuetable(h) {
+            const actionsField = {
+                name: "__slot:actions",
+                title: "操作",
+                titleClass: "center aligned",
+                dataClass: "collapsing center aligned"
+            };
             return h("vuetable", {
                 ref: "vuetable",
                 props: {
@@ -100,15 +110,9 @@ export default {
                     noDataTemplate: "没有数据",
                     detailRowComponent: this.detailRowComponent,
                     ...this.$options.propsData,
-                    fields: [
-                        ...this.fields,
-                        {
-                            name: "__slot:actions",
-                            title: "操作",
-                            titleClass: "center aligned",
-                            dataClass: "collapsing center aligned"
-                        }
-                    ]
+                    fields: this.showActions
+                        ? [...this.fields, actionsField]
+                        : [...this.fields]
                 },
                 on: {
                     // custom events
