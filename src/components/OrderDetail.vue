@@ -16,12 +16,23 @@
     tr > td:first-child {
         &:extend(.text-muted);
     }
+    tr > td:nth-child(2) {
+        & > div {
+            width: 220px;
+        }
+    }
 }
 </style>
 
 <template>
 	<div class="order-detail">
         <table class="ui very basic plain table detail">
+            <thead>
+                <tr>
+                    <th style="width:100px;"></th>
+                    <th></th>
+                </tr>
+            </thead>
             <tbody>
                 <tr>
                     <td>编号</td>
@@ -33,12 +44,23 @@
                 <tr> <td>创建者</td> <td>{{order.residentName}}</td> </tr>
                 <tr> <td>创建时间</td> <td>{{order.createTime}}</td> </tr>
                 <tr> 
+                    <td>可上门日期</td>
+                    <td>
+                        <el-date-picker
+                            v-model="order.date"
+                            @change="onDateChange"
+                            type="date"
+                            placeholder="待定" />
+                    </td>
+                </tr>
+                <tr> 
                     <td>可上门时间段</td>
                     <td> 
                         <el-time-picker
+                        is-range
+                        :clearable="false"
                         @change="onTimeRangeChange"
                         format="HH:mm"
-                        is-range
                         v-model="order.timeRange" />
                     </td>
                 </tr>
@@ -115,29 +137,30 @@
                 </tr>
             </tbody>
         </table>
-        <my-vuetable
-            v-if="order.status >= 3"
-            :css="{tableClass: 'ui very basic plain table'}"
-            :api-mode="false"
-            :data="formattedCommunityEngineers"
-            ref="allEngineersVuetable"
-            :per-page="5"
-            :load-on-start="false"
-            @vuetable-pagination:change-page="onChangePage"
-            :api="`engineers?orderId=${id}`"
-            :showActions="false"
-            :fields="fields"
-        >
-            <w-button style="width:100%;"
-                slot="actionButton"
-                slot-scope="{rowData, rowIndex}"
-                v-model="rowData.occupied"
-                :handler="() => choose(rowData, rowIndex)">
-                {{ rowData.occupied ? '取消派单' : '派单' }}
-            </w-button>
-        </my-vuetable>
-        <el-tabs v-if="order.status < 3" v-model="activeName" @tab-click="onTabClick">
-            <el-tab-pane label="所在小区工程师" name="community">
+        <el-tabs
+            v-model="activeName"
+            @tab-click="onTabClick">
+            <el-tab-pane v-if="order.status >= 3" label="该订单派给的工程师" name="orderEngineers">
+                <my-vuetable
+                    :css="{tableClass: 'ui very basic plain table'}"
+                    :api-mode="false"
+                    :data="order.engineers"
+                    data-path=""
+                    ref="orderEngineersVuetable"
+                    :per-page="10"
+                    :showActions="false"
+                    :fields="readOnlyfields"
+                >
+                    <w-button style="width:100%;"
+                        slot="actionButton"
+                        slot-scope="{rowData, rowIndex}"
+                        v-model="rowData.occupied"
+                        :handler="() => choose(rowData, rowIndex)">
+                        {{ rowData.occupied ? '取消派单' : '派单' }}
+                    </w-button>
+                </my-vuetable>
+            </el-tab-pane>
+            <el-tab-pane v-if="order.status < 3" label="所在小区工程师" name="communityEngineers">
                 <table class="ui very basic plain table">
                     <thead>
                         <tr>
@@ -179,13 +202,13 @@
                     </tbody>
                 </table>
             </el-tab-pane>
-            <el-tab-pane label="全部工程师" name="all">
+            <el-tab-pane v-if="order.status < 3" label="全部工程师" name="allEngineers">
                 <my-vuetable
                     :css="{tableClass: 'ui very basic plain table'}"
                     :api-mode="false"
                     :data="formattedAllEngineers"
                     ref="allEngineersVuetable"
-                    :per-page="10"
+                    :per-page="rows"
                     :load-on-start="false"
                     @vuetable-pagination:change-page="onChangePage"
                     :api="`engineers?orderId=${id}`"
@@ -222,14 +245,14 @@ export default {
     components: {},
     data() {
         return {
+            rows: 5,
             config,
             hasLoadAllEngineers: false,
             readOnlyfields: [
                 {name: "name", title: "姓名"},
                 {name: "type", title: "类型"},
                 {name: "level", title: "等级"},
-                {name: "phoneNum", title: "联系方式"},
-                {name: "__slot:actionButton"}
+                {name: "phoneNum", title: "联系方式"}
             ],
             fields: [
                 {name: "name", title: "姓名"},
@@ -239,13 +262,13 @@ export default {
                 {name: "__slot:scheduleButton"},
                 {name: "__slot:actionButton"}
             ],
-            activeName: "community", // all: 全部工程师, community: 当前小区工程师
-            timeRange: [new Date(), new Date()],
+            activeName: "communityEngineers", // all: 全部工程师, community: 当前小区工程师, order: 订单工程师
             productId: "",
             products: [],
             locationId: "",
             locations: [],
             order: {
+                engineers: [], // 当前订单派给的工程师
                 locationId: null,
                 productId: null,
                 occupied: false, // 是否已经被派给当前订单
@@ -272,6 +295,7 @@ export default {
             this.load();
         },
         async allEngineersData(data) {
+            if (!this.$refs.allEngineersVuetable) return [];
             this.$refs.allEngineersVuetable.transform(data);
             this.formattedAllEngineers = {
                 data: {
@@ -288,23 +312,43 @@ export default {
         await this.load();
         await this.loadLocations();
         await this.loadProducts();
-        if (this.order.status >= 3 || this.order.status === 4) this.onTabClick();
+        // if (this.order.status >= 3) {
+        //     this.onTabClick();
+        // }
+        this.activeName = this.order.status < 3
+            ? "communityEngineers"
+            : "orderEngineers";
     },
     methods: {
         async onChangePage (page) {
             this.$refs.allEngineersVuetable.onChangePage(page);
             const data = await this.$request({
-                url: `engineers?orderId=${this.order.id}&page=${page}&rows=5`
+                url: `engineers?orderId=${this.order.id}&page=${page}&rows=${this.rows}`
             });
             this.allEngineersData = data;
         },
         async onTabClick(tab) {
             if (this.hasLoadAllEngineers) return;
             const data = await this.$request({
-                url: `engineers?orderId=${this.order.id}&page=1&rows=5`
+                url: `engineers?orderId=${this.order.id}&page=1&rows=${this.rows}`
             });
             this.allEngineersData = data;
             this.hasLoadAllEngineers = true;
+        },
+        // 在不修改时间的情况下修改日期，但不提交
+        onDateChange(date) {
+            // 获取日期string
+            console.log(date);
+            const dateStr = this.$utils.formatDate(date, "YYYY-MM-DD");
+            // 获取时间string
+            console.log(this.order.timeRange);
+            const timeRange = this.order.timeRange;
+            const startStr = this.$utils.formatDate(timeRange[0], "hh:mm");
+            const endStr = this.$utils.formatDate(timeRange[1], "hh:mm");
+            // 合并，生成新的timeRange
+            const startTime = new Date(`${dateStr} ${startStr}`);
+            const endTime = new Date(`${dateStr} ${endStr}`);
+            this.order.timeRange = [startTime, endTime];
         },
         onTimeRangeChange(timeRange) {
             const startTime = this.$utils.getTimestamp(timeRange[0]);
@@ -362,6 +406,7 @@ export default {
                 this.order = {
                     ...this.order,
                     ...order,
+                    date: this.$utils.getDate(order.startTime),
                     timeRange,
                     statusName: statusMap[order.status],
                     statusClass: statusColorMap[order.status]
@@ -454,6 +499,7 @@ export default {
                     },
                     template: `
                         <vuetable 
+                            no-data-template="无安排"
                             :api-mode="false"
                             :data="schedule"
                             :fields="fields"

@@ -23,7 +23,7 @@
 		<my-vuetable
 			ref="vuetable"
 			api="orders"
-            :appendParams="{status}"
+            :appendParams="status != 0 ? {status} : {}"
 			:fields="fields"
 			:formatter="formatter"
             @vuetable:row-clicked="onRowClicked"
@@ -57,7 +57,7 @@ import detail from "@/components/OrderDetail";
 import { statusMap, statusColorMap } from "@/conf/constants";
 
 const fields = [
-    { name: "code", title: "订单编号" },
+    // { name: "code", title: "订单编号" },
     {
         name: "detail",
         title: "故障描述",

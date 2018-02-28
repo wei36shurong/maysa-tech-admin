@@ -13,6 +13,7 @@
             添加工程师 
         </el-button>
 		<my-vuetable
+            row-class=""
 			ref="vuetable"
 			api="engineers"
 			:fields="fields"

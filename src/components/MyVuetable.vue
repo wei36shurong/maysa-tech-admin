@@ -9,6 +9,10 @@ export default {
     name: "MyVuetable",
     props: {
         ...Vuetable.props,
+        rowClass: {
+            type: String,
+            default: "clickable"
+        },
         perPage: {
             type: Number,
             default: 20
@@ -18,8 +22,7 @@ export default {
             default: ""
         },
         api: {
-            type: String,
-            required: true
+            type: String
         },
         fields: {
             type: Array,
@@ -106,7 +109,7 @@ export default {
                         asc: sortOrder[0].direction === "asc",
                         orderBy: `${this.paramPrefix}${Vue.utils.toSnakeCase(sortOrder[0].field)}`,
                         page: this.page,
-                        rows: perPage
+                        rows: this.perPage
                     }),
                     perPage: this.perPage,
                     dataPath: "data.rows",
@@ -114,7 +117,7 @@ export default {
                     multiSort: true,
                     sortOrder: this.sortOrder,
                     appendParams: { ...this.appendParams },
-                    rowClass: "clickable",
+                    rowClass: this.rowClass,
                     noDataTemplate: "没有数据",
                     detailRowComponent: this.detailRowComponent,
                     ...this.$options.propsData,
