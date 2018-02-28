@@ -37,6 +37,7 @@
                     <td> 
                         <el-time-picker
                         @change="onTimeRangeChange"
+                        format="HH:mm"
                         is-range
                         v-model="order.timeRange" />
                     </td>
@@ -114,7 +115,28 @@
                 </tr>
             </tbody>
         </table>
-        <el-tabs v-if="order.status < 2" v-model="activeName" @tab-click="onTabClick">
+        <my-vuetable
+            v-if="order.status >= 3"
+            :css="{tableClass: 'ui very basic plain table'}"
+            :api-mode="false"
+            :data="formattedCommunityEngineers"
+            ref="allEngineersVuetable"
+            :per-page="5"
+            :load-on-start="false"
+            @vuetable-pagination:change-page="onChangePage"
+            :api="`engineers?orderId=${id}`"
+            :showActions="false"
+            :fields="fields"
+        >
+            <w-button style="width:100%;"
+                slot="actionButton"
+                slot-scope="{rowData, rowIndex}"
+                v-model="rowData.occupied"
+                :handler="() => choose(rowData, rowIndex)">
+                {{ rowData.occupied ? '取消派单' : '派单' }}
+            </w-button>
+        </my-vuetable>
+        <el-tabs v-if="order.status < 3" v-model="activeName" @tab-click="onTabClick">
             <el-tab-pane label="所在小区工程师" name="community">
                 <table class="ui very basic plain table">
                     <thead>
@@ -149,7 +171,7 @@
                             <td class="right aligned ">
                                 <w-button style="width:100%;"
                                     v-model="engineer.occupied"
-                                    :handler="() => choose(engineer.id, index)">
+                                    :handler="() => choose(engineer, index)">
                                     {{ engineer.occupied ? '取消派单' : '派单' }}
                                 </w-button>
                             </td>
@@ -163,7 +185,7 @@
                     :api-mode="false"
                     :data="formattedAllEngineers"
                     ref="allEngineersVuetable"
-                    :per-page="5"
+                    :per-page="10"
                     :load-on-start="false"
                     @vuetable-pagination:change-page="onChangePage"
                     :api="`engineers?orderId=${id}`"
@@ -183,7 +205,7 @@
                         slot="actionButton"
                         slot-scope="{rowData, rowIndex}"
                         v-model="rowData.occupied"
-                        :handler="() => choose(rowData.id, rowIndex)">
+                        :handler="() => choose(rowData, rowIndex)">
                         {{ rowData.occupied ? '取消派单' : '派单' }}
                     </w-button>
                 </my-vuetable>
@@ -202,6 +224,13 @@ export default {
         return {
             config,
             hasLoadAllEngineers: false,
+            readOnlyfields: [
+                {name: "name", title: "姓名"},
+                {name: "type", title: "类型"},
+                {name: "level", title: "等级"},
+                {name: "phoneNum", title: "联系方式"},
+                {name: "__slot:actionButton"}
+            ],
             fields: [
                 {name: "name", title: "姓名"},
                 {name: "type", title: "类型"},
@@ -223,12 +252,20 @@ export default {
                 available: true // 是否订单当天是否有空
             },
             allEngineersData: {},
-            formattedAllEngineers: {},
+            formattedAllEngineers: {
+                data: { rows: [] }
+            },
             engineers: []
         };
     },
     props: {
         id: Number
+    },
+    computed: {
+        formattedCommunityEngineers() {
+            const rows = this.formattedAllEngineers.data.rows.filter(engineer => engineer.occupied);
+            return rows;
+        }
     },
     watch: {
         id(id) {
@@ -251,10 +288,10 @@ export default {
         await this.load();
         await this.loadLocations();
         await this.loadProducts();
+        if (this.order.status >= 3 || this.order.status === 4) this.onTabClick();
     },
     methods: {
         async onChangePage (page) {
-            console.log(page);
             this.$refs.allEngineersVuetable.onChangePage(page);
             const data = await this.$request({
                 url: `engineers?orderId=${this.order.id}&page=${page}&rows=5`
@@ -270,7 +307,6 @@ export default {
             this.hasLoadAllEngineers = true;
         },
         onTimeRangeChange(timeRange) {
-            console.log(timeRange);
             const startTime = this.$utils.getTimestamp(timeRange[0]);
             const endTime = this.$utils.getTimestamp(timeRange[1]);
             return new Promise(async resolve => {
@@ -426,14 +462,13 @@ export default {
                 }
             });
         },
-        choose(engineerId, index) {
+        choose(engineer, index) {
             return new Promise(async(resolve, reject) => {
-                console.log("派单", engineerId);
-                const engineer = this.engineers[index];
-                const data = { id: engineerId };
+                console.log("派单", engineer.id);
+                const data = { id: engineer.id };
                 const url = `orders/${this.order.id}/engineers`;
                 if (engineer.occupied) {
-                    this.$request({url: `${url}/${engineerId}`, data, method: "delete"});
+                    this.$request({url: `${url}/${engineer.id}`, data, method: "delete"});
                 } else {
                     await this.$request({url, data, method: "post"});
                     await this.$request({

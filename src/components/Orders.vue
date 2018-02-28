@@ -1,10 +1,12 @@
 <style>
 .detail-cell {
-    max-width: 200px;
+    max-width: 150px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+.status-cell { width: 86px; }
+.building-cell { width: 86px; }
 </style>
 
 <template>
@@ -59,17 +61,14 @@ const fields = [
     {
         name: "detail",
         title: "故障描述",
-        dataClass: "three wide detail-cell"
+        dataClass: "detail-cell"
     }, {
         name: "communityName",
         title: "小区",
-        dataClass: "three wide detail-cell"
+        dataClass: "detail-cell"
     },
-    { name: "buildingName", title: "楼栋" },
+    { name: "buildingName", titleClass: "building-cell", title: "楼栋" },
     { name: "roomName", title: "单元号" },
-    // { name: "startTime", title: "预约开始时间" },
-    // { name: "endTime", title: "预约开始时间" },
-    // { name: "appointmentTime", title: "预约开始时间" }
     { name: "createTime", title: "创建时间" },
     { name: "updateTime", title: "更新时间" }
 ];
@@ -93,8 +92,7 @@ export default {
                 {
                     title: "状态",
                     name: "__slot:status",
-                    // sortField: 'status', // slot field不能这么做
-                    callback: "statusFormatter"
+                    titleClass: "status-cell"
                 }
             ],
             formatter(data) {

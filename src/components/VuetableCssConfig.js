@@ -13,5 +13,5 @@ const defaultConfig = {
 };
 export default {
     ...defaultConfig,
-    tableClass: "ui selectable plain gapped single line table"
+    tableClass: "ui selectable plain gapped unstackable table"
 };
