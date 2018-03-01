@@ -31,20 +31,7 @@
 			:fields="fields"
 			:formatter="formatter"
             @vuetable:row-clicked="onRowClicked"
-            @edit="onEdit"
         >
-			<div
-				slot="detail"
-				slot-scope="{rowData}">
-                <w-input :value="rowData.detail"
-                    type="textarea"
-                    :api="`orders/${rowData.id}`"
-                    :ref="`input-${rowData.id}`"
-                    :clickable="false"
-                    @save="$refs.vuetable.reload"
-                    @finish="editing = false"
-                    name="detail" />
-			</div>
 			<div
 				slot="status"
 				slot-scope="{rowData}">
@@ -89,7 +76,6 @@ export default {
         return {
             status: "",
             statusMap,
-            editing: false,
             id: null,
             fields: [
                 ...fields,
@@ -122,18 +108,15 @@ export default {
         handleSelect(status) {
             this.status = status;
         },
-        onEdit (id) {
-            this.editing = true;
-            this.$refs[`input-${id}`].edit();
-        },
-        onRowClicked ({id}) {
-            if (this.editing) return;
+        onRowClicked({id}) {
+            console.log("order row clicked");
             this.id = id;
             this.$vuedals.open({
                 title: "订单详情",
                 component: detail,
-                props: {
-                    id: this.id
+                props: { id: this.id },
+                onDismiss: () => {
+                    this.$refs.vuetable.reload();
                 }
             });
         }

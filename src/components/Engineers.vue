@@ -55,7 +55,6 @@ export default {
                 onClose: (res) => {
                     if (res === "success") {
                         this.$refs.vuetable.reload();
-                        // return;
                     }
                 }
             });
