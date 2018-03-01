@@ -500,7 +500,7 @@ export default {
             const {data: {rows: orders}} = await this.$request({
                 url: `engineers/${engineer.id}/orders`
             });
-            const schedule = orders.map(order => {
+            const schedule = orders.filter(order => order.appointmentTime).map(order => {
                 const start = this.$utils.formatDate(order.appointmentTime) || "待定";
                 const end = start === "待定" ? "待定" : this.$utils.formatDate(order.appointmentTime + order.workTime * 3600);
                 // const workTime = order.workTime || "待定";
