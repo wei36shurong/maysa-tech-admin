@@ -58,6 +58,7 @@
                     <td> 
                         <el-time-picker
                         is-range
+                        arrow-control
                         :clearable="false"
                         @change="onTimeRangeChange"
                         format="HH:mm"
@@ -336,19 +337,20 @@ export default {
             this.hasLoadAllEngineers = true;
         },
         // 在不修改时间的情况下修改日期，但不提交
-        onDateChange(date) {
+        async onDateChange(date) {
             // 获取日期string
             console.log(date);
             const dateStr = this.$utils.formatDate(date, "YYYY-MM-DD");
             // 获取时间string
             console.log(this.order.timeRange);
             const timeRange = this.order.timeRange;
-            const startStr = this.$utils.formatDate(timeRange[0], "hh:mm");
-            const endStr = this.$utils.formatDate(timeRange[1], "hh:mm");
+            const startStr = this.$utils.formatDate(timeRange[0], "LT");
+            const endStr = this.$utils.formatDate(timeRange[1], "LT");
             // 合并，生成新的timeRange
             const startTime = new Date(`${dateStr} ${startStr}`);
             const endTime = new Date(`${dateStr} ${endStr}`);
             this.order.timeRange = [startTime, endTime];
+            this.onTimeRangeChange(this.order.timeRange);
         },
         onTimeRangeChange(timeRange) {
             const startTime = this.$utils.getTimestamp(timeRange[0]);

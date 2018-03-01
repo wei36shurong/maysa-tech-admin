@@ -236,12 +236,18 @@ export default {
             await this.$request({
                 url: `${api}/${data.id}`,
                 method: "delete"
+            }).then(() => {
+                this.$message({
+                    type: "success",
+                    message: "删除成功"
+                });
+                this.$refs.vuetable.reload();
+            }).catch(({message}) => {
+                this.$message({
+                    type: "warning",
+                    message
+                });
             });
-            this.$message({
-                type: "success",
-                message: "删除成功"
-            });
-            this.$refs.vuetable.reload();
         },
         formatDate(value, fmt = "D MMM YYYY") {
             return value == null ? "" : moment(value, "YYYY-MM-DD").format(fmt);
@@ -264,7 +270,6 @@ export default {
             const from = (this.page - 1) * this.perPage + 1;
             const to = total < this.perPage ? total : from + this.perPage - 1;
             const queryUrl = `${this.apiRoot}${this.api}?orderBy=${this.orderBy}&asc=${this.asc}&rows=${this.perPage}`;
-            console.log(queryUrl);
             const prevPageUrl = `${queryUrl}?page=${this.page - 1}`;
             const nextPageUrl = `${queryUrl}?page=${this.page + 1}`;
             data.data = {

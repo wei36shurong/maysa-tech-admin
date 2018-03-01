@@ -1,4 +1,4 @@
-<style scoped>
+
 
 </style>
 
@@ -53,7 +53,10 @@ export default {
                 title: "添加工程师",
                 component: engineerForm,
                 onClose: (res) => {
-                    if (res === "success") this.$refs.vuetable.reload();
+                    if (res === "success") {
+                        this.$refs.vuetable.reload();
+                        // return;
+                    }
                 }
             });
         }

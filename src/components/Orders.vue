@@ -1,12 +1,17 @@
-<style>
+<style lang="less">
+@import "~@/assets/less/fn";
+
 .detail-cell {
+    &:extend(.text-ellipsis);
     max-width: 150px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
-.status-cell { width: 86px; }
+.room-cell { 
+    &:extend(.text-ellipsis);
+    max-width: 100px; 
+}
+.status-cell { width: 100px; }
 .building-cell { width: 86px; }
+
 </style>
 
 <template>
@@ -67,8 +72,8 @@ const fields = [
         title: "小区",
         dataClass: "detail-cell"
     },
-    { name: "buildingName", titleClass: "building-cell", title: "楼栋" },
-    { name: "roomName", title: "单元号" },
+    { name: "buildingName", dataClass: "building-cell", title: "楼栋" },
+    { name: "roomName", dataClass: "room-cell", title: "单元号" },
     { name: "createTime", title: "创建时间" },
     { name: "updateTime", title: "更新时间" }
 ];

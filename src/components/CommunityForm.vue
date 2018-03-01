@@ -40,7 +40,6 @@ export default {
                     message: res.message
                 });
             });
-            this.$vuedals.close("success");
         },
         cancel() {
             this.$vuedals.close("cancel");
