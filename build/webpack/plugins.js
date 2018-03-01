@@ -3,13 +3,12 @@
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
-    .BundleAnalyzerPlugin;
+// const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const OptimizeCSSPlugin = require("optimize-css-assets-webpack-plugin");
 const FriendlyErrorsPlugin = require("friendly-errors-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const path = require("path");
-const SshWebpackPlugin = require("ssh-webpack-plugin");
+// const SshWebpackPlugin = require("ssh-webpack-plugin");
 
 //判断当前是否处于开发状态下
 const __DEV__ = (process.env.NODE_ENV || "development") === "development";

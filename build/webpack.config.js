@@ -1,5 +1,5 @@
 const path = require("path");
-const webpack = require("webpack");
+// const webpack = require("webpack");
 const loaders = require("./webpack/loaders");
 const plugins = require("./webpack/plugins");
 
@@ -29,7 +29,7 @@ appsConfig.apps.forEach((app) => {
 
 // 设置开发时源代码映射工具
 // const devTool = __DEV__ ? "#cheap-module-eval-source-map" : "#source-map";
-const devTool = __DEV__ ? "#cheap-module-eval-source-map" : "#hidden-source-map";
+// const devTool = __DEV__ ? "#cheap-module-eval-source-map" : "#hidden-source-map";
 
 console.log("appsConfig.config.assetsPublicPath", appsConfig.config.assetsPublicPath);
 

@@ -11,7 +11,6 @@
 }
 .status-cell { width: 100px; }
 .building-cell { width: 86px; }
-
 </style>
 
 <template>

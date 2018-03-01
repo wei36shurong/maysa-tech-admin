@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title> 梅沙物业保修系统 </title>
+    <title> 万匠维管理系统 </title>
 
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="IE=edge"/>
@@ -21,10 +21,10 @@
     <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdn.bootcss.com/semantic-ui/2.3.0/semantic.min.js"></script>
 
-    <%if (htmlWebpackPlugin.files.favicon) { %>
+    <% if (htmlWebpackPlugin.files.favicon) { %>
         <link rel="shortcut icon" href="<%= htmlWebpackPlugin.files.favicon %>" type="image/x-icon">
     <% } %>
-    <%for (var css in htmlWebpackPlugin.files.css) { %>
+    <% for (var css in htmlWebpackPlugin.files.css) { %>
         <link href="<%= htmlWebpackPlugin.files.css[css] %>" rel="stylesheet">
     <%} %>
 </head>

@@ -102,8 +102,8 @@
                     <td>故障描述</td> 
                     <td>
                         <w-input
+                            style="width:auto;"
                             type="textarea"
-                            :rows="2"
                             name="detail"
                             :api="`orders/${id}`"
                             placeholder="请输入故障描述"

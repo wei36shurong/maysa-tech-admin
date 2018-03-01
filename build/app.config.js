@@ -1,7 +1,7 @@
 const utils = require("./utils");
 
 const baseCdnPrefix = "vankely-admin";
-const cdnPath = "cdn-vankely-admin";
+// const cdnPath = "cdn-vankely-admin";
 const oss = {
     region: "xxx",
     bucket: "xx",

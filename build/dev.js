@@ -1,17 +1,16 @@
 /*eslint no-console: 0 */
 
 const express = require("express");
-const webpack = require("webpack");
-const proxyMiddleware = require("http-proxy-middleware");
+// const webpack = require("webpack");
+// const proxyMiddleware = require("http-proxy-middleware");
 const appConfig = require("./app.config");
-const webpackConfig = require("./webpack.config");
+// const webpackConfig = require("./webpack.config");
 const opn = require("opn");
-const fs = require("fs-extra");
+// const fs = require("fs-extra");
 const utils = require("./utils");
 
 const app = express();
 const port = appConfig.devServer.port;
-
 
 // 启动mock数据
 const jsonFiles = utils.readFilesSync(utils.resolve("build/mock"), []);
@@ -59,7 +58,6 @@ app.use("/", routes);
 //     }
 //     app.use(proxyMiddleware(options.filter || context, options));
 // });
-
 
 module.exports = app.listen(port, (err) => {
     if (err) {
