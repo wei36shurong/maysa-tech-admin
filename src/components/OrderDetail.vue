@@ -56,13 +56,31 @@
                 <tr> 
                     <td>可上门时间段</td>
                     <td> 
-                        <el-time-picker
+                        <el-time-select
+                            v-model="order.startTime"
+                            @change="onTimeRangeChange"
+                            :picker-options="{
+                                start: '08:30',
+                                step: '00:30',
+                                end: '21:00'
+                            }">
+                        </el-time-select>
+                        <el-time-select
+                            v-model="order.endTime"
+                            @change="onTimeRangeChange"
+                            :picker-options="{
+                                start: '08:30',
+                                step: '00:30',
+                                end: '21:00',
+                                minTime: order.startTime
+                            }">
+                        </el-time-select>
+                        <!-- <el-time-picker
                         is-range
-                        arrow-control
                         :clearable="false"
                         @change="onTimeRangeChange"
                         format="HH:mm"
-                        v-model="order.timeRange" />
+                        v-model="order.timeRange" /> -->
                     </td>
                 </tr>
                 <tr> 
@@ -176,9 +194,6 @@
                     </thead>
                     <tbody>
                         <tr v-for="(engineer, index) in engineers" :key="`${order.id} ${engineer.id}`">
-                            <!-- <td class="collapsing">
-                                <img class="avatar" :src="engineer.avatar">
-                            </td> -->
                             <td>{{engineer.name}}</td>
                             <td>{{engineer.type}}</td>
                             <td>{{engineer.level}}</td>
@@ -269,6 +284,7 @@ export default {
             locationId: "",
             locations: [],
             order: {
+                timeRange: [],
                 engineers: [], // 当前订单派给的工程师
                 locationId: null,
                 productId: null,
@@ -289,6 +305,13 @@ export default {
         formattedCommunityEngineers() {
             const rows = this.formattedAllEngineers.data.rows.filter(engineer => engineer.occupied);
             return rows;
+        },
+        timeRange() {
+            const dateStr = this.$utils.formatDate(this.order.date, "YYYY-MM-DD");
+            // 合并，生成新的timeRange
+            const startTime = new Date(`${dateStr} ${this.order.startTime}`);
+            const endTime = new Date(`${dateStr} ${this.order.endTime}`);
+            return [startTime, endTime];
         }
     },
     watch: {
@@ -313,9 +336,6 @@ export default {
         await this.load();
         await this.loadLocations();
         await this.loadProducts();
-        // if (this.order.status >= 3) {
-        //     this.onTabClick();
-        // }
         this.activeName = this.order.status < 3
             ? "communityEngineers"
             : "orderEngineers";
@@ -352,7 +372,8 @@ export default {
             this.order.timeRange = [startTime, endTime];
             this.onTimeRangeChange(this.order.timeRange);
         },
-        onTimeRangeChange(timeRange) {
+        onTimeRangeChange() {
+            const timeRange = this.timeRange;
             const startTime = this.$utils.getTimestamp(timeRange[0]);
             const endTime = this.$utils.getTimestamp(timeRange[1]);
             return new Promise(async resolve => {
@@ -408,8 +429,10 @@ export default {
                 this.order = {
                     ...this.order,
                     ...order,
-                    date: this.$utils.getDate(order.startTime),
                     timeRange,
+                    startTime: this.$utils.formatDate(order.startTime, "LT"),
+                    endTime: this.$utils.formatDate(order.endTime, "LT"),
+                    date: this.$utils.getDate(order.startTime),
                     statusName: statusMap[order.status],
                     statusClass: statusColorMap[order.status]
                 };

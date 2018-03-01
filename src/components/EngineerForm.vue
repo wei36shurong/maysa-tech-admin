@@ -1,5 +1,4 @@
 <style scoped>
-// eslint-disable-next-line no-constant-condition
 >>> .el-input {
     width: 360px;
 }
