@@ -10,6 +10,9 @@
             router
             text-color="#fff"
             active-text-color="#fff">
+            <el-menu-item index="/admin" disabled>
+                <img :src="logo">
+            </el-menu-item>
             <el-menu-item index="/admin/orders">订单列表</el-menu-item>
             <el-menu-item index="/admin/locations">产品列表</el-menu-item>
             <el-menu-item index="/admin/engineers">工程师列表</el-menu-item>
@@ -25,10 +28,12 @@
 </template>
 
 <script>
+import logo from "@/assets/img/logo.png";
 export default {
     name: "layout",
     data() {
         return {
+            logo,
             percentage: 0,
             speed: 5
         };

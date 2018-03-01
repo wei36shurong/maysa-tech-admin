@@ -201,7 +201,7 @@
                             <td>
                                 <el-button 
                                     :type="engineer.available ? 'success' : 'warning'" 
-                                    @click="showScheduleModal(engineer.orders)"
+                                    @click="showScheduleModal(engineer)"
                                     plain
                                 >
                                     查看当天时间表
@@ -235,7 +235,7 @@
                         slot="scheduleButton"
                         slot-scope="{rowData}"
                         :type="rowData.available ? 'success' : 'warning'" 
-                        @click="showScheduleModal(rowData.orders)"
+                        @click="showScheduleModal(rowData)"
                         plain
                     >
                         查看当天时间表
@@ -496,7 +496,10 @@ export default {
                 }
             });
         },
-        showScheduleModal(orders) {
+        async showScheduleModal(engineer) {
+            const {data: {rows: orders}} = await this.$request({
+                url: `engineers/${engineer.id}/orders`
+            });
             const schedule = orders.map(order => {
                 const start = this.$utils.formatDate(order.appointmentTime) || "待定";
                 const end = start === "待定" ? "待定" : this.$utils.formatDate(order.appointmentTime + order.workTime * 3600);

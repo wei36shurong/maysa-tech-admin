@@ -21,6 +21,10 @@
             v-for="(status, key) in statusMap"
             :key="status"
             :index="key">
+				<i 
+                    style="display:inline;"
+                    :class="statusColorMap[key]"
+                    class="circle icon"/>
                 {{status}}
             </el-menu-item>
         </el-menu>
@@ -76,6 +80,7 @@ export default {
         return {
             status: "",
             statusMap,
+            statusColorMap,
             id: null,
             fields: [
                 ...fields,
@@ -113,6 +118,7 @@ export default {
             this.id = id;
             this.$vuedals.open({
                 title: "订单详情",
+                size: "lg",
                 component: detail,
                 props: { id: this.id },
                 onDismiss: () => {
