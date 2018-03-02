@@ -1,9 +1,6 @@
 const config = {
     base: {
         mock: "http://127.0.0.1:8080",
-        // 这里json是当root用的
-        // json: "http://127.0.0.1:8080",
-        // json: "http://172.17.21.221:8088/admin",
         api: "http://111.231.142.117:8088/admin"
     },
     testing: {

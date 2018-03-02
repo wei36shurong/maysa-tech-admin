@@ -541,17 +541,22 @@ export default {
             return new Promise(async(resolve, reject) => {
                 console.log("派单", engineer.id);
                 const data = { id: engineer.id };
-                const url = `orders/${this.order.id}/engineers`;
+                const order = this.order;
+                const url = `orders/${order.id}/engineers`;
                 if (engineer.occupied) {
                     this.$request({url: `${url}/${engineer.id}`, data, method: "delete"});
                 } else {
+                    const date = this.$utils.formatDate(order.date, "YYYY-MM-DD");
+                    const address = `${order.communityName} ${order.buildingName} ${order.roomName}`;
+                    const content = `您有新的订单，地址：${address}，预约时间段：${date} ${order.startTime}-${order.endTime}，请前往万匠维小程序进行处理`;
                     await this.$request({url, data, method: "post"});
                     await this.$request({
                         url: "message",
                         method: "post",
                         data: {
+                            // 【万匠维】您有新的订单，地址：xxxx，预约时间：xxxx，请前往万匠维小程序进行处理
                             mobile: engineer.phoneNum,
-                            content: "您有新的订单,请查看微信小程序"
+                            content
                         }
                     });
                 }

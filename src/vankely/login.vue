@@ -10,11 +10,17 @@
         img {margin-right: 10px;}
         display: flex;
         align-items: center;
+        justify-content: center;
         color: white;
     }
     .main {
         width: 350px;
         margin: 0 auto;
+    }
+    .captcha {
+        cursor:pointer;
+        position: relative;
+        top: 4px;
     }
 }
 </style>
@@ -33,9 +39,9 @@
                         <el-input type="password" v-model="ruleForm.password" placeholder="密码"></el-input>
                         <i class="tako-icon-login_icon_lock"></i>
                     </el-form-item>
-                    <el-form-item label="" prop="password">
+                    <el-form-item label="" prop="captcha">
                         <el-input type="text" v-model="ruleForm.captcha" placeholder="验证码">
-                            <img slot="suffix" src="http://111.231.142.117:8088/admin/captcha" />
+                            <img slot="suffix" class="captcha" :src="captcha" @click="HandleCaptcha"/>
                         </el-input>
                     </el-form-item>
                     <el-form-item class="login-btn-form">
@@ -49,11 +55,13 @@
 
 <script>
 import logo from "@/assets/img/logo.png";
+import config from "@/conf/config";
 
 export default {
     name: "login",
     data () {
         return {
+            config,
             logo,
             ruleForm: {
                 loginId: "",
@@ -115,9 +123,8 @@ export default {
                 return true;
             }
         },
-
         HandleCaptcha: function () {
-            this.captcha = this.$api.Logincaptcha + "?" + Date.parse(new Date());
+            this.captcha = `${config.api}/captcha?${Date.parse(new Date())}`;
         },
         login: function () {
             this.loginFunc().catch(err => {
