@@ -23,10 +23,7 @@
     <div class="login">
         <main class="main">
             <section class="content">
-                <h2>
-                    <img :src="logo">
-                    万匠维管理系统
-                </h2>
+                <h2> <img :src="logo"> 万匠维管理系统 </h2>
                 <el-form :model="ruleForm" :rules="rules" ref="loginForm" label-position="top" label-width="0px">
                     <el-form-item label="" prop="loginId">
                         <el-input v-model="ruleForm.loginId" required placeholder="登录名"></el-input>
@@ -133,7 +130,7 @@ export default {
                     this.$logger.log("[validate] ", valid);
                     if (valid) {
                         let redirect = this.$route.query.redirect;
-                        redirect = !redirect ? "/admin/demo/index" : decodeURIComponent(redirect);
+                        redirect = !redirect ? "/admin" : decodeURIComponent(redirect);
                         const data = {
                             ...this.ruleForm,
                             redirect: redirect

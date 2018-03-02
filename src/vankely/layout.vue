@@ -19,6 +19,7 @@
             <el-menu-item index="/admin/residents">住户列表</el-menu-item>
             <!-- <el-menu-item index="/admin/solutions">解决方案列表</el-menu-item> -->
             <el-menu-item index="/admin/communities">小区列表</el-menu-item>
+            <el-menu-item style="float:right;" index="/login">退出</el-menu-item>
         </el-menu>
         <div class="ui container">
             <vuedals />
