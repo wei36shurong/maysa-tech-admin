@@ -220,13 +220,8 @@ export default new Vuex.Store({
             Vue.logger.log("logout action:", obj);
             Vue.cache.cacheRemove(CacheKeys.isLogin);
             Vue.cache.cacheRemove(CacheKeys.loginUser);
-            await Vue.request({
-                url: api.logout,
-                method: "post"
-            });
-            commit({
-                type: types.logoutSuccess
-            });
+            await Vue.request({ url: "logout" });
+            commit({ type: types.logoutSuccess });
             Vue.router.push("/login");
         },
 

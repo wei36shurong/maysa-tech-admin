@@ -121,13 +121,12 @@ router.beforeEach(async (to, from, next) => {
     document.body.scrollTop = 0;
     Vue.logger.log("from to =>", from.path, to.path, isLogin);
     if (isLogin) {
-        // if (to.path === "/login") {
-        //     next("/admin");
-        // } else {
-        //     Vue.logger.log("route from => to", from, to);
-        //     next();
-        // }
-        next();
+        if (to.path === "/login") {
+            next("/admin");
+        } else {
+            next();
+        }
+        // next();
     } else {
         // 判断是否登录，（可以通过接口，Vuex状态 token）
         // 没有登录走下面逻辑

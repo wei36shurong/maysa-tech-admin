@@ -4,10 +4,10 @@
         <el-menu
             default-active="/admin/orders"
             mode="horizontal"
+            router
             @select="handleSelect"
             background-color="#2196F3"
             style="margin-bottom:20px;"
-            router
             text-color="#fff"
             active-text-color="#fff">
             <el-menu-item index="/admin" style="opacity:1;cursor:auto;" disabled>
@@ -19,7 +19,7 @@
             <el-menu-item index="/admin/residents">住户列表</el-menu-item>
             <!-- <el-menu-item index="/admin/solutions">解决方案列表</el-menu-item> -->
             <el-menu-item index="/admin/communities">小区列表</el-menu-item>
-            <el-menu-item style="float:right;" index="/login">退出</el-menu-item>
+            <el-menu-item style="float:right;" index="" @click="handleHeader('logout')">退出</el-menu-item>
         </el-menu>
         <div class="ui container">
             <vuedals />
