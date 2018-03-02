@@ -10,7 +10,7 @@
             router
             text-color="#fff"
             active-text-color="#fff">
-            <el-menu-item index="/admin" disabled>
+            <el-menu-item index="/admin" style="opacity:1;cursor:auto;" disabled>
                 <img :src="logo">
             </el-menu-item>
             <el-menu-item index="/admin/orders">订单列表</el-menu-item>

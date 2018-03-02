@@ -164,7 +164,7 @@ export default {
                 h("vuetable-pagination-info", {
                     props: {
                         noDataTemplate: "",
-                        infoTemplate: "显示第{from}到{to}条数据, 总共{total}条数据"
+                        infoTemplate: "第{from}到{to}条数据, 总共{total}条数据"
                     },
                     ref: "paginationInfo"
                 }),

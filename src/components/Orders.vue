@@ -118,7 +118,7 @@ export default {
             this.id = id;
             this.$vuedals.open({
                 title: "订单详情",
-                size: "lg",
+                // size: "lg",
                 component: detail,
                 props: { id: this.id },
                 onDismiss: () => {

@@ -206,7 +206,7 @@ const funcs = {
     formatterDate (row, column) {
         return funcs.formatDate(row[column.property], "YYYY-MM-DD");
     },
-    formatDate (date, format = "YYYY-MM-DD hh:mm:ss") {
+    formatDate (date, format = "YYYY-MM-DD HH:mm:ss") {
         if (!date) {
             return "";
         }

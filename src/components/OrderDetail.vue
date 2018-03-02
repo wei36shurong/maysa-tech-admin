@@ -14,6 +14,7 @@
 }
 .detail.table {
     tr > td:first-child {
+        text-align: right;
         &:extend(.text-muted);
     }
     tr > td:nth-child(2) {
@@ -29,7 +30,7 @@
         <table class="ui very basic plain table detail">
             <thead>
                 <tr>
-                    <th style="width:100px;"></th>
+                    <th style="min-width:100px;"></th>
                     <th></th>
                 </tr>
             </thead>
@@ -41,8 +42,8 @@
                 <tr> <td>小区</td> <td>{{order.communityName}}</td> </tr>
                 <tr> <td>楼栋</td> <td>{{order.buildingName}}</td> </tr>
                 <tr> <td>单元号</td> <td>{{order.roomName}}</td> </tr>
-                <tr> <td>创建者</td> <td>{{order.residentName}}</td> </tr>
-                <tr> <td>创建时间</td> <td>{{order.createTime}}</td> </tr>
+                <tr> <td>用户名</td> <td>{{order.residentName}}</td> </tr>
+                <tr> <td>下单时间</td> <td>{{order.createTime}}</td> </tr>
                 <tr> 
                     <td>可上门日期</td>
                     <td>

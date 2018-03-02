@@ -6,6 +6,7 @@ const defaultConfig = {
     ascendingClass: "sorted-asc",
     descendingClass: "sorted-desc",
     sortableIcon: "",
+    paginationInfoClass: "left floated left aligned six wide column",
     detailRowClass: "vuetable-detail-row",
     handleIcon: "grey sidebar icon",
     tableBodyClass: "vuetable-semantic-no-top vuetable-fixed-layout",
@@ -13,5 +14,6 @@ const defaultConfig = {
 };
 export default {
     ...defaultConfig,
-    tableClass: "ui selectable plain gapped unstackable table"
+    tableClass: "ui selectable plain gapped unstackable table",
+    paginationInfoClass: "left floated left aligned six wide column"
 };
