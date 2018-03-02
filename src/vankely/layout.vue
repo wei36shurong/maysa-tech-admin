@@ -69,18 +69,7 @@ export default {
             if (command === "user_info") {
                 this.$router.push("/users/current/basic/info");
             } else if (command === "logout") {
-                this.$confirm("确认退出吗?", "提示", {
-                    type: "warning"
-                })
-                    .then(async () => {
-                        await this.$store.dispatch("logout");
-                    })
-                    .catch(err => {
-                        if (err === "cancel") {
-                            return;
-                        }
-                        this.$message("" + err);
-                    });
+                this.$store.dispatch("logout");
             }
         },
         handleProject(command) {

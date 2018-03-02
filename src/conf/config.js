@@ -19,8 +19,9 @@ const config = {
         api: "http://127.0.0.1:8081"
     },
     production: {
-        api: "http://127.0.0.1:8081"
+        api: "https://product-service-admin.maysatech.com/admin"
     }
 };
 // export default Object.assign(config.base, config[process.env.PACK_ENV]);
-export default Object.assign(config.base);
+// export default Object.assign(config.base);
+export default Object.assign(config.production);
