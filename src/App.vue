@@ -1,7 +1,5 @@
 <template>
-    <div class="root-views">
-        <router-view v-loading.fullscreen.lock="$store.state.fullscreenLoading" :element-loading-text="$store.state.fullscreenLoadingContent || '内容加载中...'" class="root-views"></router-view>
-    </div>
+    <router-view v-loading.fullscreen.lock="$store.state.fullscreenLoading" :element-loading-text="$store.state.fullscreenLoadingContent || '内容加载中...'" />
 </template>
 
 <script>
