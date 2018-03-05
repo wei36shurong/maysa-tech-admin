@@ -63,7 +63,8 @@ const NetPlugin = function (Vue) {
             Vue.logger.log(`request fail => ${options.url}`, options, res);
             throw new LogicError("网络请求错误", "602", err);
         }
-        Vue.logger.log(`request success => ${options.url}`, options, res);
+        // options.url 为空时，options本身就是url
+        Vue.logger.log(`request success => ${options.url || options}`, options, res);
 
         return new Promise((resolve, reject) => {
             try {

@@ -452,6 +452,7 @@ export default {
                         // 获取工程师的工作安排
                         // TODO 当天的
                         const {data: {rows: orders}} = await this.$request(`engineers/${engineer.id}/orders`);
+
                         // 处理数据
                         let available = true;
                         for (const _order of orders) {
