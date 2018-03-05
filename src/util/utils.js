@@ -135,7 +135,6 @@ const funcs = {
         return patten.chinese.test(value);
     },
     pattenPassword (p) {
-        // console.log("value:", value)
         // if(patten.password.test(value)){
         //     return value.length <= 20 && value.length >= 6
         // }
@@ -194,10 +193,8 @@ const funcs = {
     },
     getTimestamp(date, digitNum = 10) {
         let timestamp = new Date(date).valueOf();
-        console.log(timestamp);
         // 转换成digitNum位数的timestamp
         timestamp *= 10 ** (digitNum - String(timestamp).length);
-        console.log(timestamp);
         return timestamp;
     },
     formatterTime (row, column) {
@@ -289,7 +286,6 @@ const funcs = {
     },
 
     validateNumberStr (rule, value, callback) {
-        // console.log("validateNumberStr:", rule.fullField, value, typeof value);
         let checkVal = true;
         if (!value && value !== 0) {
             if (rule.required) {
@@ -304,7 +300,6 @@ const funcs = {
                 checkVal = false;
             }
         }
-        // console.log("validateNumberStr:", checkVal);
         if (checkVal) {
             return callback();
         } else {

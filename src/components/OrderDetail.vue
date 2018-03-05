@@ -360,10 +360,8 @@ export default {
         // 在不修改时间的情况下修改日期，但不提交
         async onDateChange(date) {
             // 获取日期string
-            console.log(date);
             const dateStr = this.$utils.formatDate(date, "YYYY-MM-DD");
             // 获取时间string
-            console.log(this.order.timeRange);
             const timeRange = this.order.timeRange;
             const startStr = this.$utils.formatDate(timeRange[0], "LT");
             const endStr = this.$utils.formatDate(timeRange[1], "LT");
@@ -539,7 +537,6 @@ export default {
         },
         choose(engineer, index) {
             return new Promise(async(resolve, reject) => {
-                console.log("派单", engineer.id);
                 const data = { id: engineer.id };
                 const order = this.order;
                 const url = `orders/${order.id}/engineers`;

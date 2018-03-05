@@ -114,7 +114,6 @@ export default {
             this.status = status;
         },
         onRowClicked({id}) {
-            console.log("order row clicked");
             this.id = id;
             this.$vuedals.open({
                 title: "订单详情",

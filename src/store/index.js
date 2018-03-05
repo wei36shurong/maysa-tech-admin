@@ -12,7 +12,6 @@ import { CacheKeys } from "@/conf/constants";
 import menus from "@/conf/menus";
 
 const debug = process.env.NODE_ENV !== "production";
-
 const traversalMenu = (menuDatas, parent, callback) => {
     const newMenus = [];
     for (let i = 0; i < menuDatas.length; i++) {
@@ -68,7 +67,6 @@ export default new Vuex.Store({
                 return isPermitted(state.loginUser.permissionList, menuCode, action);
             };
         },
-
         layoutMenus: state => {
             if (!state.isLogin) {
                 return [];

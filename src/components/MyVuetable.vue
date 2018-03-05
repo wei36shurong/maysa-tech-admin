@@ -216,7 +216,6 @@ export default {
             this.$refs.vuetable.reload();
         },
         async edit(data, event) {
-            console.log("编辑", data.id);
             event.stopPropagation();
             this.$emit("edit", data.id);
         },
@@ -227,7 +226,6 @@ export default {
                 cancelButtonText: "取消",
                 type: "warning"
             });
-            console.log("删除", data.id);
             const slashIndex = this.api.lastIndexOf("/");
             // eg. community/13/building => building
             const api = slashIndex === -1

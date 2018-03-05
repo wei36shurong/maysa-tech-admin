@@ -77,7 +77,6 @@ export default {
             res.source_name = file.name;
             return res;
         }).catch((err) => {
-            /*eslint no-console: 0*/
             console.log("err:", err);
         });
     }

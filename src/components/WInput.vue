@@ -23,6 +23,7 @@
     <el-input v-if="isEditing"
         v-bind="$props"
         v-model="currentValue"
+        v-on="$listeners"
         autofocus
     />
     <p v-else
@@ -57,10 +58,7 @@ export default {
     data() {
         return {
             isEditing: false,
-            currentValue: "",
-            events: {
-                ...this.$listeners
-            }
+            currentValue: ""
         };
     },
     model: {
@@ -89,7 +87,6 @@ export default {
             this.isEditing = true;
         },
         cancel () {
-            console.log("cancel");
             this.isEditing = false;
             this.currentValue = this.value;
             this.$emit("cancel");

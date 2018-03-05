@@ -1,7 +1,6 @@
 import Axios from "axios";
 import config from "@/conf/config";
 
-console.log(config);
 const axios = Axios.create({
     baseURL: config.api
 });
