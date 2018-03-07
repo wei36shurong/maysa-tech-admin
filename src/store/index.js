@@ -7,7 +7,7 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 
 import * as types from "@/store/mutation-types";
-import { CacheKeys } from "@/conf/constants";
+import { CacheKeys, expireTime } from "@/conf/constants";
 import menus from "@/conf/menus";
 
 const debug = process.env.NODE_ENV !== "production";
@@ -123,10 +123,7 @@ export default new Vuex.Store({
     actions: {
         async currentUser ({ dispatch, commit }) {
             try {
-                const user = await Vue.request({
-                    url: "users/me",
-                    method: "get"
-                });
+                const user = await Vue.request("users/me");
                 Vue.logger.log("currentUser success", user.data);
                 return user.data;
             } catch (err) {
@@ -150,11 +147,11 @@ export default new Vuex.Store({
             }
 
             if (data.isLogin) {
-                const user = await dispatch("currentUser");
+                const user = true;
                 if (user) {
                     data.loginUser = user;
-                    Vue.cache.cacheSet(CacheKeys.isLogin, true, 24 * 3600 * 1000);
-                    Vue.cache.cacheSet(CacheKeys.loginUser, user, 24 * 3600 * 1000);
+                    Vue.cache.cacheSet(CacheKeys.isLogin, true, expireTime);
+                    Vue.cache.cacheSet(CacheKeys.loginUser, user, expireTime);
                 } else {
                     Vue.cache.cacheRemove(CacheKeys.isLogin);
                     Vue.cache.cacheRemove(CacheKeys.loginUser);
@@ -191,8 +188,8 @@ export default new Vuex.Store({
                 data: obj
             });
             Vue.logger.log("store login res:", JSON.stringify(res));
-            Vue.cache.cacheSet(CacheKeys.isLogin, true, 24 * 3600 * 1000);
-            Vue.cache.cacheSet(CacheKeys.loginUser, res.data, 24 * 3600 * 1000);
+            Vue.cache.cacheSet(CacheKeys.isLogin, true, expireTime);
+            Vue.cache.cacheSet(CacheKeys.loginUser, res.data, expireTime);
             commit({
                 type: types.loginSuccess,
                 loginUser: res.data

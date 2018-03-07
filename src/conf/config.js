@@ -1,7 +1,7 @@
 const config = {
     base: { api: "http://111.231.142.117:8088/admin" },
-    testing: { api: "111.231.142.117:8080/admin" },
-    local: { api: "http://172.17.21.221:8088" },
+    testing: { api: "http://111.231.142.117:8088/admin" },
+    local: { api: "http://172.17.21.221:8088/admin" },
     development: { api: "http://172.17.21.221:8088/admin" },
     alpha: { api: "http://127.0.0.1:8081" },
     beta: { api: "http://127.0.0.1:8081" },
