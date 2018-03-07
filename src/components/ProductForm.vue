@@ -4,7 +4,7 @@
 
 <template>
     <div class="engineerForm">
-        <el-form ref="form" :model="form" label-width="120px">
+        <el-form @keydown.native.esc="cancel" ref="form" :model="form" label-width="120px">
             <el-form-item label="产品名称">
                 <el-input v-model="form.name"></el-input>
             </el-form-item>
@@ -19,7 +19,7 @@
 <script>
 import { mapState } from "vuex";
 export default {
-    name: "BuildingForm",
+    name: "ProductForm",
     data() {
         return {
             form: {

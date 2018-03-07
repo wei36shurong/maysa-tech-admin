@@ -6,7 +6,7 @@
 
 <template>
     <div class="engineerForm">
-        <el-form :rules="rules" style="width:480px;" ref="form" :model="form" label-width="120px">
+        <el-form @keydown.native.esc="cancel" :rules="rules" style="width:480px;" ref="form" :model="form" label-width="120px">
             <el-form-item label="姓名" prop="name">
                 <el-input v-model="form.name"></el-input>
             </el-form-item>

@@ -18,7 +18,8 @@
 
 const fields = [
     { name: "name", title: "姓名" },
-    { name: "phoneNum", title: "手机号" }
+    { name: "phoneNum", title: "手机号" },
+    { name: "roomNum", title: "房间数" }
 ].map(field => ({...field, sortField: field.name}));
 
 export default {

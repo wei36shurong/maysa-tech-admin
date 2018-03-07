@@ -85,8 +85,12 @@
                     </td>
                 </tr>
                 <tr> 
-                    <td>上门时间</td> 
+                    <td>预约上门时间</td> 
                     <td>{{$utils.formatDate(order.appointmentTime)}}</td> 
+                </tr>
+                <tr> 
+                    <td>实际上门时间</td> 
+                    <td>{{$utils.formatDate(order.arriveTime) || "待上门"}}</td> 
                 </tr>
                 <tr> 
                     <td>故障位置</td>
@@ -130,7 +134,7 @@
                         />
                     </td>
                 </tr>
-                <tr>
+                <tr v-if="order.orderImgs.length">
                     <td></td>
                     <td>
                         <template
