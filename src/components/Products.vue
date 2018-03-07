@@ -58,6 +58,7 @@ export default {
             this.$vuedals.open({
                 title: "添加产品",
                 component: productForm,
+                escapable: true,
                 onClose: (res) => {
                     if (res === "success") this.$refs.vuetable.reload();
                 }

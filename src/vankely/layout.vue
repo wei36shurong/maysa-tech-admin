@@ -65,6 +65,9 @@ export default {
         }
     },
     methods: {
+        cancel() {
+            this.$vuedals.close("cancel");
+        },
         handleHeader(command) {
             if (command === "user_info") {
                 this.$router.push("/users/current/basic/info");

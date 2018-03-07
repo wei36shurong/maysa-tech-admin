@@ -44,6 +44,7 @@ export default {
             });
             this.$vuedals.open({
                 title: "住户房间列表",
+                escapable: true,
                 props: { data },
                 component: {
                     name: "ResidentDetailModal",

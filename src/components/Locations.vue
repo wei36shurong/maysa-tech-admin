@@ -53,6 +53,7 @@ export default {
             this.$vuedals.open({
                 title: "添加楼栋",
                 component: locationForm,
+                escapable: true,
                 onClose: (res) => {
                     if (res === "success") this.$refs.vuetable.reload();
                 }
