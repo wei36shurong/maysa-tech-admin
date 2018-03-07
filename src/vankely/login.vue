@@ -30,7 +30,7 @@
         <main class="main">
             <section class="content">
                 <h2> <img :src="logo"> 万匠维管理系统 </h2>
-                <el-form :model="ruleForm" :rules="rules" ref="loginForm" label-position="top" label-width="0px">
+                <el-form @keydown.native.enter="login" :model="ruleForm" :rules="rules" ref="loginForm" label-position="top" label-width="0px">
                     <el-form-item label="" prop="loginId">
                         <el-input v-model="ruleForm.loginId" required placeholder="登录名"></el-input>
                         <i class="tako-icon-login_icon_mine"></i>

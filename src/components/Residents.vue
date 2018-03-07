@@ -8,16 +8,9 @@
 			ref="vuetable"
 			api="residents"
 			:fields="fields"
+            :formatter="formatter"
             @vuetable:row-clicked="onRowClicked"
-		>
-			<div
-				slot="status"
-				slot-scope="{rowData}">
-				<i :class="[rowData.statusClass]"
-					class="circle icon" />
-				<span> {{rowData.statusName}} </span>
-			</div>
-		</my-vuetable>
+		/>
 	</div>
 </template>
 
@@ -36,6 +29,12 @@ export default {
         };
     },
     methods: {
+        formatter: res => ({
+            data: {
+                ...res.data,
+                rows: res.data.rows.filter(row => row.name)
+            }
+        }),
         async onRowClicked ({id}) {
             if (this.editing) return;
             this.id = id;

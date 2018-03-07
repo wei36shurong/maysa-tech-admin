@@ -31,7 +31,6 @@ Vue.component("VuetablePaginationInfo", VuetablePaginationInfo);
 
 //
 import logger from "@/util/logger";
-import api from "@/conf/api";
 import * as constants from "@/conf/constants";
 import cache from "@/util/cache";
 import utils from "@/util/utils";
@@ -63,9 +62,6 @@ const install = function (VueClass, opts = {}) {
 
     VueClass.logger = logger;
     VueClass.prototype.$logger = logger;
-
-    VueClass.api = api;
-    VueClass.prototype.$api = api;
 
     VueClass.constants = constants;
     VueClass.prototype.$constants = constants;

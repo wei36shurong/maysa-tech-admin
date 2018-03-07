@@ -3,6 +3,8 @@ export const CacheKeys = {
     loginUser: "loginUser"
 };
 
+export const expireTime = 0.5 * 3600 * 1000;
+
 export const levelMap = {
     1: "一级",
     2: "二级",

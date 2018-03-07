@@ -7,7 +7,6 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 
 import * as types from "@/store/mutation-types";
-import api from "@/conf/api";
 import { CacheKeys } from "@/conf/constants";
 import menus from "@/conf/menus";
 
@@ -125,7 +124,7 @@ export default new Vuex.Store({
         async currentUser ({ dispatch, commit }) {
             try {
                 const user = await Vue.request({
-                    url: api.sysUser_getCurrentUser,
+                    url: "users/me",
                     method: "get"
                 });
                 Vue.logger.log("currentUser success", user.data);

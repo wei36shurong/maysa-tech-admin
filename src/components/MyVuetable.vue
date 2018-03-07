@@ -259,6 +259,7 @@ export default {
             Vue.nextTick(() => this.$refs.vuetable.refresh());
         },
         transform(data) {
+            console.log(data);
             if (this.formatter) data = this.formatter(data);
             return this.paginationFormatter(data);
         },
