@@ -51,7 +51,7 @@ export default {
     methods: {
         add() {
             this.$vuedals.open({
-                title: "添加楼栋",
+                title: "添加位置",
                 component: locationForm,
                 escapable: true,
                 onClose: (res) => {

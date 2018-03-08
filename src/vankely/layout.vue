@@ -2,7 +2,7 @@
 <template lang='html'>
     <div>
         <el-menu
-            default-active="/admin/orders"
+            :default-active="currentActive"
             mode="horizontal"
             router
             @select="handleSelect"
@@ -40,6 +40,9 @@ export default {
         };
     },
     computed: {
+        currentActive: function() {
+            return window.location.hash.substr(1);
+        },
         logoRes: function() {
             return "";
         },
