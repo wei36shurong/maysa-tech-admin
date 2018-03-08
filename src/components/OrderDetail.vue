@@ -289,6 +289,7 @@ export default {
             locationId: "",
             locations: [],
             order: {
+                orderImgs: [],
                 timeRange: [],
                 engineers: [], // 当前订单派给的工程师
                 locationId: null,

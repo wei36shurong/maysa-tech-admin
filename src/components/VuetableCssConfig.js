@@ -1,8 +1,8 @@
 const defaultConfig = {
     tableClass: "ui blue selectable celled stackable attached table",
     loadingClass: "loading",
-    ascendingIcon: "blue chevron up icon",
-    descendingIcon: "blue chevron down icon",
+    ascendingIcon: "blue chevron up icon no-float",
+    descendingIcon: "blue chevron down icon no-float",
     ascendingClass: "sorted-asc",
     descendingClass: "sorted-desc",
     sortableIcon: "",

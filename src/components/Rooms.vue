@@ -5,6 +5,7 @@
 <template>
 	<div class="rooms">
 		<my-vuetable
+            row-class=""
 			ref="vuetable"
 			:api="`buildings/${currentBuildingId}/rooms`"
 			:fields="fields"

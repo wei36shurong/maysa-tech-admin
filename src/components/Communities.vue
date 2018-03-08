@@ -59,7 +59,7 @@ export default {
     methods: {
         add() {
             this.$vuedals.open({
-                title: "添加工程师",
+                title: "添加小区",
                 component: communityForm,
                 escapable: true,
                 onClose: (res) => {

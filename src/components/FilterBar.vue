@@ -22,6 +22,7 @@
 
 <script>
 export default {
+    name: "FilterBar",
     data() {
         return {
             filterText: ""
@@ -29,11 +30,12 @@ export default {
     },
     methods: {
         doFilter() {
-            this.$events.fire("filter-set", this.filterText);
+            // this.$events.fire("filter-set", this.filterText);
+            this.$emit("filter-set", this.filterText);
         },
         resetFilter() {
             this.filterText = "";
-            this.$events.fire("filter-reset");
+            this.$emit("filter-reset");
         }
     }
 };

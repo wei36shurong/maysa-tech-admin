@@ -18,6 +18,7 @@ nav {
             > 添加产品 </el-button>
         </nav>
 		<my-vuetable
+            row-class=""
 			ref="vuetable"
 			:api="`locations/${currentLocationId}/products`"
 			:fields="fields"

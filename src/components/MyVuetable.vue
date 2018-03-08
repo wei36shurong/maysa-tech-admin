@@ -4,9 +4,11 @@ import Vue from "vue";
 import CssConfig from "./VuetableCssConfig.js";
 import config from "@/conf/config";
 import Vuetable from "vuetable-2/src/components/Vuetable";
+// import FilterBar from "@/components/FilterBar";
 
 export default {
     name: "MyVuetable",
+    // components: {FilterBar},
     props: {
         ...Vuetable.props,
         rowClass: {
@@ -44,12 +46,6 @@ export default {
                 ];
             }
         },
-        appendParams: {
-            type: Object,
-            default() {
-                return {};
-            }
-        },
         detailModalComponent: {
             type: String,
             default: ""
@@ -65,7 +61,8 @@ export default {
             isLoading: false,
             id: null,
             page: 1,
-            apiRoot: config.api
+            apiRoot: config.api,
+            moreParams: {}
         };
     },
     computed: {
@@ -73,7 +70,11 @@ export default {
     },
     render(h) {
         const elems = [
-            // h('filter-bar'),
+            // h("filter-bar", {
+            //     on: {
+            //         "filter-set": this.onFilterSet
+            //     }
+            // }),
             h("div", {
                 class: [
                     "ui",
@@ -116,7 +117,7 @@ export default {
                     paginationPath: "data",
                     multiSort: true,
                     sortOrder: this.sortOrder,
-                    appendParams: { ...this.appendParams },
+                    appendParams: { ...this.moreParams },
                     rowClass: this.rowClass,
                     noDataTemplate: "没有数据",
                     detailRowComponent: this.detailRowComponent,
@@ -251,12 +252,17 @@ export default {
             return value == null ? "" : moment(value, "YYYY-MM-DD").format(fmt);
         },
         onFilterSet(filterText) {
-            this.appendParams.filter = filterText;
-            Vue.nextTick(() => this.$refs.vuetable.refresh());
+            this.moreParams = { name: filterText };
+            this.$refs.vuetable.$nextTick(
+                () => {
+                    console.log(this.$refs.vuetable.appendParams);
+                    this.$refs.vuetable.refresh();
+                }
+            );
         },
         onFilterReset() {
-            delete this.appendParams.filter;
-            Vue.nextTick(() => this.$refs.vuetable.refresh());
+            delete this.moreParams.name;
+            this.$nextTick(() => this.$refs.vuetable.refresh());
         },
         transform(data) {
             console.log(data);

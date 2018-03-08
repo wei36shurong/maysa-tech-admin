@@ -19,6 +19,7 @@
     "dev:production": "cross-env PACK_ENV=production node build/devServer.js",
     "build": "cross-env NODE_ENV=production PACK_ENV=production node build/build.js",
     "build:local": "cross-env NODE_ENV=production PACK_ENV=local node build/build.js",
+    "build:testing": "cross-env NODE_ENV=production PACK_ENV=testing node build/build.js",
     "build:development": "cross-env NODE_ENV=production PACK_ENV=development node build/build.js",
     "build:alpha": "cross-env NODE_ENV=production PACK_ENV=alpha node build/build.js",
     "build:beta": "cross-env NODE_ENV=production PACK_ENV=beta node build/build.js",
