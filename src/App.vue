@@ -58,8 +58,14 @@ table.table.no-header {
         display: none;
     }
 }
+table.ui.no-header-gap {
+    margin-top: 0;
+}
 
 // vuedal
+.vuedal.no-header-gap header {
+    margin-bottom: 0;
+}
 .vuedal.image {
     padding: 0;
     img {

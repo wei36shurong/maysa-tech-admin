@@ -37,15 +37,14 @@ export default {
         sortOrder: {
             type: Array,
             default() {
-                return [
-                    {
-                        field: "updateTime",
-                        sortField: "updateTime",
-                        direction: "desc"
-                    }
-                ];
+                return [{
+                    field: "updateTime",
+                    sortField: "updateTime",
+                    direction: "desc"
+                }];
             }
         },
+        cssConfig: Object,
         detailModalComponent: {
             type: String,
             default: ""
@@ -104,7 +103,7 @@ export default {
             return h("vuetable", {
                 ref: "vuetable",
                 props: {
-                    css: CssConfig,
+                    css: {...CssConfig, ...this.cssConfig},
                     apiUrl: `${this.apiRoot}/${this.api}`,
                     queryParams: (sortOrder, currentPage, perPage) => ({
                         asc: sortOrder[0].direction === "asc",
