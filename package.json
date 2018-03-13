@@ -10,7 +10,7 @@
     "devDll": "cross-env node build/dll/devServer.js",
     "devDll:webpack": "cross-env node build/dll/WebpackDevServer.js",
     "distServer": "cross-env NODE_ENV=production PACK_ENV=production node build/distServer.js",
-    "dev": "cross-env node build/devServer.js",
+    "dev": "cross-env PACK_ENV=testing node build/devServer.js",
     "dev:development": "cross-env PACK_ENV=development node build/devServer.js",
     "dev:local": "cross-env PACK_ENV=local node build/devServer.js",
     "dev:testing": "cross-env PACK_ENV=testing node build/devServer.js",

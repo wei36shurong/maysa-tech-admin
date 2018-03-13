@@ -7,8 +7,8 @@ const fields = [
         title: "故障描述",
         dataClass: "detail-cell"
     }, {
-        name: "communityName",
         title: "小区",
+        name: "communityName",
         dataClass: "detail-cell"
     },
     { name: "buildingName", dataClass: "building-cell", title: "楼栋" },

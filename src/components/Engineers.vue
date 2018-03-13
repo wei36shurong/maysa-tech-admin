@@ -65,13 +65,11 @@ export default {
                 name: "no-header-gap",
                 escapable: true,
                 component: {
-                    name: "ResidentDetailModal",
-                    props: ["orderId"],
+                    name: "EngineerDetailModal",
                     mixins: [orderMixins],
                     data() {
                         return {
                             fields: [
-                                { name: "detail", title: "故障描述"},
                                 { name: "communityName", title: "小区"},
                                 { name: "buildingName", title: "楼栋" },
                                 { name: "roomName", title: "单元号" },

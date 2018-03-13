@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import orderMixins from "@/mixins/order-mixins";
 
 const fields = [
     { name: "name", title: "姓名" },
@@ -43,27 +44,58 @@ export default {
                 url: `residents/${id}`
             });
             this.$vuedals.open({
-                title: "住户房间列表",
+                title: "住户详情",
                 escapable: true,
                 props: { data },
                 component: {
                     name: "ResidentDetailModal",
+                    mixins: [orderMixins],
                     props: ["data"],
                     data() {
                         return {
-                            fields: [
+                            roomFields: [
                                 { name: "communityName", title: "小区"},
                                 { name: "buildingName", title: "楼栋" },
                                 { name: "name", title: "单元号" }
+                            ],
+                            orderFields: [
+                                { name: "detail", title: "故障描述"},
+                                { name: "communityName", title: "小区"},
+                                { name: "buildingName", title: "楼栋" },
+                                { name: "roomName", title: "单元号" },
+                                {
+                                    title: "状态",
+                                    name: "__slot:status",
+                                    titleClass: "status-cell"
+                                }
                             ]
                         };
                     },
                     template: `
+                    <div>
                         <vuetable 
                             :api-mode="false"
                             :data="data"
-                            :fields="fields"
+                            :fields="roomFields"
                         />
+                        <my-vuetable
+                            ref="vuetable"
+                            api="residents/${id}/orders"
+                            :appendParams="status != 0 ? {status} : {}"
+                            :fields="orderFields"
+                            :formatter="formatter"
+                            :css="{tableClass: 'ui selectable plain gapped unstackable table no-header-gap'}"
+                            @vuetable:row-clicked="onRowClicked"
+                        >
+                            <div
+                                slot="status"
+                                slot-scope="{rowData}">
+                                <i :class="[rowData.statusClass]"
+                                    class="circle icon"/>
+                                <span> {{rowData.statusName}} </span>
+                            </div>
+                        </my-vuetable>
+                    </div>
                     `
                 }
             });
