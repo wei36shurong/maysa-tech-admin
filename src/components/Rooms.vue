@@ -10,6 +10,7 @@
 			:api="`buildings/${currentBuildingId}/rooms`"
 			:fields="fields"
             @vuetable:row-clicked="onRowClicked"
+            :showActions="false"
 		>
 			<div
 				slot="status"
