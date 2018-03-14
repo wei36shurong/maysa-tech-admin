@@ -211,6 +211,7 @@ export default {
                     this.page = page;
             }
             this.$refs.vuetable.changePage(page);
+            return this.page;
         },
         reload() {
             this.$refs.vuetable.reload();

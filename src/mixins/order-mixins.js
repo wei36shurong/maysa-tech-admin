@@ -30,6 +30,8 @@ export default {
             status: "",
             statusMap,
             statusColorMap,
+            statusClass: "red",
+            statusName: "待派单",
             id: null,
             fields: [
                 ...fields,
@@ -55,12 +57,31 @@ export default {
         handleSelect(status) {
             this.status = status;
         },
-        onRowClicked({id}) {
+        onRowClicked({id, status}) {
             this.id = id;
             this.$vuedals.open({
                 title: "订单详情",
+                header: {
+                    props: {
+                        statusName: statusMap[status],
+                        statusClass: statusColorMap[status]
+                    },
+                    component: {
+                        props: ["statusName", "statusClass"],
+                        template: `
+                        <div>
+                            <h3 style="float:left;"> 订单详情 </h3>
+                            <div style="float:right;">
+                                <i class="red circle icon" :class="statusClass"/>
+                                <span> {{statusName}} </span>
+                            </div>
+                        </div>
+                        `
+                    }
+                },
                 component: detail,
                 props: { id: this.id },
+                dismissable: false,
                 onDismiss: () => {
                     this.$refs.vuetable.reload();
                 }

@@ -1,6 +1,14 @@
 <style lang="less" scoped>
 @import "~@/assets/less/fn";
 
+.order-detail {
+    position: relative;
+    .status {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+}
 .avatar {
     width: 40px;
     height: 40px;
@@ -13,8 +21,11 @@
     padding: 0;
 }
 .detail.table {
+    // tr > td {
+    //     padding-top: 5px;
+    //     padding-bottom: 5px;
+    // }
     tr > td:first-child {
-        text-align: right;
         &:extend(.text-muted);
     }
     tr > td:nth-child(2) {
@@ -36,7 +47,7 @@
 
 <template>
 	<div class="order-detail">
-        <table class="ui very basic plain detail table">
+        <table class="ui very basic plain compact detail table">
             <thead>
                 <tr>
                     <th style="min-width:100px;"></th>
@@ -51,7 +62,8 @@
                 <tr> <td>小区</td> <td>{{order.communityName}}</td> </tr>
                 <tr> <td>楼栋</td> <td>{{order.buildingName}}</td> </tr>
                 <tr> <td>单元号</td> <td>{{order.roomName}}</td> </tr>
-                <tr> <td>用户名</td> <td>{{order.residentName}}</td> </tr>
+                <tr> <td>联系人</td> <td>{{order.contact}}</td> </tr>
+                <tr> <td>联系方式</td> <td>{{order.contactPhoneNum}}</td> </tr>
                 <tr> <td>下单时间</td> <td>{{order.createTime}}</td> </tr>
                 <tr> 
                     <td>可上门日期</td>
@@ -173,7 +185,7 @@
         <el-tabs
             v-model="activeName"
             @tab-click="onTabClick">
-            <el-tab-pane v-if="order.status >= 3" label="该订单派给的工程师" name="orderEngineers">
+            <el-tab-pane v-if="order.status > 1" label="该订单派给的工程师" name="orderEngineers">
                 <my-vuetable
                     :css="{tableClass: 'ui very basic plain table'}"
                     :api-mode="false"
@@ -243,7 +255,7 @@
                     @vuetable-pagination:change-page="onChangePage"
                     :api="`engineers?orderId=${id}`"
                     :showActions="false"
-                    :fields="fields"
+                    :fields="fieldsForAllEngineers"
                 >
                     <el-button 
                         slot="scheduleButton"
@@ -293,6 +305,14 @@ export default {
                 {name: "type", title: "类型"},
                 {name: "level", title: "等级"},
                 {name: "phoneNum", title: "联系方式"}
+            ],
+            fieldsForAllEngineers: [
+                {name: "name", title: "姓名"},
+                {name: "type", title: "类型"},
+                {name: "level", title: "等级"},
+                {name: "communityName", title: "所属小区"},
+                {name: "__slot:scheduleButton"},
+                {name: "__slot:actionButton"}
             ],
             fields: [
                 {name: "name", title: "姓名"},
@@ -367,7 +387,7 @@ export default {
     },
     methods: {
         async onChangePage (page) {
-            this.$refs.allEngineersVuetable.onChangePage(page);
+            page = this.$refs.allEngineersVuetable.onChangePage(page);
             const data = await this.$request({
                 url: `engineers?orderId=${this.order.id}&page=${page}&rows=${this.rows}`
             });

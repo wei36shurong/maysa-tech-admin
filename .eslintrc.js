@@ -75,6 +75,7 @@ module.exports = {
         "camelcase": 0, // 驼峰模式
         "no-restricted-globals": ["error", "fdescribe"], // js的全局函数
         "no-underscore-dangle": 0, // 下划线的变量
+        "no-multi-assign": 0,
 
         // 必须尽快酌情打开
         "handle-callback-err": 0, // 错误未处理
