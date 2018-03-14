@@ -23,11 +23,20 @@
         }
     }
 }
+.updates.table {
+    &:extend(.text-muted);
+    td {
+        padding: 5px;
+    }
+    tr > td:nth-child(2) {
+        text-align: right;
+    }
+}
 </style>
 
 <template>
 	<div class="order-detail">
-        <table class="ui very basic plain table detail">
+        <table class="ui very basic plain detail table">
             <thead>
                 <tr>
                     <th style="min-width:100px;"></th>
@@ -253,6 +262,16 @@
                         {{ rowData.occupied ? '取消派单' : '派单' }}
                     </w-button>
                 </my-vuetable>
+            </el-tab-pane>
+        </el-tabs>
+        <el-tabs value="updates">
+            <el-tab-pane label="订单动态" name="updates">
+                <table class="ui very basic plain updates table">
+                    <tr v-for="update in order.updates">
+                        <td>{{update.detail}}</td>
+                        <td>{{update.updateTime}}</td>
+                    </tr>
+                </table>
             </el-tab-pane>
         </el-tabs>
 	</div>
